@@ -1,0 +1,14 @@
+[14-Jul-2021 10:01:54 Europe/Belgrade] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'id_korisnika' cannot be null in /home/mmontstr/public_html/fakture/classes/class.insertdata.php:21
+Stack trace:
+#0 /home/mmontstr/public_html/fakture/classes/class.insertdata.php(21): PDOStatement->execute()
+#1 /home/mmontstr/public_html/fakture/classes/class.insertdata.php(229): InsertData->insert_data('INSERT INTO kup...', Array, 'bindValue')
+#2 /home/mmontstr/public_html/fakture/index.php(103): InsertData->insert_new_kupac(NULL, 'MEDIC 2019', '', '', '', '.', '', '')
+#3 {main}
+  thrown in /home/mmontstr/public_html/fakture/classes/class.insertdata.php on line 21
+[22-Feb-2022 13:31:50 Europe/Belgrade] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'id_korisnika' cannot be null in /home/mmontstr/public_html/fakture/classes/class.insertdata.php:21
+Stack trace:
+#0 /home/mmontstr/public_html/fakture/classes/class.insertdata.php(21): PDOStatement->execute()
+#1 /home/mmontstr/public_html/fakture/classes/class.insertdata.php(229): InsertData->insert_data('INSERT INTO kup...', Array, 'bindValue')
+#2 /home/mmontstr/public_html/fakture/index.php(103): InsertData->insert_new_kupac(NULL, 'MAKS PLAST', 'Njegoseva 61', 'Nova Pazova', '101244819', '53461042', '340-00000100046...', '')
+#3 {main}
+  thrown in /home/mmontstr/public_html/fakture/classes/class.insertdata.php on line 21
