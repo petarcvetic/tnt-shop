@@ -11,7 +11,7 @@ $dbPassword = "";
 $root_path = "localhost/mmont-fakture";
 */
 
-
+/**/
 //POSAO
 $dbHost = "localhost";
 $dbName = "tnt_shop";
