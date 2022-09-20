@@ -31,11 +31,9 @@
 <body>
 
  
-	<div class="header" id=headerTop>
+	<div class="header">
 
-		<div class="logo mont-logo" id="pc-code-logo">
-			<a href="index.php"><img src="images/korisnik1.png" height="80" alt="pc-code_logo"></a>
-		</div> <!-- END logo -->	
+		
 
 		<?php
 		if(isset($_SESSION['sess_user_id']) && $_SESSION['sess_user_id'] != "") {
@@ -45,11 +43,18 @@
 			$statusKorisnika = $_SESSION['sess_korisnik_status'];
 			?>
 
+		<?php
+			if($_SESSION['sess_korisnik_status']>0){ ?>
+			<div class="logo">
+				<a href="index.php"><img src="images/logo-medium.webp" height="150" alt="pc-code_logo"></a>
+			</div>
+		<?php } ?>
+
 			<div class="login-header">			
-				KORISNIK:  <?php echo $username; ?>  &nbsp;  &nbsp; <a href="logout.php"><button class="submit yellow-button" name="logout"> Izloguj se </button></a>
+				<a href="logout.php"><button class="submit yellow-button" name="logout"> Izloguj se </button></a>
 				<?php
 				if($user->is_loggedin()!="" && $statusUser > 2 && $_SESSION['sess_korisnik_status']>0){
-	              echo "&nbsp;  &nbsp; <a href='register.php'><button class='submit yellow-button'> Register </button></a>";
+	              echo "<a href='register.php'><button class='submit yellow-button'> Register </button></a>";
 	            }
 	            ?>
 			</div>
@@ -58,6 +63,7 @@
 			if($statusUser !== "4" && $_SESSION['sess_korisnik_status']>0){
 			?>
 			<!-- MENU Desktop -->
+			<!--
 			<div class="menu">
 				<ul class="menulist">
 					<li><a id="n1" href="index.php">UNOS</a></li>
@@ -69,7 +75,8 @@
 				}
 				?>
 				</ul>	
-			</div> 
+			</div>
+			--> 
 			<!-- END Menu Desktop -->
 
 		<?php

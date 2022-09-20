@@ -28,6 +28,78 @@ if(isset($_POST['submitBtnLogin'])) {
 
 include("assets/header.php");
 
+//-------KLIKNUTO JE "UNESI FAKTURU" ili "UNESI IZVOD"--------------------------------
+if(isset($_POST["unos-fakture"]) or isset($_POST["unos-izvoda"])){
+  $firma = strip_tags($_POST["firma"]);
+  $adresa = strip_tags($_POST["adresa"]);
+  $mesto = strip_tags($_POST["mesto"]);
+  $pib = strip_tags($_POST["pib"]);
+  $matBr = strip_tags($_POST["matBr"]);
+
+  if($matBr == ""){$matBr = ".";}
+
+  $email = strip_tags($_POST["email"]);
+  $ziro_racun = strip_tags($_POST["ziro-racun"]);
+  $status = strip_tags($_POST["status"]);
+
+  //Upis kupca u bazu ukoliko ga nema u bazi  
+  $find = $getData->if_kupac_exists($idKorisnika,$firma);
+
+  if($find==0){
+    $insertData->insert_new_kupac($idKorisnika,$firma,$adresa,$mesto,$pib,$matBr,$ziro_racun,$email);
+  }
+
+  $kupacRow = $getData->get_kupac($idKorisnika,$firma);
+
+  $kupac_id = $kupacRow["id_kupca"];
+
+  //KLIKNUTO JE "UNESI FAKTURU"
+  if(isset($_POST["unos-fakture"])){
+
+    $broj_fakture = strip_tags($_POST["br-fakture"]);
+    $iznos_fakture = strip_tags($_POST["iznos-fakture"]);
+    $datum_fakture = strip_tags($_POST["datum-fakture"]);
+
+    if(isset($_POST["valuta-fakture"])){
+      $valuta_fakture = strip_tags($_POST["valuta-fakture"]);
+    }
+    else{
+      $valuta_fakture = 0;
+    }
+
+    if(!is_int($valuta_fakture)){
+      $valuta_fakture = 0;
+    }
+
+    $faktura_exists = $getData->if_faktura_exists($idKorisnika,$broj_fakture,$kupac_id);
+
+    if($faktura_exists == 0){
+      $insertData->insert_new_faktura($broj_fakture,$idKorisnika,$kupac_id,$datum_fakture,$valuta_fakture,$iznos_fakture,$username);
+    }
+    else{
+      echo "<script>alert('Ova faktura je već uneta u bazu podataka');</script>";
+    }
+  }
+
+  //KLIKNUTO JE "UNESI IZVOD"
+  if(isset($_POST["unos-izvoda"])){
+
+    $broj_izvoda = strip_tags($_POST["br-izvoda"]);
+    $datum_uplate = strip_tags($_POST["datum-uplate"]);
+    $iznos_uplate = (float)strip_tags($_POST["iznos-uplate"]);
+
+    $izvod_exists = $getData->if_izvod_exists($idKorisnika,$broj_izvoda,$kupac_id);
+
+    if($izvod_exists == 0){
+    //  echo "<script>alert('".$broj_izvoda."/".$idKorisnika."/".$kupac_id."/".$username."/".$iznos_uplate."/".$datum_uplate."');</script>";
+      $insertData->insert_new_izvod($broj_izvoda,$idKorisnika,$kupac_id,$username,$iznos_uplate,$datum_uplate);
+    }
+    else{
+      echo "<script>alert('Ovj izvod je već unet u bazu podataka');</script>";
+    }
+  }
+} // END "PRINT"
+
 
 
 /*AKO JE USER ULOGOVAN (ako postoji sesija sess_user_id*/
@@ -68,21 +140,8 @@ if($user->is_loggedin()!="" && $_SESSION['sess_korisnik_status'] != "0"){
 
   if($statusUser !== "0"){ /*user koji ima status 0 je blokiran*/
 
-    if($statusKorisnika =='1'){ ?>
-      
-      <div class="main-menu">
-        <div class="main-menu-block">
-          <a href=""><button class="submit">Biznis soft</button></a>  
-          <a href=""><button class="submit">Blagajna</button></a>
-        </div>
-
-        <div class="main-menu-block">
-          <a href="unosi.php"><button class="submit">Unosi</button></a>  
-          <a href=""><button class="submit">Porudžbine</button></a>
-        </div>
-      </div>
-    
-    <?php
+    if($statusKorisnika =='1'){
+      include("assets/unos.php");
     }
     elseif ($statusKorisnika == '0') {
       echo "<h1 class='centerText'>ZBOG NEIZMIRENIH OBAVEZA STE PRIVREMENO ISKLJUCENI!</h1><br><br><br><br><br><br><br><br>";
@@ -110,19 +169,4 @@ include("assets/footer.php");
 
 <script>
     $("#n1").css({"color": "#415a2d", "padding":"5px", "border": "solid 1px", "border-radius":"4px", "font-weight":"bold"});
-
-    function mediaSize(){
-    if (window.matchMedia('(max-device-width: 768px)').matches){
-      $("body").css("background-image", "url('images/background_mobile.webp')");
-      $(".header").css("border-bottom", "none");
-    }
-    else{
-      $("body").css("background-image", "url('images/background.webp')");
-    }
-  }
-
-  mediaSize();
-  window.addEventListener('resize', mediaSize, false);
-  $("#headerTop").css("background-color", "rgba(10,10,10,0)");
-  $("#pc-code-logo").css("display", "none");
 </script>

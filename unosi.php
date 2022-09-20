@@ -1,36 +1,8 @@
-<?php 
-
-//SEO 
-$page_title = "Kartica Firme";
-$keywords = "mont,kartica,firme,dobavljac,faktura";
-$description = "Knjigovodstvena aplikacija za izlistavanje kartice firme i unos faktura";
-
-$today = date("Y-m-d");
-
-$msg = $artikliKomadi = $cena = $ukupno = $broj_otpremnice = $broj_prijemnice = $br_predracuna = $firma = ""; 
-
-
-include("dbconfig.php");  
-
-/*KLIKNUTO JE DUGME LOGIN NA LOGIN FORMI*/
-if(isset($_POST['submitBtnLogin'])) {
-
-  $username = strip_tags($_POST['username']);
-  $password = sha1(strip_tags($_POST['password']));
-
-  if($username != "" && $password != ""){
-    $user->login($username,$password);  
-  }
-  else{
-    $msg = "Oba polja moraju biti popunjena!";
-  } 
-}
+<?php
+include("dbconfig.php"); 
 
 include("assets/header.php");
 
-
-
-/*AKO JE USER ULOGOVAN (ako postoji sesija sess_user_id*/
 if($user->is_loggedin()!="" && $_SESSION['sess_korisnik_status'] != "0"){
 
 /*Podaci USER-a*/
@@ -69,18 +41,63 @@ if($user->is_loggedin()!="" && $_SESSION['sess_korisnik_status'] != "0"){
   if($statusUser !== "0"){ /*user koji ima status 0 je blokiran*/
 
     if($statusKorisnika =='1'){ ?>
-      
-      <div class="main-menu">
-        <div class="main-menu-block">
-          <a href=""><button class="submit">Biznis soft</button></a>  
-          <a href=""><button class="submit">Blagajna</button></a>
-        </div>
 
-        <div class="main-menu-block">
-          <a href="unosi.php"><button class="submit">Unosi</button></a>  
-          <a href=""><button class="submit">Porudžbine</button></a>
-        </div>
-      </div>
+    	<div class="unos">
+	      
+	        <div class="unos-menu">
+	          <button class="submit">Proizvodi</button>  
+	          <button class="submit">Saradnik</button>
+	          <button class="submit">Gradovi</button>  
+	          <button class="submit">Users</button>
+	          <button class="submit">Users</button>
+	        </div>
+	      
+			<div class="unos-form-container">
+				<!--Forma PROIZVODI-->
+				<div class="form-proizvodi">
+					<h1 class="center-text white-text">PROIZVOD</h1>
+					<form action="" method="post">
+						<div class="left-row">
+							<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Naziv">
+							<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Cena">
+							<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Težina">
+							<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Naziv">
+						</div>
+
+						<div class="right-row">
+							<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Magacin">
+							<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Količina u magacinu">
+						</div>
+
+					</form>
+				</div>
+
+
+				<!--Forma PROIZVODI-->
+				<div class="form-proizvodi">
+					<form action="" method="post">
+						
+					</form>
+				</div>
+
+
+				<!--Forma PROIZVODI-->
+				<div class="form-proizvodi">
+					<form action="" method="post">
+						
+					</form>
+				</div>
+
+
+				<!--Forma PROIZVODI-->
+				<div class="form-proizvodi">
+					<form action="" method="post">
+						
+					</form>
+				</div>
+			</div>
+
+		</div>
     
     <?php
     }
@@ -98,12 +115,10 @@ if($user->is_loggedin()!="" && $_SESSION['sess_korisnik_status'] != "0"){
             <h2>Proverite svoju email poštu</h2>
           </div>";
   }
-} 
-
-/*AKO NIJE ULOGOVAN PRIKAZUJE SE LOGIN FORMA*/
-else { 
-  include("assets/login_form.php"); 
 }
+else{
+	header("Location: /index.php");
+} 
 
 include("assets/footer.php"); 
  ?>
