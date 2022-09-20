@@ -26,7 +26,7 @@ if (isset($_SESSION['error_msg'])) {
       </div>
 
       <div class="login-div">
-        <input type="submit" class="submit login-button" name="submitBtnLogin" value="Login"><br><br>
+        <input type="submit" class="submit button-full" name="submitBtnLogin" value="Login"><br><br>
       </div>
 
 

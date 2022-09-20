@@ -18,6 +18,14 @@ body{
 	color: #747673;
 }
 
+.show{
+	display: block;
+}
+
+.hide{
+	display: none;
+}
+
 .center-text{
 	text-align: center;
 }
@@ -63,7 +71,7 @@ body{
 	margin: 5px;
 	padding:10px 15px;
 	border-radius:25px;
-	border: 1px solid #6fb143;
+	border: 1px solid #597645;
 	background-color: #6fb143;
 	color: #f4ffe6;
 	font-family: 'Roboto', sans-serif;
@@ -153,7 +161,7 @@ body{
 	float:none !important;
 }
 
-.login-button{
+.button-full{
 	width: 100% !important;
 	font-size: 20px;
 	line-height: 30px; 
@@ -306,7 +314,11 @@ legend {
   border-radius: 25px;
 }
 
-.form-proizvodi form{
+.forme-unosa{
+	width: 100%;
+}
+
+.form-inputs{
 	display: flex;
 }
 
@@ -317,7 +329,17 @@ legend {
   flex: 1;
 }
 
+.unos-button{
+	width: 270px;
+	margin: auto;
+}
+
+.active-button{
+	background-color: #597645;
+}
+
 /*END Unosi*/
+
 
 /*FOOTER*/
 .footer{
