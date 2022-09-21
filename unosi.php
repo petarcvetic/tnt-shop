@@ -172,41 +172,45 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 				<!--Forma USERS-->
 				<div id="form5" class="hide">
 
-					<span>
-						<h1 class="center-text white-text">MAGACIN</h1>
-					</span>
+					<div class="flex">
+						<div class="flex2">
+							<h1 class="center-text white-text">MAGACIN</h1>
+						</div>
 
-					<span>
-						<select>
-							<option>Biznis soft</option>
-							<option>Blagajna</option>
-						</select>
-					</span>
+						<div class="flex1">
+							<select class="submit white-background unos-select">
+								<option>Biznis soft</option>
+								<option>Blagajna</option>
+							</select>
+						</div>
+					</div>
 
-					<table>
-						<tr>
-							<th>Br</th>
-							<th>NAZIV ARTIKLA</th>
-							<th>CENA</th>
-							<th>CENA SARADNIKA</th>
-							<th>KOLICINA</th>
-						</tr>
+					<table class="unos-table">
+						<tbody>
+							<tr>
+								<th>Br</th>
+								<th>NAZIV ARTIKLA</th>
+								<th>CENA</th>
+								<th>CENA SARADNIKA</th>
+								<th>KOLICINA</th>
+							</tr>
 
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
+							<tr>
+								<td>1</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
 
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
+							<tr>
+								<td>2</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</tbody>
 					</table>
 
 				</div>

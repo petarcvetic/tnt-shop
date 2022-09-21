@@ -34,6 +34,20 @@ body{
 	color: #F5FFF7;
 }
 
+.flex{
+	display: flex;
+}
+
+.flex1{
+	-ms-flex: 1; /* IE 10 */
+  flex: 1;
+}
+
+.flex2{
+	-ms-flex: 2; /* IE 10 */
+  flex: 2;
+}
+
 .container{
 	width: 60%;
 	margin: auto;
@@ -95,6 +109,16 @@ body{
 	border: 1px solid #3c3c3c;
 	outline:0;
 }
+
+.white-background{
+	background-color: #fff;
+	color: #747673;
+}
+
+.white-background:hover, .white-background:focus{
+	color: #4e4e4e;
+}
+
 
 
 .yellow-button{
@@ -312,6 +336,7 @@ legend {
 	-ms-flex: 2;  /* IE 10 */  
   flex: 2;
   border-radius: 25px;
+  padding: 5px 30px;
 }
 
 .forme-unosa{
@@ -336,6 +361,15 @@ legend {
 
 .active-button{
 	background-color: #597645;
+}
+
+.unos-select{
+	margin-top: 30px;
+}
+
+.unos-table{
+	margin: auto;
+	background-color: #fff;
 }
 
 /*END Unosi*/
