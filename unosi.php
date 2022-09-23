@@ -72,7 +72,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 						</div>
 
 						<div class="unos-button">
-			        <input type="submit" class="submit button-full" name="submit-proizvodi" value="Submit"><br><br>
+			        <input type="submit" class="submit button-full" name="submit-proizvod" value="Submit"><br><br>
 			      </div>
 
 					</form>
@@ -87,21 +87,14 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 					<form action="" method="post" class="forme-unosa">
 
 						<div class="form-inputs">
-							<div class="left-row">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Naziv">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Cena">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Težina">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Naziv">
-							</div>
-
-							<div class="right-row">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Magacin">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Količina u magacinu">
+							<div class="center-row">
+								<input type="text" class="center-text input-field" name="ime-saradnika" placeholder="Ime">
+								<input type="text" class="center-text input-field" name="prezime-saradnika" placeholder="Prezime">
 							</div>
 						</div>
 
 						<div class="unos-button">
-			        <input type="submit" class="submit button-full" name="submit-proizvodi" value="Submit"><br><br>
+			        <input type="submit" class="submit button-full" name="submit-saradnik" value="Submit"><br><br>
 			      </div>
 
 					</form>
@@ -117,21 +110,14 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 					<form action="" method="post" class="forme-unosa">
 
 						<div class="form-inputs">
-							<div class="left-row">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Naziv">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Cena">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Težina">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Naziv">
-							</div>
-
-							<div class="right-row">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Magacin">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Količina u magacinu">
+							<div class="center-row">
+								<input type="text" class="center-text input-field" name="ime-grada" placeholder="Ime grada">
+								<input type="text" class="center-text input-field" name="prezime-saradnika" placeholder="Poštansko broj">
 							</div>
 						</div>
 
 						<div class="unos-button">
-			        <input type="submit" class="submit button-full" name="submit-proizvodi" value="Submit"><br><br>
+			        <input type="submit" class="submit button-full" name="submit-grad" value="Submit"><br><br>
 			      </div>
 
 					</form>
@@ -148,15 +134,20 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 						<div class="form-inputs">
 							<div class="left-row">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Naziv">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Cena">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Težina">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Naziv">
+								<input type="text" class="center-text input-field" name="user-ime" placeholder="Ime">
+								<input type="text" class="center-text input-field" name="user-prezime" placeholder="Prezime">
+								<input type="text" class="center-text input-field" name="user-username" placeholder="Username">
+								<input type="password" class="center-text input-field" name="user-password" placeholder="Password">
 							</div>
 
 							<div class="right-row">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Magacin">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Količina u magacinu">
+								<input type="email" class="center-text input-field" name="user-rola" placeholder="email">
+								<select class="center-text input-field" name="user-rola" placeholder="Privilegija">
+									<option value="" disabled selected>Privilegija</option>
+									<option value="1">Saradnik</option>
+									<option value="2">Zaposleni</option>
+									<option value="3">Admin</option>
+								</select>
 							</div>
 						</div>
 

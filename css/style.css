@@ -344,6 +344,8 @@ legend {
 }
 
 .form-inputs{
+	width: 100%;
+	min-height: 380px;
 	display: flex;
 }
 
@@ -352,6 +354,11 @@ legend {
 	display: inline-block;
 	-ms-flex: 1;  /* IE 10 */  
   flex: 1;
+}
+
+.center-row{
+	width: 270px;
+	margin: auto;
 }
 
 .unos-button{
