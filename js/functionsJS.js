@@ -5,7 +5,7 @@
 
 		
 		var xhr = new XMLHttpRequest();
-		xhr.open("get", "ajax_response.php?id_magacina="+id_magacina, false);
+		xhr.open("get", "ajax_response.php?id_magacina="+id_magacina+"&page=unosi", false);
 		xhr.send();
 		var odgovor = xhr.responseText;
 		if(odgovor!==""){
@@ -14,11 +14,147 @@
 
 	}
 
- 
+ 	function autofillNarudzbaMagacin(id){
+ 		var id_magacina = id.value;
+		var id_magacina = encodeURIComponent(id_magacina);
 
+		alert(id_magacina);
+		
+		var xhr = new XMLHttpRequest();
+		xhr.open("get", "ajax_response.php?id_magacina="+id_magacina+"&page=narudzbenica", false);
+		xhr.send();
+		var odgovor = xhr.responseText;
+		if(odgovor!==""){
+			$("#datalist-proizvodi").html(odgovor);
+		}	
+ 	}
+
+ 	function autofillProizvoda(proiz,i,page,id_magacina){
+		var proizvod = proiz.value;
+		var proizvod = encodeURIComponent(proizvod);
+		var id = proiz.id;
+		
+		if(page=="narudzbenica"){ //Ako je poziv funkcije iz "narudzbenica.php"
+
+			var xhr = new XMLHttpRequest();
+			xhr.open("get", "ajax_response.php?proizvod="+proizvod+"&i="+i+"&id_magacina="+id_magacina, false);
+			xhr.send();
+			var odgovor = xhr.responseText;
+			if(odgovor!==""){
+				$("#alert").html(odgovor);
+			}
+			
+		}
+	}
 
 
 //STARO
+	function autofillArtikal(art,i,doc){
+		var artikal = art.value;
+		var artikal = encodeURIComponent(artikal);
+		var id = art.id;
+		
+		if(doc=="faktura"){ //Ako je poziv funkcije iz "Fakture"
+
+			var xhr = new XMLHttpRequest();
+			xhr.open("get", "ajax_response.php?artikal="+artikal+"&i="+i, false);
+			xhr.send();
+			var odgovor = xhr.responseText;
+			if(odgovor!==""){
+				$("#alert").html(odgovor);
+			}
+			
+		}
+		
+		if(doc=="edit"){ //Ako je poziv funkcije iz "Podesavanja"
+
+			var xhr = new XMLHttpRequest();
+			xhr.open("get", "ajax_response.php?artikal="+artikal+"&i="+i+"&page=settings", false);
+			xhr.send();
+			var odgovor = xhr.responseText;
+			if(odgovor!==""){
+				$("#alert").html(odgovor);
+			}
+		}
+
+
+		//Ako je duzina teksta unetog u imput polje duza od 36 karaktera onda se input polje pretvara u textarea
+		artikal = decodeURIComponent(artikal); 
+		var n = artikal.length;
+		if(n>35){
+			var texbox = $("#artikal"+i);
+			var rows = parseInt(n/35)+1;
+			var onblur = 'onblur="autofillArtikal(this,'+"'"+i+"','faktura'"+')"';
+
+			var textarea = "<textarea "+onblur+" class='artikal-input' name='artikal"+i+"'  id='textarea"+i+"' rows='"+rows+"' cols='34'  required>"+artikal+"</textarea>";
+ 
+			if(n>2000){
+				var textarea = "<textarea "+onblur+" class='artikal-input' name='artikal"+i+"'  id='textarea"+i+"' rows='1' cols='34'  required>"+alert('Maksimalan broj karaktera je 2000.')+"</textarea>"; 
+			}
+			$("#artikal"+i).each(function() {
+			    var style = $(this).attr('style'); 
+			    $(this).replaceWith(textarea);
+			});
+		}
+
+
+		function artikli(){
+			var xhr = new XMLHttpRequest();
+			xhr.open("get", "artikal.php?artikal="+artikal, false);
+			xhr.send();
+			var odgovor = xhr.responseText;
+			if(odgovor!==""){
+				document.getElementById("hidden").value = odgovor;
+			}
+		}
+		
+		function mera(){
+			var xhr = new XMLHttpRequest();
+			xhr.open("get", "artikal.php?mera="+artikal, false);
+			xhr.send();
+			var odgovor = xhr.responseText;
+			if(odgovor!==""){
+				if(doc=="faktura"){
+					document.getElementById("mera"+i).innerHTML = odgovor;
+				}
+				document.getElementById("mera").value = odgovor;
+			}
+		}
+		
+		function cena(){
+			var xhr = new XMLHttpRequest();
+			xhr.open("get", "artikal.php?cena="+artikal, false);
+			xhr.send();
+			var odgovor = xhr.responseText;
+			if(odgovor!==""){
+				if(doc=="faktura"){
+					document.getElementById("cena"+i).innerHTML = odgovor;
+				}
+				document.getElementById("cena"+i).value = odgovor;
+			}
+		}
+		
+		function pdv(){
+			var xhr = new XMLHttpRequest();
+			xhr.open("get", "artikal.php?pdv="+artikal, false);
+			xhr.send();
+			var odgovor = xhr.responseText;
+			if(odgovor!==""){
+				document.getElementById("pdv").value = odgovor;
+			}
+		}
+		
+		function statusArtikla(){
+			var xhr = new XMLHttpRequest();
+			xhr.open("get", "artikal.php?statusArtikla="+artikal, false);
+			xhr.send();
+			var odgovor = xhr.responseText;
+			if(odgovor!==""){
+				document.getElementById("blockArtical").checked = odgovor;	
+			}
+		}
+	}
+
 	function kes(period){ //ukoliko je valuta placanja "1" (placanje u gotovini) dodeljuje se rabat ("kasa skonto") 5%
 		if(period == "1"){
 			$("#skonto").val("5");

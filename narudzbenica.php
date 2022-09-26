@@ -4,6 +4,13 @@ include "dbconfig.php";
 include "assets/header.php";
 
 if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
+	if (isset($_GET['id_magacina'])) {
+		$id_magacina = strip_tags($_GET['id_magacina']);
+	} else {
+		header("Location: izbor-magacina.php");
+	}
+
+	$naziv_magacina = $getData->get_magacin_by_id($id_magacina)["naziv_magacina"];
 
 /*Podaci USER-a*/
 	$useID = $_SESSION['sess_user_id'];
@@ -35,7 +42,9 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 	if ($statusUser !== "0") {
 
-		if ($statusKorisnika == '1') {?>
+		if ($statusKorisnika == '1') {
+			?>
+			<div id="alert"></div>
 
     	<div class="unos">
 
@@ -50,45 +59,66 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 						<div class="narudzbenica-general">
 							<div class="left-3row">
 								<div>
-									<input type="text" class="center-text input-small" size="5" name="" placeholder="ID" required>
-									<input type="date" class="center-text input-small" size="9" name="" placeholder="" required>
+									<input type="text" class="center-text input-small" size="5" name="id" placeholder="ID" required>
+									<input type="date" class="center-text input-small" size="9" name="datum" required>
 								</div>
-								
-								<input type="text" class="center-text input-field" name="" placeholder="Mest" required>
-								<input type="text" class="center-text input-field" name="" placeholder="Saradnik" required>
+
+								<input type="text" class="awesomplete center-text input-field" name="mesto" list="gradovi" placeholder="Mesto" required>
+									<datalist id="gradovi">
+										<?php
+
+			$mesta = $getData->get_gradovi();
+			foreach ($mesta as $mesto) {
+				echo "<option value='" . $mesto['ime_grada'] . "'>" . $mesto['ime_grada'] . " " . $mesto['postanski_broj'] . '</option>';
+			}
+
+			?>
+									</datalist>
+
+								<input type="text" class="awesomplete center-text input-small" name="saradnik" list="saradnici" value="" placeholder="Izaberi Saradnika">
+									<datalist id="saradnici">
+										<?php
+
+			$saradnici = $getData->get_saradnici($id_korisnika);
+			foreach ($saradnici as $saradnik) {
+				echo "<option value='" . $saradnik['id_saradnika'] . "'>" . $saradnik['ime_saradnika'] . " " . $saradnik['prezime_saradnika'] . '</option>';
+			}
+
+			?>
+									</datalist>
 							</div>
 
 							<div class="center-3row">
-								<input type="text" class="center-text input-field" name="" placeholder="Ime i Prezime" required>
-								<input type="text" class="center-text input-field" name="" placeholder="Adresa" required>
-								<input type="text" class="center-text input-field" name="" placeholder="Prevoznik" required>
+								<input type="text" class="center-text input-field" name="ime_i_prezime" placeholder="Ime i Prezime" required>
+								<input type="text" class="center-text input-field" name="adresa" placeholder="Adresa" required>
+								<input type="text" class="center-text input-field" name="prevoznik" placeholder="Prevoznik" required>
 							</div>
 
 							<div class="right-3row">
-								<?php
-								$magacini = $getData->get_magacini_by_korisnik($id_korisnika);
-								?>
-								<select class="center-text input-field" >
-									<option value="" disabled selected>Izaberi magacin</option>
-								<?php
-								foreach ($magacini as $magacin) {
-									echo "
-									<option value=".$magacin['id_magacina'].">".$magacin['naziv_magacina']."</option>
-									";	
-								}
-								?>									
-								</select>
-								<input type="text" class="center-text input-field" name="" placeholder="Telefon" required>
-								<input type="text" class="center-text input-field" name="" placeholder="Broj Pošiljke" required>
+								<input type="text" class="center-text input-field" name="magacin" value="<?php echo $naziv_magacina ?>" disabled>
+								<input type="hidden" name="id_magacina" value="<?php echo $id_magacina ?>">
+								<input type="text" class="center-text input-field" name="telefon" placeholder="Telefon" required>
+								<input type="text" class="center-text input-field" name="broj_posiljke" placeholder="Broj Pošiljke" required>
 							</div>
 
 						</div>
-
+						<?php $i = 1;?>
 						<div class="porudzbenica-artikli">
-							<input type="text" class="center-text input-small" name="" size="35" placeholder="Proizvod" required>
+							<?php echo $i . ". "; ?>
+							<input type="text" class="awesomplete center-text input-small" name="proizvod1" list="proizvodi" value="" size="36" placeholder="Izaberi Artikal" required onblur="autofillProizvoda(this,'<?php echo $i; ?>','narudzbenica',<?php echo $id_magacina ?>)">
+							<datalist id="proizvodi">
+								<?php
+
+			$proizvodi = $getData->get_proizvodi_from_magacin($id_korisnika, $id_magacina);
+			foreach ($proizvodi as $proizvod) {
+				echo "<option value='" . $proizvod['id_proizvoda'] . "'>" . $proizvod['naziv_proizvoda'] . '</option>';
+			}
+
+			?>
+							</datalist>
 							<input type="text" class="center-text input-small" name="" size="5" placeholder="kolicina" required>
-							<input type="text" class="center-text input-small" name="" size="5" placeholder="cena" required>
-							<input type="text" class="center-text input-small" name="" size="5" placeholder="stanje" required>
+							<input type="text" class="center-text input-small" name="cena-proizvoda<?php echo $i; ?>" id="cena-proizvoda<?php echo $i; ?>" size="5" placeholder="cena" required>
+							<input type="text" class="center-text input-small" name="stanje<?php echo $i; ?>" id="stanje<?php echo $i; ?>" size="5" placeholder="stanje" disabled>
 						</div>
 
 						<div class="unos-button">
@@ -104,7 +134,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 		</div> <!--END Unos-->
 
 		<?php
-		} elseif ($statusKorisnika == '0') {
+} elseif ($statusKorisnika == '0') {
 			echo "<h1 class='centerText'>ZBOG NEIZMIRENIH OBAVEZA STE PRIVREMENO ISKLJUCENI!</h1><br><br><br><br><br><br><br><br>";
 		} else {
 			// ako status korisnika nije '1' ili '2' vec je '0'
