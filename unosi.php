@@ -1,4 +1,6 @@
 <?php
+$message = "";
+
 include "dbconfig.php";
 
 include "assets/header.php";
@@ -8,7 +10,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 /*Podaci USER-a*/
 	$useID = $_SESSION['sess_user_id'];
 	$username = $_SESSION['sess_user_name'];
-	$idKorisnika = $_SESSION['sess_id_korisnika'];
+	$id_korisnika = $_SESSION['sess_id_korisnika'];
 	$statusUser = $_SESSION['sess_user_status'];
 
 /*Podaci KORISNIKA*/
@@ -33,7 +35,109 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 		$statusKorisnika = 0;
 	}
 
+	//Ako je kliknuto submit-proizvod
+	if (isset($_POST['submit-proizvod'])) {
+		$naziv_proizvoda = strip_tags($_POST['naziv-proizvoda']);
+		$cena_proizvoda = strip_tags($_POST['cena-proizvoda']);
+		$tezina_proizvoda = strip_tags($_POST['tezina-proizvoda']);
+		$cena_saradnika = strip_tags($_POST['cena-saradnika']);
+		$id_magacina = strip_tags($_POST['magacin']);
+		$kolicina_u_magacinu = strip_tags($_POST['kolicina-u-magacinu']);
+
+		$naziv_magacina = $getData->get_magacin_by_id($id_magacina)["naziv_magacina"];
+
+		if ($naziv_proizvoda != "" && $cena_proizvoda != "" && $tezina_proizvoda != "" && $cena_saradnika != "" && $id_magacina != "" && $kolicina_u_magacinu != "") {
+
+			$existingProizvod = $getData->if_proizvod_exists($id_korisnika, $naziv_proizvoda, $id_magacina);
+			if ($existingProizvod > 0) {
+				$message = "Ovaj proizvod je već dodat u magacin " . $naziv_magacina;
+			}
+
+			if ($message == "") {
+				$insertData->unos_proizvoda($id_korisnika, $naziv_proizvoda, $cena_proizvoda, $tezina_proizvoda, $cena_saradnika, $id_magacina, $kolicina_u_magacinu);
+			} else {
+				echo "<script> alert('" . $message . "'); </script>";
+			}
+		} else {
+			echo "<script> alert('Sva polja moraju biti popunjena'); </script>";
+		}
+	}
+
+	//Ako je kliknuto submit-saradnik
+	if (isset($_POST['submit-saradnik'])) {
+		$ime_saradnika = strip_tags($_POST['ime-saradnika']);
+		$prezime_saradnika = strip_tags($_POST['prezime-saradnika']);
+
+		if ($ime_saradnika != "" && $prezime_saradnika != "") {
+
+			$existingSaradnik = $getData->if_saradnik_exists($id_korisnika, $ime_saradnika, $prezime_saradnika);
+			if ($existingSaradnik > 0) {
+				$message = "Ovaj saradnik je već dodat u bazu podataka";
+			}
+
+			if ($message == "") {
+				$insertData->unos_saradnika($id_korisnika, $ime_saradnika, $prezime_saradnika);
+			} else {
+				echo "<script> alert('" . $message . "'); </script>";
+			}
+
+		} else {
+			echo "<script> alert('Sva polja moraju biti popunjena'); </script>";
+		}
+	}
+
+	//Ako je kliknuto submit-grad
+	if (isset($_POST['submit-grad'])) {
+		$ime_grada = strip_tags($_POST['ime-grada']);
+		$postanski_broj = strip_tags($_POST['postanski-broj']);
+
+		if ($ime_grada != "" && $postanski_broj != "") {
+			$existingGrad = $getData->if_grad_exists($ime_grada);
+
+			if ($existingGrad > 0) {
+				$message = "Ovaj grad je već unet u bazu podataka";
+			}
+
+			if ($message == "") {
+				$insertData->unos_grada($ime_grada, $postanski_broj);
+			} else {
+				echo "<script> alert('" . $message . "'); </script>";
+			}
+		} else {
+			echo "<script> alert('Sva polja moraju biti popunjena'); </script>";
+		}
+	}
+
+	//Ako je kliknuto submit-user
+	if (isset($_POST['submit-user'])) {
+		$user_ime = strip_tags($_POST['user-ime']);
+		$user_prezime = strip_tags($_POST['user-prezime']);
+		$username = strip_tags($_POST['user-username']);
+		$password = sha1(strip_tags($_POST['user-password']));
+		$email = strip_tags($_POST['user-email']);
+		$status = strip_tags($_POST['user-rola']);
+
+		if ($user_ime != "" && $user_prezime != "" && $username != "" && $password != "" && $email != "" && $status != "") {
+			$existingUsername = $getData->if_user_exists($username, $id_korisnika);
+			$existingEmail = $getData->if_user_mail_exists($email);
+
+			if ($existingUsername > 0) {
+				$message = "Ovaj username je zauzet";
+			}
+			if ($existingEmail > 0) {
+				$message = "Ovaj email je zauzet";
+			}
+
+			if ($message == "") {
+				$insertData->unos_usera($user_ime, $user_prezime, $username, $password, $email, $id_korisnika, $status);
+			} else {
+				echo "<script> alert('" . $message . "'); </script>";
+			}
+		}
+	}
+
 	if ($statusUser !== "0") {
+
 		/*user koji ima status 0 je blokiran*/
 
 		if ($statusKorisnika == '1') {?>
@@ -59,15 +163,18 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 						<div class="form-inputs">
 							<div class="left-row">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Naziv">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Cena">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Težina">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Naziv">
+								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Naziv" required>
+								<input type="text" class="center-text input-field" name="cena-proizvoda" placeholder="Cena" required>
+								<input type="text" class="center-text input-field" name="tezina-proizvoda" placeholder="Težina" required>
+								<input type="text" class="center-text input-field" name="cena-saradnika" placeholder="Cena Saradnika" required>
 							</div>
 
 							<div class="right-row">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Magacin">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Količina u magacinu">
+								<select class="submit white-background unos-select" name="magacin">
+								<option value="1">Biznis soft</option>
+								<option value="2">Blagajna</option>
+							</select>
+								<input type="text" class="center-text input-field" name="kolicina-u-magacinu" placeholder="Količina u magacinu" required>
 							</div>
 						</div>
 
@@ -88,8 +195,8 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 						<div class="form-inputs">
 							<div class="center-row">
-								<input type="text" class="center-text input-field" name="ime-saradnika" placeholder="Ime">
-								<input type="text" class="center-text input-field" name="prezime-saradnika" placeholder="Prezime">
+								<input type="text" class="center-text input-field" name="ime-saradnika" placeholder="Ime" required>
+								<input type="text" class="center-text input-field" name="prezime-saradnika" placeholder="Prezime" required>
 							</div>
 						</div>
 
@@ -111,8 +218,8 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 						<div class="form-inputs">
 							<div class="center-row">
-								<input type="text" class="center-text input-field" name="ime-grada" placeholder="Ime grada">
-								<input type="text" class="center-text input-field" name="prezime-saradnika" placeholder="Poštansko broj">
+								<input type="text" class="center-text input-field" name="ime-grada" placeholder="Ime grada" required>
+								<input type="text" class="center-text input-field" name="postanski-broj" placeholder="Poštansko broj">
 							</div>
 						</div>
 
@@ -134,15 +241,16 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 						<div class="form-inputs">
 							<div class="left-row">
-								<input type="text" class="center-text input-field" name="user-ime" placeholder="Ime">
-								<input type="text" class="center-text input-field" name="user-prezime" placeholder="Prezime">
-								<input type="text" class="center-text input-field" name="user-username" placeholder="Username">
-								<input type="password" class="center-text input-field" name="user-password" placeholder="Password">
+								<input type="text" class="center-text input-field" name="user-ime" placeholder="Ime" required>
+								<input type="text" class="center-text input-field" name="user-prezime" placeholder="Prezime" required>
+								<input type="text" class="center-text input-field" name="user-username" placeholder="Username" required>
+								<input type="password" class="center-text input-field" name="user-password" id="user-password" placeholder="Password" required>
+								<input type="checkbox" onclick="showPassword()">Show Password
 							</div>
 
 							<div class="right-row">
-								<input type="email" class="center-text input-field" name="user-rola" placeholder="email">
-								<select class="center-text input-field" name="user-rola" placeholder="Privilegija">
+								<input type="email" class="center-text input-field" name="user-email" placeholder="email" required>
+								<select class="center-text input-field" name="user-rola" placeholder="Privilegija" required>
 									<option value="" disabled selected>Privilegija</option>
 									<option value="1">Saradnik</option>
 									<option value="2">Zaposleni</option>
@@ -152,7 +260,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 						</div>
 
 						<div class="unos-button">
-			        <input type="submit" class="submit button-full" name="submit-proizvodi" value="Submit"><br><br>
+			        <input type="submit" class="submit button-full" name="submit-user" value="Submit"><br><br>
 			      </div>
 
 					</form>
@@ -302,4 +410,13 @@ include "assets/footer.php";
       $("#form1, #form2, #form3, #form4").addClass("hide");
     });
   });
+
+  function showPassword() {
+	  var x = document.getElementById("user-password");
+	  if (x.type === "password") {
+	    x.type = "text";
+	  } else {
+	    x.type = "password";
+	  }
+	}
 </script>

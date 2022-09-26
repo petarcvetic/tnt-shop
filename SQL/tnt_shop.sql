@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.7deb1bionic1
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Sep 23, 2022 at 04:26 PM
--- Server version: 8.0.30-0ubuntu0.20.04.2
--- PHP Version: 7.4.3
+-- Host: 127.0.0.1:3306
+-- Generation Time: Sep 26, 2022 at 12:15 AM
+-- Server version: 10.4.10-MariaDB
+-- PHP Version: 7.3.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -28,41 +28,47 @@ SET time_zone = "+00:00";
 -- Table structure for table `admin`
 --
 
-CREATE TABLE `admin` (
-  `id_admin` int NOT NULL,
-  `username` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `password` varchar(80) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `email` varchar(45) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `id_korisnika` int NOT NULL,
-  `status` enum('0','1','2','3','4','5') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+DROP TABLE IF EXISTS `admin`;
+CREATE TABLE IF NOT EXISTS `admin` (
+  `id_admin` int(11) NOT NULL AUTO_INCREMENT,
+  `user_ime` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `user_prezime` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `username` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(80) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `id_korisnika` int(11) NOT NULL,
+  `status` enum('0','1','2','3','4','5') COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id_admin`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`id_admin`, `username`, `password`, `email`, `id_korisnika`, `status`) VALUES
-(1, 'petar', '4c154902214180d01f60ffe435332ee2e511f503', '', 1, '3'),
-(2, 'root', '4c154902214180d01f60ffe435332ee2e511f503', '', 1, '3');
+INSERT INTO `admin` (`id_admin`, `user_ime`, `user_prezime`, `username`, `password`, `email`, `id_korisnika`, `status`) VALUES
+(1, 'Petar', 'Cvetic', 'petar', '4c154902214180d01f60ffe435332ee2e511f503', 'petar.cvetic', 1, '3'),
+(2, '', '', 'root', '4c154902214180d01f60ffe435332ee2e511f503', '', 1, '3');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `grdovi`
+-- Table structure for table `gradovi`
 --
 
-CREATE TABLE `grdovi` (
-  `id_grada` int NOT NULL,
-  `ime_grada` varchar(70) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `postanski_broj` int NOT NULL,
-  `status` enum('0','1','2','') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+DROP TABLE IF EXISTS `gradovi`;
+CREATE TABLE IF NOT EXISTS `gradovi` (
+  `id_grada` int(11) NOT NULL AUTO_INCREMENT,
+  `ime_grada` varchar(70) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `postanski_broj` int(11) NOT NULL,
+  `status` enum('0','1','2','') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id_grada`)
+) ENGINE=InnoDB AUTO_INCREMENT=1178 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `grdovi`
+-- Dumping data for table `gradovi`
 --
 
-INSERT INTO `grdovi` (`id_grada`, `ime_grada`, `postanski_broj`, `status`) VALUES
+INSERT INTO `gradovi` (`id_grada`, `ime_grada`, `postanski_broj`, `status`) VALUES
 (1, 'Ada', 24430, '1'),
 (2, 'Adaševci', 22244, '1'),
 (3, 'Adorjan', 24425, '1'),
@@ -1245,23 +1251,25 @@ INSERT INTO `grdovi` (`id_grada`, `ime_grada`, `postanski_broj`, `status`) VALUE
 -- Table structure for table `korisnici`
 --
 
-CREATE TABLE `korisnici` (
-  `id_korisnika` int NOT NULL,
-  `korisnik` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `adresa` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `mesto` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `maticni_broj` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `pib` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `sifra_delatnosti` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `telefon` varchar(26) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `fax` varchar(26) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `tekuci_racun` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `banka` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `logo` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `template` enum('1','2','3','4') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT '1',
-  `dodatak_broju` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `status` enum('0','1','2','3','4','5') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+DROP TABLE IF EXISTS `korisnici`;
+CREATE TABLE IF NOT EXISTS `korisnici` (
+  `id_korisnika` int(11) NOT NULL AUTO_INCREMENT,
+  `korisnik` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `adresa` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `mesto` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `maticni_broj` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `pib` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `sifra_delatnosti` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `telefon` varchar(26) COLLATE utf8_unicode_ci NOT NULL,
+  `fax` varchar(26) COLLATE utf8_unicode_ci NOT NULL,
+  `tekuci_racun` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `banka` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `logo` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `template` enum('1','2','3','4') COLLATE utf8_unicode_ci NOT NULL DEFAULT '1',
+  `dodatak_broju` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `status` enum('0','1','2','3','4','5') COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id_korisnika`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `korisnici`
@@ -1276,13 +1284,23 @@ INSERT INTO `korisnici` (`id_korisnika`, `korisnik`, `adresa`, `mesto`, `maticni
 -- Table structure for table `magacini`
 --
 
-CREATE TABLE `magacini` (
-  `id_magacinia` int NOT NULL,
-  `id_korisnika` int NOT NULL,
-  `naziv_magacinia` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `adresa_magacinia` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status_magacinia` enum('0','1','2','3') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+DROP TABLE IF EXISTS `magacini`;
+CREATE TABLE IF NOT EXISTS `magacini` (
+  `id_magacina` int(11) NOT NULL AUTO_INCREMENT,
+  `id_korisnika` int(11) NOT NULL,
+  `naziv_magacina` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `adresa_magacina` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('0','1','2','3') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id_magacina`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `magacini`
+--
+
+INSERT INTO `magacini` (`id_magacina`, `id_korisnika`, `naziv_magacina`, `adresa_magacina`, `status`) VALUES
+(1, 1, 'Biznis soft', 'BB', '1'),
+(2, 1, 'blagajna', 'BB', '1');
 
 -- --------------------------------------------------------
 
@@ -1290,91 +1308,78 @@ CREATE TABLE `magacini` (
 -- Table structure for table `porudzbine`
 --
 
-CREATE TABLE `porudzbine` (
-  `id_narudzbine` int NOT NULL,
+DROP TABLE IF EXISTS `porudzbine`;
+CREATE TABLE IF NOT EXISTS `porudzbine` (
+  `id_narudzbine` int(11) NOT NULL AUTO_INCREMENT,
   `id_posiljke` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
   `datum` date NOT NULL,
-  `id_magacina` int NOT NULL,
+  `id_magacina` int(11) NOT NULL,
   `ime_i_prezime` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   `mesto` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   `adresa` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
   `telefon` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `id_saradnika` int NOT NULL,
+  `id_saradnika` int(11) NOT NULL,
   `prevoznik` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `artikliKomadi` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `ukupno` decimal(7,2) NOT NULL,
   `ukupno_sa_prevozom` decimal(7,2) NOT NULL,
   `user` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` enum('0','1','2','3') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1'
+  `status` enum('0','1','2','3') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id_narudzbine`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Indexes for dumped tables
---
+-- --------------------------------------------------------
 
 --
--- Indexes for table `admin`
---
-ALTER TABLE `admin`
-  ADD PRIMARY KEY (`id_admin`);
-
---
--- Indexes for table `grdovi`
---
-ALTER TABLE `grdovi`
-  ADD PRIMARY KEY (`id_grada`);
-
---
--- Indexes for table `korisnici`
---
-ALTER TABLE `korisnici`
-  ADD PRIMARY KEY (`id_korisnika`);
-
---
--- Indexes for table `magacini`
---
-ALTER TABLE `magacini`
-  ADD PRIMARY KEY (`id_magacinia`);
-
---
--- Indexes for table `porudzbine`
---
-ALTER TABLE `porudzbine`
-  ADD PRIMARY KEY (`id_narudzbine`);
-
---
--- AUTO_INCREMENT for dumped tables
+-- Table structure for table `proizvodi`
 --
 
---
--- AUTO_INCREMENT for table `admin`
---
-ALTER TABLE `admin`
-  MODIFY `id_admin` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+DROP TABLE IF EXISTS `proizvodi`;
+CREATE TABLE IF NOT EXISTS `proizvodi` (
+  `id_proizvod` int(11) NOT NULL AUTO_INCREMENT,
+  `id_korisnika` int(5) NOT NULL,
+  `naziv_proizvoda` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cena_proizvoda` decimal(6,2) NOT NULL,
+  `tezina_proizvoda` decimal(6,2) NOT NULL,
+  `cena_saradnika` decimal(6,2) NOT NULL,
+  `id_magacina` int(5) NOT NULL,
+  `kolicina_u_magacinu` decimal(7,2) NOT NULL,
+  `status` enum('0','1','2','3') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id_proizvod`)
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- AUTO_INCREMENT for table `grdovi`
+-- Dumping data for table `proizvodi`
 --
-ALTER TABLE `grdovi`
-  MODIFY `id_grada` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1176;
+
+INSERT INTO `proizvodi` (`id_proizvod`, `id_korisnika`, `naziv_proizvoda`, `cena_proizvoda`, `tezina_proizvoda`, `cena_saradnika`, `id_magacina`, `kolicina_u_magacinu`, `status`) VALUES
+(1, 1, 'Artikal1', '100.00', '10.00', '90.00', 1, '20.00', '1'),
+(6, 1, 'Artikal2', '100.00', '10.00', '90.00', 1, '20.00', '1');
+
+-- --------------------------------------------------------
 
 --
--- AUTO_INCREMENT for table `korisnici`
+-- Table structure for table `saradnici`
 --
-ALTER TABLE `korisnici`
-  MODIFY `id_korisnika` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+DROP TABLE IF EXISTS `saradnici`;
+CREATE TABLE IF NOT EXISTS `saradnici` (
+  `id_saradnika` int(11) NOT NULL AUTO_INCREMENT,
+  `id_korisnika` int(6) NOT NULL,
+  `ime_saradnika` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `prezime_saradnika` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('0','1','2','3') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id_saradnika`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- AUTO_INCREMENT for table `magacini`
+-- Dumping data for table `saradnici`
 --
-ALTER TABLE `magacini`
-  MODIFY `id_magacinia` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `porudzbine`
---
-ALTER TABLE `porudzbine`
-  MODIFY `id_narudzbine` int NOT NULL AUTO_INCREMENT;
+INSERT INTO `saradnici` (`id_saradnika`, `id_korisnika`, `ime_saradnika`, `prezime_saradnika`, `status`) VALUES
+(1, 1, 'Petar', 'Petrovic', '1'),
+(2, 1, 'Marko', 'Markovic', '1'),
+(3, 1, 'Petar', 'Markovic', '1');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
