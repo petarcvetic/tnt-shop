@@ -52,11 +52,7 @@ if ($_SESSION['sess_korisnik_status'] > 0) {?>
 
 			<div class="login-header">
 				<a href="logout.php"><button class="submit yellow-button" name="logout"> Izloguj se </button></a>
-				<?php
-if ($user->is_loggedin() != "" && $statusUser > 2 && $_SESSION['sess_korisnik_status'] > 0) {
-		echo "<a href='register.php'><button class='submit yellow-button'> Register </button></a>";
-	}
-	?>
+				<a href="index.php"><button class="submit">HOME</button></a>
 			</div>
 
 			<?php

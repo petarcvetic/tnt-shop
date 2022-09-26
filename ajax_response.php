@@ -1,12 +1,41 @@
 <?php 
-
-//include("config.php");
 include("dbconfig.php");	
 
- $idKorisnika = $_SESSION['sess_id_korisnika'];
+$id_korisnika = $_SESSION['sess_id_korisnika'];
 
+//POPUNJAVANJE TABELE MAGACIN NA STRANI unosi.php
+if(isset($_GET['id_magacina'])){
+	$id_magacina = strip_tags($_GET['id_magacina']);
 
+	$proizvodi = $getData->get_proizvodi_from_magacin($id_korisnika,$id_magacina);
 
+	$i = 1;
+?>	
+
+		<tr>
+			<th>Br</th>
+			<th>NAZIV ARTIKLA</th>
+			<th>CENA</th>
+			<th>CENA SARADNIKA</th>
+			<th>KOLICINA</th>
+		</tr>
+
+<?php
+	foreach ($proizvodi as $proizvod) {
+		echo "
+		<tr>
+			<td>" . $i . "</td>
+			<td>" . $proizvod['naziv_proizvoda'] . "</td>
+			<td>" . $proizvod['cena_proizvoda'] . "</td>
+			<td>" . $proizvod['cena_saradnika'] ."</td>
+			<td>" . $proizvod['kolicina_u_magacinu'] . "</td>
+		</tr>
+		";
+		$i++;
+	}
+}
+
+//STARO
 if (isset($_GET['t'])){
 	$zahtev = strip_tags($_GET['z']);
 

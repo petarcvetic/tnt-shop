@@ -110,6 +110,29 @@ class GetData {
 		return $this->get_fetch_data($query, $stmtArray, "bindValue");
 	}
 
+	public function get_magacini_by_korisnik($id_korisnika) {
+		$query = "SELECT * FROM magacini WHERE id_korisnika=:id_korisnika AND status='1'";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"id_korisnika" => $id_korisnika,
+		);
+
+		return $this->get_fetch_all($query, $stmtArray, "bindParam");
+	}
+
+	public function get_proizvodi_from_magacin($id_korisnika,$id_magacina) {
+		$query = "SELECT * FROM proizvodi WHERE id_korisnika=:id_korisnika AND id_magacina=:id_magacina AND status='1'";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"id_korisnika" => $id_korisnika,
+			"id_magacina" => $id_magacina,
+		);
+
+		return $this->get_fetch_all($query, $stmtArray, "bindValue");
+	}
+
 /* STARO */
 	public function get_korisnik($id_korisnika) {
 		$query = "SELECT * FROM korisnici WHERE id_korisnika=:id_korisnika";

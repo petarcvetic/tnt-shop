@@ -78,7 +78,7 @@ if($user->is_loggedin()!="" && $_SESSION['sess_korisnik_status'] != "0"){
 
         <div class="main-menu-block">
           <a href="unosi.php"><button class="submit">Unosi</button></a>  
-          <a href=""><button class="submit">Porudžbine</button></a>
+          <a href="narudzbenica.php"><button class="submit">Porudžbine</button></a>
         </div>
       </div>
     

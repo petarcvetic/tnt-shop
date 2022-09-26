@@ -1,20 +1,24 @@
-	/*Hamburger Menu*/
-/*	var isActive = false;
+	function autofillTabeleMagacin(id){
+		
+		var id_magacina = id.value;
+		var id_magacina = encodeURIComponent(id_magacina);
 
-	$('.mobile-js-menu').on('click', function() {
-		if (isActive) {
-			$(this).removeClass('active');
-			$('body').removeClass('menu-open');
-		} else {
-			$(this).addClass('active');
-			$('body').addClass('menu-open');
-		}
+		
+		var xhr = new XMLHttpRequest();
+		xhr.open("get", "ajax_response.php?id_magacina="+id_magacina, false);
+		xhr.send();
+		var odgovor = xhr.responseText;
+		if(odgovor!==""){
+			$("#unos-tabela").html(odgovor);
+		}		
 
-		isActive = !isActive;
-	});
-*/	/*END Hamburger Menu*/
+	}
+
  
 
+
+
+//STARO
 	function kes(period){ //ukoliko je valuta placanja "1" (placanje u gotovini) dodeljuje se rabat ("kasa skonto") 5%
 		if(period == "1"){
 			$("#skonto").val("5");

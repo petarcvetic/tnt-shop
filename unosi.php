@@ -269,6 +269,9 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 
 				<!--Forma USERS-->
+				<?php
+				$magacini = $getData->get_magacini_by_korisnik($id_korisnika);
+				?>
 				<div id="form5" class="hide">
 
 					<div class="flex">
@@ -277,39 +280,25 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 						</div>
 
 						<div class="flex1">
-							<select class="submit white-background unos-select">
-								<option>Biznis soft</option>
-								<option>Blagajna</option>
-							</select>
+
+								<select class="submit white-background unos-select" onchange="autofillTabeleMagacin(this)">
+									<option value="" disabled selected>Izaberi magacin</option>
+									<?php
+									foreach ($magacini as $magacin) {
+										echo "
+										<option value=".$magacin['id_magacina'].">".$magacin['naziv_magacina']."</option>
+										";	
+									}
+									?>									
+								</select>
+
 						</div>
 					</div>
 
-					<table class="unos-table">
-						<tbody>
-							<tr>
-								<th>Br</th>
-								<th>NAZIV ARTIKLA</th>
-								<th>CENA</th>
-								<th>CENA SARADNIKA</th>
-								<th>KOLICINA</th>
-							</tr>
 
-							<tr>
-								<td>1</td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
 
-							<tr>
-								<td>2</td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-						</tbody>
+					<table class="unos-table" id="unos-tabela">
+							
 					</table>
 
 				</div>
@@ -334,7 +323,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
           </div>";
 	}
 } else {
-	header("Location: /index.php");
+	header("Location: index.php");
 }
 
 include "assets/footer.php";
@@ -419,4 +408,5 @@ include "assets/footer.php";
 	    x.type = "password";
 	  }
 	}
+
 </script>
