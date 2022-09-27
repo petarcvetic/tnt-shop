@@ -99,6 +99,15 @@ class GetData {
 		return $count;
 	}
 
+	public function if_proizvod_id_exists($id_korisnika, $id_proizvoda, $id_magacina) {
+		$query = "SELECT COUNT(*) FROM proizvodi WHERE id_korisnika='$id_korisnika' AND id_proizvoda='$id_proizvoda' AND id_magacina='$id_magacina'";
+
+		$stmt = $this->db->prepare($query);
+		$stmt->execute();
+		$count = $stmt->fetchColumn();
+		return $count;
+	}
+
 	public function get_magacin_by_id($id_magacina) {
 		$query = "SELECT * FROM magacini WHERE id_magacina=:id_magacina ";
 
@@ -146,6 +155,19 @@ class GetData {
 		return $this->get_fetch_data($query, $stmtArray, "bindValue");
 	}
 
+	public function get_proizvod_by_id($id_korisnika, $id_proizvoda, $id_magacina) {
+		$query = "SELECT * FROM proizvodi WHERE id_korisnika=:id_korisnika AND id_proizvoda=:id_proizvoda AND id_magacina=:id_magacina AND status='1'";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"id_korisnika" => $id_korisnika,
+			"naziv_proizvoda" => $id_proizvoda,
+			"id_magacina" => $id_magacina,
+		);
+
+		return $this->get_fetch_data($query, $stmtArray, "bindValue");
+	}
+
 	public function get_saradnici($id_korisnika) {
 		$query = "SELECT * FROM saradnici WHERE id_korisnika=:id_korisnika AND status='1'";
 
@@ -165,6 +187,23 @@ class GetData {
 
 		return $this->get_fetch_all($query, $stmtArray, "bindParam");
 	}
+
+	public function get_poslednja_posiljka($id_korisnika) {
+		$query = "SELECT * FROM porudzbine WHERE id_korisnika=:id_korisnika ORDER BY id_narudzbine DESC LIMIT 1 OFFSET 0";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"id_korisnika" => $id_korisnika,
+		);
+		return $this->get_fetch_data($query, $stmtArray, "bindParam");
+	}
+
+
+
+
+
+
+
 
 /* STARO */
 	public function get_korisnik($id_korisnika) {

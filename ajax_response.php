@@ -40,16 +40,17 @@ if (isset($_GET['proizvod'])) {
 	$i = strip_tags($_GET['i']);
 	$id_magacina = strip_tags($_GET['id_magacina']);
 
-	$proizvod = $getData->get_proizvod_by_name($id_korisnika, $naziv_proizvoda, $id_magacina);
-	$cena = $proizvod['cena_proizvoda'];
-	$stanje = $proizvod['kolicina_u_magacinu'];
-	if ($proizvod !== false) {
-		echo '<script>
-					$("#cena-proizvoda' . $i . '").val("' . $cena . '");
-					$("#stanje' . $i . '").val("' . $stanje . '");
-				</script>';
+	if($getData->if_proizvod_exists($id_korisnika, $naziv_proizvoda, $id_magacina) == 1){
+		$proizvod = $getData->get_proizvod_by_name($id_korisnika, $naziv_proizvoda, $id_magacina);
+		$cena = $proizvod['cena_proizvoda'];
+		$stanje = $proizvod['kolicina_u_magacinu'];
+		if ($proizvod !== false) {
+			echo '<script>
+						$("#cena-proizvoda' . $i . '").val("' . $cena . '");
+						$("#stanje' . $i . '").val("' . $stanje . '");
+					</script>';
+		}
 	}
-
 }
 
 //STARO
