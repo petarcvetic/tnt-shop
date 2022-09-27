@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 26, 2022 at 12:15 AM
+-- Generation Time: Sep 27, 2022 at 10:15 PM
 -- Server version: 10.4.10-MariaDB
 -- PHP Version: 7.3.12
 
@@ -1300,7 +1300,7 @@ CREATE TABLE IF NOT EXISTS `magacini` (
 
 INSERT INTO `magacini` (`id_magacina`, `id_korisnika`, `naziv_magacina`, `adresa_magacina`, `status`) VALUES
 (1, 1, 'Biznis soft', 'BB', '1'),
-(2, 1, 'blagajna', 'BB', '1');
+(2, 1, 'Blagajna', 'BB', '1');
 
 -- --------------------------------------------------------
 
@@ -1311,8 +1311,8 @@ INSERT INTO `magacini` (`id_magacina`, `id_korisnika`, `naziv_magacina`, `adresa
 DROP TABLE IF EXISTS `porudzbine`;
 CREATE TABLE IF NOT EXISTS `porudzbine` (
   `id_narudzbine` int(11) NOT NULL AUTO_INCREMENT,
-  `id_posiljke` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `datum` date NOT NULL,
+  `id_korisnika` int(6) NOT NULL,
+  `datum` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `id_magacina` int(11) NOT NULL,
   `ime_i_prezime` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   `mesto` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1320,13 +1320,22 @@ CREATE TABLE IF NOT EXISTS `porudzbine` (
   `telefon` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `id_saradnika` int(11) NOT NULL,
   `prevoznik` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `broj_posiljke` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   `artikliKomadi` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `ukupno` decimal(7,2) NOT NULL,
   `ukupno_sa_prevozom` decimal(7,2) NOT NULL,
   `user` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `time` timestamp NOT NULL DEFAULT current_timestamp(),
   `status` enum('0','1','2','3') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
   PRIMARY KEY (`id_narudzbine`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `porudzbine`
+--
+
+INSERT INTO `porudzbine` (`id_narudzbine`, `id_korisnika`, `datum`, `id_magacina`, `ime_i_prezime`, `mesto`, `adresa`, `telefon`, `id_saradnika`, `prevoznik`, `broj_posiljke`, `artikliKomadi`, `ukupno`, `ukupno_sa_prevozom`, `user`, `time`, `status`) VALUES
+(1, 1, '29-09-2022', 2, 'Pepa', 'Titel 21240', 'Bulevar Oslobodjenja 100', '0123456', 2, 'Axa', '123', '7/1/150.00,', '150.00', '650.00', 'petar', '2022-09-27 22:09:58', '1');
 
 -- --------------------------------------------------------
 
@@ -1336,7 +1345,7 @@ CREATE TABLE IF NOT EXISTS `porudzbine` (
 
 DROP TABLE IF EXISTS `proizvodi`;
 CREATE TABLE IF NOT EXISTS `proizvodi` (
-  `id_proizvod` int(11) NOT NULL AUTO_INCREMENT,
+  `id_proizvoda` int(11) NOT NULL AUTO_INCREMENT,
   `id_korisnika` int(5) NOT NULL,
   `naziv_proizvoda` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
   `cena_proizvoda` decimal(6,2) NOT NULL,
@@ -1345,16 +1354,18 @@ CREATE TABLE IF NOT EXISTS `proizvodi` (
   `id_magacina` int(5) NOT NULL,
   `kolicina_u_magacinu` decimal(7,2) NOT NULL,
   `status` enum('0','1','2','3') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id_proizvod`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  PRIMARY KEY (`id_proizvoda`)
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `proizvodi`
 --
 
-INSERT INTO `proizvodi` (`id_proizvod`, `id_korisnika`, `naziv_proizvoda`, `cena_proizvoda`, `tezina_proizvoda`, `cena_saradnika`, `id_magacina`, `kolicina_u_magacinu`, `status`) VALUES
+INSERT INTO `proizvodi` (`id_proizvoda`, `id_korisnika`, `naziv_proizvoda`, `cena_proizvoda`, `tezina_proizvoda`, `cena_saradnika`, `id_magacina`, `kolicina_u_magacinu`, `status`) VALUES
 (1, 1, 'Artikal1', '100.00', '10.00', '90.00', 1, '20.00', '1'),
-(6, 1, 'Artikal2', '100.00', '10.00', '90.00', 1, '20.00', '1');
+(6, 1, 'Artikal2', '100.00', '10.00', '90.00', 1, '20.00', '1'),
+(7, 1, 'Artikal3', '150.00', '12.00', '121.00', 2, '50.00', '1'),
+(8, 1, 'Artikal4', '123.00', '110.00', '90.00', 2, '50.00', '1');
 
 -- --------------------------------------------------------
 

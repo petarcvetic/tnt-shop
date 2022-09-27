@@ -85,6 +85,31 @@ class InsertData {
 		return $this->insert_data($query, $stmtArray, "bindValue");
 	}
 
+	public function insert_new_porudzbina($id_korisnika, $datum, $id_magacina, $ime_i_prezime, $mesto, $adresa, $telefon, $id_saradnika, $prevoznik, $broj_posiljke, $artikliKomadi, $ukupno, $ukupno_sa_prevozom, $user) {
+		$query = "INSERT INTO porudzbine (id_korisnika, datum, id_magacina, ime_i_prezime, mesto, adresa, telefon, id_saradnika, prevoznik, broj_posiljke, artikliKomadi, ukupno, ukupno_sa_prevozom, user, status) VALUES (:id_korisnika, :datum, :id_magacina, :ime_i_prezime, :mesto, :adresa, :telefon, :id_saradnika, :prevoznik, :broj_posiljke, :artikliKomadi, :ukupno, :ukupno_sa_prevozom, :user, :status)";
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"id_korisnika" => $id_korisnika,
+			"datum" => $datum,
+			"id_magacina" => $id_magacina,
+			"ime_i_prezime" => $ime_i_prezime,
+			"mesto" => $mesto,
+			"adresa" => $adresa,
+			"telefon" => $telefon,
+			"id_saradnika" => $id_saradnika,
+			"prevoznik" => $prevoznik,
+			"broj_posiljke" => $broj_posiljke,
+			"artikliKomadi" => $artikliKomadi,
+			"ukupno" => $ukupno,
+			"ukupno_sa_prevozom" => $ukupno_sa_prevozom,
+			"user" => $user,
+			"status" => $this->status,
+		);
+
+		return $this->insert_data($query, $stmtArray, "bindValue");
+	}
+
+/*STARO*/
 	public function verify_user($id_admin) {
 
 		$query = "UPDATE admin SET status=:status WHERE id_admin=:id_admin";

@@ -179,6 +179,19 @@ class GetData {
 		return $this->get_fetch_all($query, $stmtArray, "bindValue");
 	}
 
+	public function get_saradnik_by_ime_i_prezime($id_korisnika, $ime_saradnika, $prezime_saradnika) {
+		$query = "SELECT * FROM saradnici WHERE id_korisnika=:id_korisnika AND ime_saradnika=:ime_saradnika AND prezime_saradnika=:prezime_saradnika AND status='1'";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"id_korisnika" => $id_korisnika,
+			"ime_saradnika" => $ime_saradnika,
+			"prezime_saradnika" => $prezime_saradnika,
+		);
+
+		return $this->get_fetch_data($query, $stmtArray, "bindValue");
+	}
+
 	public function get_gradovi() {
 		$query = "SELECT * FROM gradovi ";
 		$stmt = $this->db->prepare($query);
@@ -197,13 +210,6 @@ class GetData {
 		);
 		return $this->get_fetch_data($query, $stmtArray, "bindParam");
 	}
-
-
-
-
-
-
-
 
 /* STARO */
 	public function get_korisnik($id_korisnika) {

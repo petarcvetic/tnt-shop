@@ -47,6 +47,36 @@
 		}
 	}
 
+	function createNewInput(i,id_magacina){
+
+
+		i=Number(i);  // broj trenutnog inputa
+		var s = Number(i)+1;
+		var narudzbenica = "narudzbenica";
+		var predhodniArtikal = $('#stanje'+i).val(); //vrednost u predhodnom inputu
+		var sledeciArtikal = $('#proizvod'+s).val(); //vrednost u sledecem inputu
+		
+		if (predhodniArtikal != ""){ // ako predhodni input nije prazan izpisuje se novi input
+			i = s;
+			
+			var div_start = '<div class="porudzbenica-artikli" id="'+i+'">';
+			var cell1 = '<div class="redni-broj">'+i+'</div>';
+			var cell2 = '<input type="text" class="awesomplete center-text input-small" name="proizvod'+i+'" id="proizvod'+i+'" list="proizvodi" size="34" placeholder="Izaberi Artikal" required onChange="autofillProizvoda(this,'+"'"+i+"','narudzbenica','"+id_magacina+"')"+'">';
+			var cell3 = '<input type="text" class="center-text input-small" name="kolicina'+i+'" size="5" placeholder="kolicina" required>';			
+			var cell4 = '<input type="text" class="center-text input-small" name="cena_proizvoda'+i+'" id="cena-proizvoda'+i+'" size="5" placeholder="cena" required>';
+			var cell5 = '<input type="text" class="center-text input-small" name="stanje'+i+'" id="stanje'+i+'" size="5" placeholder="stanje" disabled>';
+			var cell6 = '<div class="broj center-text input-small plus" id="plus'+i+'" onclick="createNewInput('+"'"+i+"','"+id_magacina+"')"+'">+</div>';
+			var div_end = '</div>';		
+			
+//			alert(div_start+cell1+cell2+cell3+cell4+cell5+cell6+div_end);
+			$('#proizvodi-za-porudzbinu').append(div_start+cell1+cell2+cell3+cell4+cell5+cell6+div_end);
+			$("#broj_artikala").val(i);
+			if(i>1){ /*ako proizvod nije prvi brise se dugme "+" sa prethodnog proizvoda*/
+				var ii = i-1;
+				$("#plus"+ii).css("display","none");
+			}
+		}		
+	}
 
 //STARO
 	function autofillArtikal(art,i,doc){
