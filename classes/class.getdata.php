@@ -108,6 +108,17 @@ class GetData {
 		return $count;
 	}
 
+	public function get_magacini($id_korisnika) {
+		$query = "SELECT * FROM magacini WHERE id_korisnika=:id_korisnika ";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"id_korisnika" => $id_korisnika,
+		);
+
+		return $this->get_fetch_data($query, $stmtArray, "bindValue");
+	}
+
 	public function get_magacin_by_id($id_magacina) {
 		$query = "SELECT * FROM magacini WHERE id_magacina=:id_magacina ";
 
@@ -161,7 +172,7 @@ class GetData {
 		$stmt = $this->db->prepare($query);
 		$stmtArray = array(
 			"id_korisnika" => $id_korisnika,
-			"naziv_proizvoda" => $id_proizvoda,
+			"id_proizvoda" => $id_proizvoda,
 			"id_magacina" => $id_magacina,
 		);
 

@@ -347,7 +347,7 @@ legend {
 
 .unos-form-container{
 	width: 500px;
-	height: 600px;
+	min-height: 600px;
 	background-color: #6fb143;
 	-ms-flex: 2;  /* IE 10 */  
   flex: 2;

@@ -109,6 +109,19 @@ class InsertData {
 		return $this->insert_data($query, $stmtArray, "bindValue");
 	}
 
+	public function update_stanje_proizvoda($kolicina_u_magacinu, $id_proizvoda, $id_korisnika) {
+		$query = "UPDATE proizvodi SET kolicina_u_magacinu=:kolicina_u_magacinu WHERE id_proizvoda=:id_proizvoda AND id_korisnika=:id_korisnika";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"kolicina_u_magacinu" => $kolicina_u_magacinu,
+			"id_proizvoda" => $id_proizvoda,
+			"id_korisnika" => $id_korisnika,
+		);
+
+		return $this->insert_data($query, $stmtArray, "bindValue");
+	}
+
 /*STARO*/
 	public function verify_user($id_admin) {
 

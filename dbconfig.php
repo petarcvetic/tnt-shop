@@ -1,22 +1,30 @@
 <?php
 date_default_timezone_set('Europe/Belgrade');
 session_start();
-
+/*
+//Loopia
+$dbHost = "mysql512.loopia.se";
+$dbName = "petarcvetic_com_db_7";
+$dbUser = "pepa@p64526";
+$dbPassword = "Pep@9917";
+$root_path ="https://tnt-shop.petarcvetic.com";
+*/
+/*
 //KUCA
 $dbHost = "localhost";
 $dbName = "tnt_shop";
 $dbUser = "root";
 $dbPassword = "";
 $root_path = "localhost/mmont-fakture";
+*/
 
-/*
 //POSAO
 $dbHost = "localhost";
 $dbName = "tnt_shop";
 $dbUser = "root";
 $dbPassword = "pepa9917";
 $root_path ="localhost/mmont-fakture";
- */
+
 
 //PHPMailer info
 //Sender info

@@ -32,14 +32,14 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 /*Podaci USER-a*/
 	$useID = $_SESSION['sess_user_id'];
 	$username = $_SESSION['sess_user_name'];
-	$idKorisnika = $_SESSION['sess_id_korisnika'];
+	$id_korisnika = $_SESSION['sess_id_korisnika'];
 	$statusUser = $_SESSION['sess_user_status'];
 
 /*Podaci KORISNIKA*/
 	$korisnik = $_SESSION['sess_korisnik_name'];
 
 	if ($korisnik != "") {
-		$korisnikRow = $getData->get_korisnik($idKorisnika);
+		$korisnikRow = $getData->get_korisnik($id_korisnika);
 
 		$adresaKorisnika = $korisnikRow["adresa"];
 		$mestoKorisnika = $korisnikRow["mesto"];
@@ -64,8 +64,13 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
       <div class="main-menu">
         <div class="main-menu-block">
-          <a href=""><button class="submit">Biznis soft</button></a>
-          <a href=""><button class="submit">Blagajna</button></a>
+        	<?php  
+        	$magacini = $getData->get_magacini_by_korisnik($id_korisnika);
+        	foreach ($magacini as $magacin) {
+        		echo "<a href='magacin.php?".$magacin['id_magacina']."'><button class='submit'>".$magacin['naziv_magacina']."</button></a>";
+        	}
+        	?>
+
         </div>
 
         <div class="main-menu-block">
