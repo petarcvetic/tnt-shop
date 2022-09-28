@@ -115,8 +115,8 @@ class GetData {
 		$stmtArray = array(
 			"id_korisnika" => $id_korisnika,
 		);
-
-		return $this->get_fetch_data($query, $stmtArray, "bindValue");
+		return $this->get_fetch_all($query, $stmtArray, "bindParam");
+//		return $this->get_fetch_data($query, $stmtArray, "bindValue");
 	}
 
 	public function get_magacin_by_id($id_magacina) {
@@ -203,6 +203,18 @@ class GetData {
 		return $this->get_fetch_data($query, $stmtArray, "bindValue");
 	}
 
+	public function get_saradnik_by_id($id_korisnika, $id_saradnika) {
+		$query = "SELECT * FROM saradnici WHERE id_korisnika=:id_korisnika AND id_saradnika=:id_saradnika AND status='1'";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"id_korisnika" => $id_korisnika,
+			"id_saradnika" => $id_saradnika,
+		);
+
+		return $this->get_fetch_data($query, $stmtArray, "bindValue");
+	}
+
 	public function get_gradovi() {
 		$query = "SELECT * FROM gradovi ";
 		$stmt = $this->db->prepare($query);
@@ -220,6 +232,18 @@ class GetData {
 			"id_korisnika" => $id_korisnika,
 		);
 		return $this->get_fetch_data($query, $stmtArray, "bindParam");
+	}
+
+	public function get_porudzbine_by_magacin($id_korisnika, $id_magacina) {
+		$query = "SELECT * FROM porudzbine WHERE id_korisnika=:id_korisnika AND id_magacina=:id_magacina AND status='1'";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"id_korisnika" => $id_korisnika,
+			"id_magacina" => $id_magacina,
+		);
+
+		return $this->get_fetch_all($query, $stmtArray, "bindValue");
 	}
 
 /* STARO */

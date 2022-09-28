@@ -1,6 +1,6 @@
 <?php
 $ukupno = 0;
-$artikliKomadi = "";
+$artikliKomadi = $regular = "";
 $today = date("Y-m-d");
 
 include "dbconfig.php";
@@ -10,7 +10,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 	if (isset($_GET['id_magacina'])) {
 		$id_magacina = strip_tags($_GET['id_magacina']);
 	} else {
-		header("Location: izbor-magacina.php");
+		$id_magacina = -1;
 	}
 
 	$naziv_magacina = $getData->get_magacin_by_id($id_magacina)["naziv_magacina"];
@@ -54,17 +54,17 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 				$mesto = strip_tags($_POST['mesto']);
 
-				$saradnika = strip_tags($_POST['saradnik']);
-				$ime_saradnika = explode(" ", $saradnika)[0];
-				$prezime_saradnika = explode(" ", $saradnika)[1];
-				$id_saradnika = $getData->get_saradnik_by_ime_i_prezime($id_korisnika, $ime_saradnika, $prezime_saradnika)["id_saradnika"];
+				$id_saradnika = strip_tags($_POST['saradnik']);
+				$saradnik = $getData->get_saradnik_by_id($id_korisnika, $id_saradnika);
+				$ime_saradnika = $saradnik['ime_saradnika'];
+				$prezime_saradnika = $saradnik['prezime_saradnika'];
 
 				$ime_i_prezime = strip_tags($_POST['ime_i_prezime']);
 				$adresa = strip_tags($_POST['adresa']);
 				$prevoznik = strip_tags($_POST['prevoznik']);
 				$id_magacina = strip_tags($_POST['id_magacina']);
 				$telefon = strip_tags($_POST['telefon']);
-				$broj_posiljke = strip_tags($_POST['broj_posiljke']);
+				$napomena = strip_tags($_POST['napomena']);
 				$broj_artikala = strip_tags($_POST['broj_artikala']);
 
 				for ($i = 1; $i <= $broj_artikala; $i++) {
@@ -72,8 +72,6 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 						$naziv_proizvoda = strip_tags($_POST['proizvod' . $i]);
 						$kolicina = strip_tags($_POST["kolicina" . $i]);
 						$cena = strip_tags($_POST["cena_proizvoda" . $i]);
-
-//						echo $naziv_proizvoda . "/" . $id_magacina . "/" . $ime_saradnika . "/" . $prezime_saradnika . "/ ID: " . $id_saradnika . "/" . $datum;
 
 						if ($getData->if_proizvod_exists($id_korisnika, $naziv_proizvoda, $id_magacina) != 0) {
 							$proizvod = $getData->get_proizvod_by_name($id_korisnika, $naziv_proizvoda, $id_magacina);
@@ -97,29 +95,27 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 					}
 				}
 
-				$ukupno_sa_prevozom = $ukupno + 500;
-
 				if ($artikliKomadi != "" && $ukupno != 0) {
-					$artikliKomadi = substr_replace($artikliKomadi,"", -1);
+					$artikliKomadi = substr_replace($artikliKomadi, "", -1);
 
-					$query = $insertData->insert_new_porudzbina($id_korisnika, $datum, $id_magacina, $ime_i_prezime, $mesto, $adresa, $telefon, $id_saradnika, $prevoznik, $broj_posiljke, $artikliKomadi, $ukupno, $ukupno_sa_prevozom, $username);
-					
-					if($query == ""){/*Ako je upis u bazu uspeo skida se porucena kolicina sa stanja artikala*/
+					$query = $insertData->insert_new_porudzbina($id_korisnika, $datum, $id_magacina, $ime_i_prezime, $mesto, $adresa, $telefon, $id_saradnika, $prevoznik, $artikliKomadi, $ukupno, $username, $napomena);
+
+					if ($query == "") {
+/*Ako je upis u bazu uspeo skida se porucena kolicina sa stanja artikala*/
 						$artikliKomadi_array = explode(",", $artikliKomadi);
 
 						foreach ($artikliKomadi_array as $artikal_komad) {
 							$artikal_komad_array = explode("/", $artikal_komad);
-							$id_proizvoda_i =  $artikal_komad_array[0];
+							$id_proizvoda_i = $artikal_komad_array[0];
 							$poruceno_i = $artikal_komad_array[1];
 
-							$trenutno_stanje = $getData->get_proizvod_by_id($id_korisnika, $id_proizvoda_i, $id_magacina)['kolicina_u_magacinu']; 
+							$trenutno_stanje = $getData->get_proizvod_by_id($id_korisnika, $id_proizvoda_i, $id_magacina)['kolicina_u_magacinu'];
 							$novo_stanje = $trenutno_stanje - $poruceno_i;
 
-							$insertData->update_stanje_proizvoda($novo_stanje, $id_proizvoda, $id_korisnika);
+							$insertData->update_stanje_proizvoda($novo_stanje, $id_proizvoda_i, $id_korisnika);
 						}
-					}
-					else{
-						echo "<script>alert('Doslo je do greske pri upisu u bazu'".$query.");</script>";
+					} else {
+						echo "<script>alert('Doslo je do greske pri upisu u bazu'" . $query . ");</script>";
 					}
 				}
 			}
@@ -139,7 +135,17 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 				<div class="unos-form-container">
 
 					<div id="form1" class="show">
-
+						<?php
+$magacini = $getData->get_magacini($id_korisnika);
+			foreach ($magacini as $magacin) {
+				if ($magacin['id_magacina'] != $id_magacina) {
+					echo "<a href='narudzbenica.php?id_magacina=" . $magacin['id_magacina'] . "'><button class='center-text submit'>" . $magacin['naziv_magacina'] . "</button></a>";
+				} elseif ($magacin['id_magacina'] == $id_magacina) {
+					$regular = true;
+				}
+			}
+			if ($regular) {
+				?>
 						<h1 class="center-text white-text">NARUDŽBENICA</h1>
 
 						<form action="" method="post" class="forme-unosa">
@@ -158,35 +164,34 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 				$mesta = $getData->get_gradovi();
 				foreach ($mesta as $mesto) {
 					echo "<option>" . $mesto['ime_grada'] . " " . $mesto['postanski_broj'] . '</option>';
-				}
-
-				?>
+				}?>
 										</datalist>
 
-									<input type="text" class="awesomplete center-text input-small" name="saradnik" list="saradnici" value="" placeholder="Izaberi Saradnika">
-										<datalist id="saradnici">
-											<?php
-
-				$saradnici = $getData->get_saradnici($id_korisnika);
+									<select class="center-text input-field" name="saradnik" placeholder="Izaberi Saradnika" required>
+										<option value="" disabled selected>Saradnik</option>
+									<?php
+$saradnici = $getData->get_saradnici($id_korisnika);
 				foreach ($saradnici as $saradnik) {
-					echo "<option>" . $saradnik['ime_saradnika'] . " " . $saradnik['prezime_saradnika'] . '</option>';
+					echo "<option value='" . $saradnik['id_saradnika'] . "'>" . $saradnik['ime_saradnika'] . " " . $saradnik['prezime_saradnika'] . '</option>';
 				}
-
 				?>
-										</datalist>
+									</select>
 								</div>
 
 								<div class="center-3row">
 									<input type="text" class="center-text input-field" name="ime_i_prezime" placeholder="Ime i Prezime" required>
 									<input type="text" class="center-text input-field" name="adresa" placeholder="Adresa" required>
-									<input type="text" class="center-text input-field" name="prevoznik" placeholder="Prevoznik" required>
+									<select class="center-text input-field" name="prevoznik" placeholder="Prevoznik" required>
+										<option>Bex</option>
+										<option>Aks</option>
+									</select>
 								</div>
 
 								<div class="right-3row">
 									<input type="text" class="center-text input-field" name="magacin" value="<?php echo $naziv_magacina ?>" disabled>
 									<input type="hidden" name="id_magacina" value="<?php echo $id_magacina ?>">
 									<input type="text" class="center-text input-field" name="telefon" placeholder="Telefon" required>
-									<input type="text" class="center-text input-field" name="broj_posiljke" placeholder="Broj Pošiljke" required>
+									<input type="text" class="center-text input-field" name="napomena" placeholder="Napomena" required>
 								</div>
 
 							</div>
@@ -195,7 +200,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 								<div class="porudzbenica-artikli" id="<?php echo $i; ?>">
 									<div class="redni-broj"><?php echo $i . ". "; ?></div>
-									<input type="text" class="awesomplete center-text input-small" name="proizvod<?php echo $i; ?>" id="proizvod<?php echo $i; ?>" list="proizvodi" size="34" placeholder="Izaberi Artikal" required onChange="autofillProizvoda(this,'<?php echo $i; ?>','narudzbenica',<?php echo $id_magacina ?>)">
+									<input type="text" class="awesomplete center-text input-small" name="proizvod<?php echo $i; ?>" id="proizvod<?php echo $i; ?>" list="proizvodi" size="34" placeholder="Izaberi Artikal" onChange="autofillProizvoda(this,'<?php echo $i; ?>','narudzbenica',<?php echo $id_magacina ?>)" required>
 									<datalist id="proizvodi">
 										<?php
 
@@ -222,7 +227,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 							</div>
 
 						</form>
-
+					<?php }?>
 					</div>
 
 				</div> <!--END unos-form-container-->

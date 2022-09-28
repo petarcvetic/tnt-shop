@@ -140,7 +140,8 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 		/*user koji ima status 0 je blokiran*/
 
-		if ($statusKorisnika == '1') {?>
+		if ($statusKorisnika == '1') {
+			?>
 
     	<div class="unos">
 
@@ -270,8 +271,8 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 				<!--Forma USERS-->
 				<?php
-				$magacini = $getData->get_magacini_by_korisnik($id_korisnika);
-				?>
+$magacini = $getData->get_magacini_by_korisnik($id_korisnika);
+			?>
 				<div id="form5" class="hide">
 
 					<div class="flex">
@@ -284,21 +285,20 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 								<select class="submit white-background unos-select" onchange="autofillTabeleMagacin(this)">
 									<option value="" disabled selected>Izaberi magacin</option>
 									<?php
-									foreach ($magacini as $magacin) {
-										echo "
-										<option value=".$magacin['id_magacina'].">".$magacin['naziv_magacina']."</option>
-										";	
-									}
-									?>									
+foreach ($magacini as $magacin) {
+				echo "
+										<option value=" . $magacin['id_magacina'] . ">" . $magacin['naziv_magacina'] . "</option>
+										";
+			}
+			?>
 								</select>
 
 						</div>
 					</div>
 
 
-
 					<table class="unos-table" id="unos-tabela">
-							
+
 					</table>
 
 				</div>

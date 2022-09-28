@@ -1,33 +1,17 @@
 <?php
-
-//SEO
-$page_title = "Kartica Firme";
-$keywords = "mont,kartica,firme,dobavljac,faktura";
-$description = "Knjigovodstvena aplikacija za izlistavanje kartice firme i unos faktura";
-
+$ukupno = 0;
+$artikliKomadi = "";
 $today = date("Y-m-d");
 
-$msg = $artikliKomadi = $cena = $ukupno = $broj_otpremnice = $broj_prijemnice = $br_predracuna = $firma = "";
-
 include "dbconfig.php";
-
-/*KLIKNUTO JE DUGME LOGIN NA LOGIN FORMI*/
-if (isset($_POST['submitBtnLogin'])) {
-
-	$username = strip_tags($_POST['username']);
-	$password = sha1(strip_tags($_POST['password']));
-
-	if ($username != "" && $password != "") {
-		$user->login($username, $password);
-	} else {
-		$msg = "Oba polja moraju biti popunjena!";
-	}
-}
-
 include "assets/header.php";
 
-/*AKO JE USER ULOGOVAN (ako postoji sesija sess_user_id*/
 if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
+	if (isset($_GET['id_magacina'])) {
+		$id_magacina = strip_tags($_GET['id_magacina']);
+	} else {
+		header("Location: index.php");
+	}
 
 /*Podaci USER-a*/
 	$useID = $_SESSION['sess_user_id'];
@@ -58,31 +42,56 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 	}
 
 	if ($statusUser !== "0") {
-		/*user koji ima status 0 je blokiran*/
 
 		if ($statusKorisnika == '1') {
+			$naziv_magacina = $getData->get_magacin_by_id($id_magacina)["naziv_magacina"];
+
+			$porudzbine = $getData->get_porudzbine_by_magacin($id_korisnika, $id_magacina);
+
 			?>
+		<div id="alert"></div>
 
-      <div class="main-menu">
-      	<div class="wraped">
-        	<div class="main-menu-block">
-        		<h3 class="center-text">PORUDžBINE</h3>
-        		<?php
-$magacini = $getData->get_magacini_by_korisnik($id_korisnika);
-			foreach ($magacini as $magacin) {
-				echo "<a href='porudzbine.php?id_magacina=" . $magacin['id_magacina'] . "'><button class='submit'>" . $magacin['naziv_magacina'] . "</button></a>";
-			}?>
-        	</div>
-        </div>
-        <div class="wraped">
-        	<div class="main-menu-block">
-          	<a href="unosi.php"><button class="submit">Unosi</button></a>
-          	<a href="narudzbenica.php"><button class="submit">Narudžbenica</button></a>
-        	</div>
-        </div>
-      </div>
+		<div><h1 class="center-text">Magacin <?php echo $naziv_magacina; ?></h1></div>
 
-    <?php
+		<div class="unos">
+
+			<div class="unos-form-container">
+
+				<table class="unos-table" id="magacin-tabela">
+					<tr>
+						<th>ID</th>
+						<th>DATUM</th>
+						<th>IME I PREZIME</th>
+						<th>SARADNIK</th>
+						<th>BROJ POSILJKE</th>
+						<th>IZNOS</th>
+						<th>Napomena</th>
+					</tr>
+			<?php
+
+			foreach ($porudzbine as $porudzbina) {
+				$id_saradnika = $porudzbina["id_saradnika"];
+				$saradnik = $getData->get_saradnik_by_id($id_korisnika, $id_saradnika);
+				echo "
+					<tr>
+						<td><button class='broj center-text input-small plus'>" . $porudzbina['id_narudzbine'] . "</button></td>
+						<td>" . $porudzbina['datum'] . "</td>
+						<td>" . $porudzbina['ime_i_prezime'] . "</td>
+						<td>" . $saradnik['ime_saradnika'] . " " . $saradnik['prezime_saradnika'] . "</td>
+						<td>" . $porudzbina['broj_posiljke'] . "</td>
+						<td>" . $porudzbina['ukupno'] . "</td>
+						<td>" . $porudzbina['napomena'] . "</td>
+					</tr>
+					";
+			}
+			?>
+				</table>
+
+			</div><!--END unos-form-container-->
+		</div><!--END unos-->
+
+
+<?php
 } elseif ($statusKorisnika == '0') {
 			echo "<h1 class='centerText'>ZBOG NEIZMIRENIH OBAVEZA STE PRIVREMENO ISKLJUCENI!</h1><br><br><br><br><br><br><br><br>";
 		} else {
@@ -97,20 +106,15 @@ $magacini = $getData->get_magacini_by_korisnik($id_korisnika);
             <h2>Proverite svoju email poštu</h2>
           </div>";
 	}
-}
-
-/*AKO NIJE ULOGOVAN PRIKAZUJE SE LOGIN FORMA*/
-else {
-	include "assets/login_form.php";
+} else {
+	header("Location: index.php");
 }
 
 include "assets/footer.php";
 ?>
 
-<script>
-    $("#n1").css({"color": "#415a2d", "padding":"5px", "border": "solid 1px", "border-radius":"4px", "font-weight":"bold"});
-
-    function mediaSize(){
+<script type="text/javascript">
+ function mediaSize(){
     if (window.matchMedia('(max-device-width: 768px)').matches){
       $("body").css("background-image", "url('images/background_mobile.webp')");
       $(".header").css("border-bottom", "none");
@@ -121,7 +125,5 @@ include "assets/footer.php";
   }
 
   mediaSize();
-  window.addEventListener('resize', mediaSize, false);
-  $("#headerTop").css("background-color", "rgba(10,10,10,0)");
-  $("#pc-code-logo").css("display", "none");
+
 </script>

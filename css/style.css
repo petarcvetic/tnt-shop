@@ -74,6 +74,13 @@ body{
 	left: 100px;
 }
 
+.wraped{
+	margin: 5px;
+	padding:10px 15px;
+	border-radius:25px;
+	border: 1px solid #597645;
+}
+
 .awesomplete{
 	float: none !important;
 }
@@ -126,12 +133,8 @@ body{
 
 
 .yellow-button{
-	padding:5px 8px;
-	border-radius:5px;
-	border: 1px solid #3c3c3c;
 	background-color: #FDD140;
 	color:#000000;
-	font-family: 'Roboto', sans-serif;
 }
 
 .yellow-button:hover{
@@ -316,12 +319,15 @@ legend {
 
 /*Index menu*/
 .main-menu{
-	width: 650px;
+/*	width: 650px;
 	margin: 300px auto;
+*/
+	width: 700px;
+	margin: 130px auto;
 }
 
 .main-menu-block{
-	margin-bottom: 50px;
+	margin: 20px 0;
 }
 
 .main-menu-block a{
@@ -398,8 +404,9 @@ legend {
 }
 
 .unos-table{
-	margin: auto;
+	margin:25px auto;
 	background-color: #fff;
+	text-align: venter;
 }
 
 /*END Unosi*/
