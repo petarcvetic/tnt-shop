@@ -74,7 +74,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 				$saradnik = $getData->get_saradnik_by_id($id_korisnika, $id_saradnika);
 				echo "
 					<tr>
-						<td><button class='broj center-text input-small plus'>" . $porudzbina['id_narudzbine'] . "</button></td>
+						<td><a href='edit-porudzbine.php?id_narudzbine=" . $porudzbina['id_narudzbine'] . "'><button class='broj center-text input-small plus'>" . $porudzbina['id_narudzbine'] . "</button></a></td>
 						<td>" . $porudzbina['datum'] . "</td>
 						<td>" . $porudzbina['ime_i_prezime'] . "</td>
 						<td>" . $saradnik['ime_saradnika'] . " " . $saradnik['prezime_saradnika'] . "</td>

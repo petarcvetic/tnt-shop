@@ -246,6 +246,18 @@ class GetData {
 		return $this->get_fetch_all($query, $stmtArray, "bindValue");
 	}
 
+	public function get_porudzbina_by_id($id_korisnika, $id_narudzbine) {
+		$query = "SELECT * FROM porudzbine WHERE id_korisnika=:id_korisnika AND id_narudzbine=:id_narudzbine";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"id_korisnika" => $id_korisnika,
+			"id_narudzbine" => $id_narudzbine,
+		);
+
+		return $this->get_fetch_data($query, $stmtArray, "bindValue");
+	}
+
 /* STARO */
 	public function get_korisnik($id_korisnika) {
 		$query = "SELECT * FROM korisnici WHERE id_korisnika=:id_korisnika";
