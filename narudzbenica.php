@@ -13,7 +13,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 		$id_magacina = -1;
 	}
 
-	$naziv_magacina = $getData->get_magacin_by_id($id_magacina)["naziv_magacina"];
+//	$naziv_magacina = $getData->get_magacin_by_id($id_magacina)["naziv_magacina"];
 
 /*Podaci USER-a*/
 	$useID = $_SESSION['sess_user_id'];
@@ -145,6 +145,7 @@ $magacini = $getData->get_magacini($id_korisnika);
 				}
 			}
 			if ($regular) {
+				$naziv_magacina = $getData->get_magacin_by_id($id_magacina)["naziv_magacina"];
 				?>
 						<h1 class="center-text white-text">NARUDŽBENICA</h1>
 

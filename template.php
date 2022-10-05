@@ -7,13 +7,6 @@ include "dbconfig.php";
 include "assets/header.php";
 
 if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
-	if (isset($_GET['id_magacina'])) {
-		$id_magacina = strip_tags($_GET['id_magacina']);
-	} else {
-		header("Location: izbor-magacina.php");
-	}
-
-	$naziv_magacina = $getData->get_magacin_by_id($id_magacina)["naziv_magacina"];
 
 /*Podaci USER-a*/
 	$useID = $_SESSION['sess_user_id'];

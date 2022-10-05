@@ -14,6 +14,8 @@
 
 	}
 
+
+
  	function autofillNarudzbaMagacin(id){
  		var id_magacina = id.value;
 		var id_magacina = encodeURIComponent(id_magacina);
@@ -67,15 +69,22 @@
 			var cell5 = '<input type="text" class="center-text input-small" name="stanje'+i+'" id="stanje'+i+'" size="5" placeholder="stanje" disabled>';
 			var cell6 = '<div class="broj center-text input-small plus" id="plus'+i+'" onclick="createNewInput('+"'"+i+"','"+id_magacina+"')"+'">+</div>';
 			var div_end = '</div>';		
-			
-//			alert(div_start+cell1+cell2+cell3+cell4+cell5+cell6+div_end);
+
 			$('#proizvodi-za-porudzbinu').append(div_start+cell1+cell2+cell3+cell4+cell5+cell6+div_end);
 			$("#broj_artikala").val(i);
-			if(i>1){ /*ako proizvod nije prvi brise se dugme "+" sa prethodnog proizvoda*/
+			if(i>1){ //ako proizvod nije prvi brise se dugme "+" sa prethodnog proizvoda
 				var ii = i-1;
 				$("#plus"+ii).css("display","none");
 			}
-		}		
+		}	
+
+	}
+
+
+	function redirect_to(object){
+		var selected = object.value;
+		var id_proizvoda = $('#datalist_edit').find('option[value="'+ selected +'"]').attr('id');
+		location.href = "edit-proizvoda.php?id-proizvoda="+id_proizvoda;
 	}
 
 //STARO

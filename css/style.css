@@ -85,6 +85,11 @@ body{
 	float: none !important;
 }
 
+.input-select{
+	height:100px;
+  overflow:scroll;
+}
+
 /*BUTTONS*/
 .setings-button{
 	margin-left: 20px;

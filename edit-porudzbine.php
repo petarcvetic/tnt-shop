@@ -60,9 +60,11 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 				$ime_i_prezime = strip_tags($_POST['ime_i_prezime']);
 				$adresa = strip_tags($_POST['adresa']);
 				$prevoznik = strip_tags($_POST['prevoznik']);
+				$broj_posiljke = strip_tags($_POST['broj-posiljke']);
 				$id_magacina = strip_tags($_POST['id_magacina']);
 				$telefon = strip_tags($_POST['telefon']);
 				$napomena = strip_tags($_POST['napomena']);
+				$status = strip_tags($_POST['status']);
 				$broj_artikala = strip_tags($_POST['broj_artikala']);
 
 				for ($i = 1; $i <= $broj_artikala; $i++) {
@@ -96,7 +98,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 				if ($artikliKomadi != "" && $ukupno != 0) {
 					$artikliKomadi = substr_replace($artikliKomadi, "", -1);
 
-					$query = $insertData->insert_new_porudzbina($id_korisnika, $datum, $id_magacina, $ime_i_prezime, $mesto, $adresa, $telefon, $id_saradnika, $prevoznik, $artikliKomadi, $ukupno, $username, $napomena);
+					$query = $insertData->update_porudzbina_by_id($datum, $id_magacina, $ime_i_prezime, $mesto, $adresa, $telefon, $id_saradnika, $prevoznik, $broj_posiljke, $artikliKomadi, $ukupno, $username, $napomena, $status, $id_korisnika, $id_narudzbine);
 
 					if ($query == "") {
 /*Ako je upis u bazu uspeo skida se porucena kolicina sa stanja artikala*/
@@ -140,7 +142,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 					<div id="form1" class="show">
 
-						<h1 class="center-text white-text">NARUDŽBENICA</h1>
+						<h1 class="center-text white-text">EDIT narudzbenice</h1>
 <?php if ($id_narudzbine > 0) {
 				?>
 						<form action="" method="post" class="forme-unosa">
@@ -177,9 +179,15 @@ $saradnici = $getData->get_saradnici($id_korisnika);
 								<div class="center-3row">
 									<input type="text" class="center-text input-field" name="ime_i_prezime" value="<?php echo $narudzbina['ime_i_prezime']; ?>" required>
 									<input type="text" class="center-text input-field" name="adresa" value="<?php echo $narudzbina['adresa']; ?>" required>
-									<select class="center-text input-field" name="prevoznik" value="<?php echo $narudzbina['prevoznik']; ?>" required>
-										<option>Bex</option>
-										<option>Aks</option>
+									<select class="center-text input-field" name="prevoznik" required>
+											<option disabled selected>Saradnik</option>
+									<?php
+/*									$prevoznici = $getData->get_prevoznici($id_korisnika);
+									foreach ($prevoznici as $prevoznik) {
+										if ($$naziv_prevoznika_e == $prevoznik['naziv_prevoznika']) {$selected = "selected";} else { $selected = "";}
+										echo "<option>1</option>";
+									}
+*/									?>
 									</select>
 								</div>
 
@@ -187,7 +195,7 @@ $saradnici = $getData->get_saradnici($id_korisnika);
 									<input type="text" class="center-text input-field" name="magacin" value="<?php echo $magacin_e['naziv_magacina']; ?>" disabled>
 									<input type="hidden" name="id_magacina" value="<?php echo $magacin_e['id_magacina']; ?>">
 									<input type="text" class="center-text input-field" name="telefon" value="<?php echo $narudzbina['telefon']; ?>" required>
-									<input type="text" class="center-text input-field" name="napomena" value="<?php echo $narudzbina['napomena']; ?>" required>
+									<input type="text" class="center-text input-field" name="broj-posiljke" value="<?php echo $narudzbina['broj_posiljke']; ?>" placeholder="Broj posiljke">
 								</div>
 
 							</div>
@@ -195,47 +203,58 @@ $saradnici = $getData->get_saradnici($id_korisnika);
 							<div id="proizvodi-za-porudzbinu">
 
 								<div class="porudzbenica-artikli" id="<?php echo $i; ?>">
+									
 
-									<?php
-$artikliKomadi_e_array = explode(",", $artikliKomadi_e);
-				foreach ($artikliKomadi_e_array as $artikal_komad_e) {
-					$artikal_komad_e_array = explode("/", $artikal_komad_e);
-					$id_proizvoda_e = $artikal_komad_e_array[0];
-					$kolicina_e = $artikal_komad_e_array[1];
-					$cena_e = $artikal_komad_e_array[2];
+								<?php
+								$artikliKomadi_e_array = explode(",", $artikliKomadi_e);
+								foreach ($artikliKomadi_e_array as $artikal_komad_e) {
+									$artikal_komad_e_array = explode("/", $artikal_komad_e);
+									$id_proizvoda_e = $artikal_komad_e_array[0];
+									$kolicina_e = $artikal_komad_e_array[1];
+									$cena_e = $artikal_komad_e_array[2];
 
-					$proizvod_e = $getData->get_proizvod_by_id($id_korisnika, $id_proizvoda_e, $id_magacina_e);
-					?>
+									$proizvod_e = $getData->get_proizvod_by_id($id_korisnika, $id_proizvoda_e, $id_magacina_e);
+									?>
 
 
 									<div class="redni-broj"><?php echo $i . ". "; ?></div>
-									<input type="text" class="awesomplete center-text input-small" name="proizvod<?php echo $i; ?>" id="proizvod<?php echo $i; ?>" list="proizvodi" size="34" value="<?php echo $proizvod_e['naziv_proizvoda'] ?>" onChange="autofillProizvoda(this,'<?php echo $i; ?>','narudzbenica',<?php echo $id_magacina_e ?>)" required>
-									<datalist id="proizvodi">
+									<input type="text" class="awesomplete center-text input-small" name="proizvod<?php echo $i; ?>" id="proizvod<?php echo $i; ?>" list="proizvodi<?php echo $i; ?>" size="34" value="<?php echo $proizvod_e['naziv_proizvoda']; ?>" onChange="autofillProizvoda(this,'<?php echo $i; ?>','narudzbenica',<?php echo $id_magacina_e ?>)" required>
+									<datalist id="proizvodi<?php echo $i; ?>">
 										<?php
 
-					$proizvodi = $getData->get_proizvodi_from_magacin($id_korisnika, $id_magacina_e);
-					foreach ($proizvodi as $proizvod) {
-						echo "<option>" . $proizvod['naziv_proizvoda'] . "</option>";
-					}
+										$proizvodi = $getData->get_proizvodi_from_magacin($id_korisnika, $id_magacina_e);
+										foreach ($proizvodi as $proizvod) {
+											echo "<option value=".$proizvod['id_proizvoda'].">" . $proizvod['naziv_proizvoda'] . "</option>";
+										}
 
-					?>
+										?>
 									</datalist>
 
-									<input type="text" class="center-text input-small" name="kolicina<?php echo $i; ?>" size="5" placeholder="kolicina" required>
-									<input type="text" class="center-text input-small" name="cena_proizvoda<?php echo $i; ?>" id="cena-proizvoda<?php echo $i; ?>" size="5" placeholder="cena" required>
+									<input type="text" class="center-text input-small" name="kolicina<?php echo $i; ?>" size="5" placeholder="kolicina" value="<?php echo $kolicina_e; ?>" required>
+									<input type="text" class="center-text input-small" name="cena_proizvoda<?php echo $i; ?>" id="cena-proizvoda<?php echo $i; ?>" size="5" placeholder="cena" value="<?php echo $cena_e; ?>" required>
 									<input type="text" class="center-text input-small" name="stanje<?php echo $i; ?>" id="stanje<?php echo $i; ?>" size="5" placeholder="stanje" disabled>
-									<div class="broj center-text input-small plus" id="plus<?php echo $i; ?>" onclick="createNewInput('<?php echo $i; ?>','<?php echo $id_magacina_e; ?>')">+</div>
+									<div class="broj center-text input-small plus" id="plus<?php echo $i; ?>" onclick="createNewInput(<?php echo $i; ?>,<?php echo $id_magacina_e; ?>)">+</div><br>
 
 
-					<?php
-$i++;
-				}
-				?>
+								<?php
+								$i++;
+								}
+								?>
 
 
 								</div>
 
 							</div>
+							<input type="radio" name="status" value="1">
+							<label>Ne naplaceno</label>
+							<input type="radio" name="status" value="2">
+							<label>Naplaceno</label>
+							<input type="radio" name="status" value="3">
+							<label>Lom</label>
+							<input type="radio" name="status" value="4">
+							<label>Povrat</label>
+
+							<input type="text" class="center-text input-field" name="napomena" value="<?php echo $narudzbina['napomena']; ?>" placeholder="napomena">
 
 							<input type="hidden" name="broj_artikala" id="broj_artikala" value="<?php echo $i; ?>">
 

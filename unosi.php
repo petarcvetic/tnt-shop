@@ -143,21 +143,21 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 		if ($statusKorisnika == '1') {
 			?>
 
-    	<div class="unos">
+  	<div class="unos">
 
-	        <div class="unos-menu">
-	          <button id="1" class="submit active-button">Proizvodi</button>
-	          <button id="2" class="submit">Saradnik</button>
-	          <button id="3" class="submit">Gradovi</button>
-	          <button id="4" class="submit">Users</button>
-	          <button id="5" class="submit">Magacin</button>
-	        </div>
+      <div class="unos-menu">
+        <button id="1" class="submit active-button">Proizvodi</button>
+        <button id="2" class="submit">Saradnik</button>
+        <button id="3" class="submit">Gradovi</button>
+        <button id="4" class="submit">Users</button>
+        <button id="5" class="submit">Magacin</button>
+      </div>
 
 			<div class="unos-form-container">
 
 				<!--Forma PROIZVODI-->
 				<div id="form1" class="show">
-
+					<a href='edit-proizvoda.php'><button class='center-text submit'>Edit proizvoda</button></a>
 					<h1 class="center-text white-text">PROIZVOD</h1>
 
 					<form action="" method="post" class="forme-unosa">
@@ -305,7 +305,7 @@ foreach ($magacini as $magacin) {
 
 			</div>
 
-		</div>
+		</div><!--END unos-->
 
     <?php
 } elseif ($statusKorisnika == '0') {

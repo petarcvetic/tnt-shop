@@ -108,6 +108,15 @@ class GetData {
 		return $count;
 	}
 
+	public function if_proizvod_id_exists_for_korisnik($id_korisnika, $id_proizvoda) {
+		$query = "SELECT COUNT(*) FROM proizvodi WHERE id_korisnika='$id_korisnika' AND id_proizvoda='$id_proizvoda'";
+
+		$stmt = $this->db->prepare($query);
+		$stmt->execute();
+		$count = $stmt->fetchColumn();
+		return $count;
+	}
+
 	public function get_magacini($id_korisnika) {
 		$query = "SELECT * FROM magacini WHERE id_korisnika=:id_korisnika ";
 
@@ -139,6 +148,17 @@ class GetData {
 		);
 
 		return $this->get_fetch_all($query, $stmtArray, "bindParam");
+	}
+
+	public function get_all_proizvodi($id_korisnika) {
+		$query = "SELECT * FROM proizvodi WHERE id_korisnika=:id_korisnika";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"id_korisnika" => $id_korisnika,
+		);
+
+		return $this->get_fetch_all($query, $stmtArray, "bindValue");
 	}
 
 	public function get_proizvodi_from_magacin($id_korisnika, $id_magacina) {
@@ -174,6 +194,18 @@ class GetData {
 			"id_korisnika" => $id_korisnika,
 			"id_proizvoda" => $id_proizvoda,
 			"id_magacina" => $id_magacina,
+		);
+
+		return $this->get_fetch_data($query, $stmtArray, "bindValue");
+	}
+
+	public function get_proizvod_by_id_and_korisnik($id_korisnika, $id_proizvoda) {
+		$query = "SELECT * FROM proizvodi WHERE id_korisnika=:id_korisnika AND id_proizvoda=:id_proizvoda";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"id_korisnika" => $id_korisnika,
+			"id_proizvoda" => $id_proizvoda,
 		);
 
 		return $this->get_fetch_data($query, $stmtArray, "bindValue");
@@ -256,6 +288,16 @@ class GetData {
 		);
 
 		return $this->get_fetch_data($query, $stmtArray, "bindValue");
+	}
+
+	public function get_prevoznici($id_korisnika) {
+		$query = "SELECT * FROM prevoznici WHERE id_korisnika=:id_korisnika ";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"id_korisnika" => $id_korisnika,
+		);
+		return $this->get_fetch_all($query, $stmtArray, "bindParam");
 	}
 
 /* STARO */
