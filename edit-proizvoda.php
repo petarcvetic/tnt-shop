@@ -32,15 +32,14 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 		$logoKorisnika = $korisnikRow["logo"];
 		$dodatakBroju = $korisnikRow["dodatak_broju"];
 		$statusKorisnika = $korisnikRow['status'];
-	} 
-	else {
+	} else {
 		$statusKorisnika = 0;
 	}
 
 	if ($statusUser !== "0") {
 
 		/*KLIKNUTO JE SUBMIT*/
-		if(isset($_POST['submit-proizvod'])){
+		if (isset($_POST['submit-proizvod'])) {
 			$id_proizvoda = strip_tags($_POST['id-proizvoda']);
 			$naziv_proizvoda = strip_tags($_POST['naziv-proizvoda']);
 			$cena_proizvoda = strip_tags($_POST['cena-proizvoda']);
@@ -48,41 +47,41 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 			$cena_saradnika = strip_tags($_POST['cena-saradnika']);
 			$id_magacina = strip_tags($_POST['id-magacina']);
 			$kolicina_u_magacinu = strip_tags($_POST['kolicina-u-magacinu']);
+			$sifra_proizvoda = strip_tags($_POST['sifre-proizvoda']);
 
-			if($naziv_proizvoda != "" && $cena_proizvoda != "" && $tezina_proizvoda !="" && $cena_saradnika != "" && $id_magacina != "" && $kolicina_u_magacinu != ""){
-				$insertData->update_proizvoda($naziv_proizvoda, $cena_proizvoda, $tezina_proizvoda, $cena_saradnika, $id_magacina, $kolicina_u_magacinu, $id_proizvoda, $id_korisnika);
+			if ($naziv_proizvoda != "" && $cena_proizvoda != "" && $tezina_proizvoda != "" && $cena_saradnika != "" && $id_magacina != "" && $kolicina_u_magacinu != "") {
+				$insertData->update_proizvoda($naziv_proizvoda, $cena_proizvoda, $tezina_proizvoda, $cena_saradnika, $id_magacina, $kolicina_u_magacinu, $sifra_proizvoda, $id_proizvoda, $id_korisnika);
 				header('Location: edit-proizvoda.php');
 			}
 		}
 
 		if ($statusKorisnika == '1') {
 			if (isset($_GET['id-proizvoda'])) {
-			 	$id_proizvoda = strip_tags($_GET['id-proizvoda']);
-			 }else{
-			 	$id_proizvoda = -1;
-			 } ?>
+				$id_proizvoda = strip_tags($_GET['id-proizvoda']);
+			} else {
+				$id_proizvoda = -1;
+			}?>
 
 
 				<div class="unos">
 					<div class="unos-form-container">
-						
-					<?php 
-					if($id_proizvoda<=0){
-						$proizvodi = $getData->get_all_proizvodi($id_korisnika);
-					?>
+
+					<?php
+if ($id_proizvoda <= 0) {
+				$proizvodi = $getData->get_all_proizvodi($id_korisnika);
+				?>
 						<input type="text" class="center-text input-small" list="datalist_edit" size="34" onChange="redirect_to(this)" placeholder="Odaberi proizvod">
 
 						<datalist id="datalist_edit">
 
 						<?php
-						foreach ($proizvodi as $proizvod) {
-							echo "<option id='".$proizvod['id_proizvoda']."' value='". $proizvod['naziv_proizvoda'] ."'>";
-						}
-						echo "</datalist>";
-					}
-					elseif($getData->if_proizvod_id_exists_for_korisnik($id_korisnika, $id_proizvoda) > 0){
-						$proizvod = $getData->get_proizvod_by_id_and_korisnik($id_korisnika, $id_proizvoda);
-						?>	
+foreach ($proizvodi as $proizvod) {
+					echo "<option id='" . $proizvod['id_proizvoda'] . "' value='" . $proizvod['naziv_proizvoda'] . "'>";
+				}
+				echo "</datalist>";
+			} elseif ($getData->if_proizvod_id_exists_for_korisnik($id_korisnika, $id_proizvoda) > 0) {
+				$proizvod = $getData->get_proizvod_by_id_and_korisnik($id_korisnika, $id_proizvoda);
+				?>
 						<!--Forma PROIZVODI-->
 						<div id="form1" class="show">
 
@@ -91,30 +90,42 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 							<form action="" method="post" class="forme-unosa">
 
 								<div class="form-inputs">
-									<div class="left-row">
-										<input type="hidden" name="id-proizvoda" value="<?php echo $proizvod['id_proizvoda'];?>">
-										<input type="text" class="center-text input-field" name="naziv-proizvoda" value="<?php echo $proizvod['naziv_proizvoda'];?>" required>
-										<input type="text" class="center-text input-field" name="cena-proizvoda" value="<?php echo $proizvod['cena_proizvoda'];?>" required>
-										<input type="text" class="center-text input-field" name="tezina-proizvoda" value="<?php echo $proizvod['tezina_proizvoda'];?>" required>
-										<input type="text" class="center-text input-field" name="cena-saradnika" value="<?php echo $proizvod['cena_saradnika'];?>" required>
-									</div>
-
-									<div class="right-row">
-										<select class="submit white-background unos-select" name="id-magacina" required>
-										<?php 
-										$magacini = $getData->get_magacini($id_korisnika);
-										foreach ($magacini as $magacin) {
-											if($proizvod['id_magacina'] == $magacin['id_magacina']){
-												$selected = "selected";
-											}
-											else{
-												$selected = "";
-											}
-											echo "<option value='".$magacin['id_magacina']."' ".$selected.">".$magacin['naziv_magacina']."</option>";
-										}
-										?>
-										</select>
-										<input type="text" class="center-text input-field" name="kolicina-u-magacinu" value="<?php echo $proizvod['kolicina_u_magacinu'];?>" required>
+									<div class="big-center-row">
+										<div class="row">
+											<input type="hidden" name="id-proizvoda" value="<?php echo $proizvod['id_proizvoda']; ?>">
+										Proizvod: <input type="text" class="center-text submit white-background float-right" name="naziv-proizvoda" value="<?php echo $proizvod['naziv_proizvoda']; ?>" required>
+										</div>
+										<br>
+										<div class="row">
+											Cena: <input type="text" class="center-text submit white-background float-right" name="cena-proizvoda" value="<?php echo $proizvod['cena_proizvoda']; ?>" required>
+										</div><br>
+										<div class="row">
+											Tezina: <input type="text" class="center-text submit white-background float-right" name="tezina-proizvoda" value="<?php echo $proizvod['tezina_proizvoda']; ?>" required>
+										</div><br>
+										<div class="row">
+											Cena saradnika:<input type="text" class="center-text submit white-background float-right" name="cena-saradnika" value="<?php echo $proizvod['cena_saradnika']; ?>" required>
+										</div><br>
+										<div class="row">
+										Magacin: <select class="center-text submit white-background float-right" name="id-magacina" required>
+										<?php
+$magacini = $getData->get_magacini($id_korisnika);
+				foreach ($magacini as $magacin) {
+					if ($proizvod['id_magacina'] == $magacin['id_magacina']) {
+						$selected = "selected";
+					} else {
+						$selected = "";
+					}
+					echo "<option value='" . $magacin['id_magacina'] . "' " . $selected . ">" . $magacin['naziv_magacina'] . "</option>";
+				}
+				?>
+											</select>
+										</div><br>
+										<div class="row">
+											Stanje: <input type="text" class="center-text submit white-background float-right" name="kolicina-u-magacinu" value="<?php echo $proizvod['kolicina_u_magacinu']; ?>" required>
+										</div><br>
+										<div class="row">
+											Šifra: <input type="text" class="center-text submit white-background float-right" name="sifre-proizvoda" value="<?php echo $proizvod['sifra_proizvoda']; ?>" required>
+										</div><br>
 									</div>
 								</div>
 
@@ -125,19 +136,17 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 							</form>
 
 						</div>
-					<?php }else{
-						echo "<script>alert('Proizvod sa zadatim ID-jem ne postoji u bazi')</script>";
-					} ?>
+					<?php } else {
+				echo "<script>alert('Proizvod sa zadatim ID-jem ne postoji u bazi')</script>";
+			}?>
 					</div><!--END unos-form-container-->
 				</div><!--END unos -->
 
 
 
-	<?php	} 
-		elseif ($statusKorisnika == '0') {
+	<?php	} elseif ($statusKorisnika == '0') {
 			echo "<h1 class='centerText'>ZBOG NEIZMIRENIH OBAVEZA STE PRIVREMENO ISKLJUCENI!</h1><br><br><br><br><br><br><br><br>";
-		} 
-		else {
+		} else {
 			// ako status korisnika nije '1' ili '2' vec je '0'
 			echo "<h1 class='centerText'>TRENOTNO SE RADI NA POBOLJSANJU APLIKACIJE!</h1><br><br><br><br><br><br><br><br>";
 		}

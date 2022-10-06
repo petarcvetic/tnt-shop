@@ -68,12 +68,12 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 						<th>Napomena</th>
 					</tr>
 			<?php
-
+$i = 1;
 			foreach ($porudzbine as $porudzbina) {
 				$id_saradnika = $porudzbina["id_saradnika"];
 				$saradnik = $getData->get_saradnik_by_id($id_korisnika, $id_saradnika);
 				echo "
-					<tr>
+					<tr id='tr" . $i . "'>
 						<td><a href='edit-porudzbine.php?id_narudzbine=" . $porudzbina['id_narudzbine'] . "'><button class='broj center-text input-small plus'>" . $porudzbina['id_narudzbine'] . "</button></a></td>
 						<td>" . $porudzbina['datum'] . "</td>
 						<td>" . $porudzbina['ime_i_prezime'] . "</td>
@@ -83,6 +83,20 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 						<td>" . $porudzbina['napomena'] . "</td>
 					</tr>
 					";
+				if ($porudzbina['status'] == 2) {
+					$background_color = "green";
+					$text_color = "white";
+				} elseif ($porudzbina['status'] == 3) {
+					$background_color = "red";
+					$text_color = "white";
+				} elseif ($porudzbina['status'] == 4) {
+					$background_color = "yellow";
+					$text_color = "#333";
+				} else {
+					$background_color = "white";
+					$text_color = "#747673";}
+				echo "<script>$('#tr" . $i . "').css({'background-color':'" . $background_color . "', 'color':'" . $text_color . "'});</script>";
+				$i++;
 			}
 			?>
 				</table>

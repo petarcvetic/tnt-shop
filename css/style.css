@@ -348,6 +348,7 @@ legend {
 	max-width: 1200px;
 	display: flex;
 	margin: auto;
+	color:  white;
 }
 
 .unos-menu{
@@ -362,6 +363,7 @@ legend {
 	background-color: #6fb143;
 	-ms-flex: 2;  /* IE 10 */  
   flex: 2;
+  border: solid 5px #fff;
   border-radius: 25px;
   padding: 5px 30px;
 }
@@ -538,6 +540,19 @@ legend {
 	color: #fff;
 }
 /*End Narudzbenica*/
+
+/*EDIT PROIZVODA*/
+.row{
+	line-height: 2.5;
+	height: 60px;
+}
+
+.big-center-row{
+	width: 500px;
+	margin: auto;
+}
+/*END Edit proizvoda*/
+
 
 /*KARTICA DOBAVLJACA*/
 th, td{

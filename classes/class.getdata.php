@@ -267,7 +267,7 @@ class GetData {
 	}
 
 	public function get_porudzbine_by_magacin($id_korisnika, $id_magacina) {
-		$query = "SELECT * FROM porudzbine WHERE id_korisnika=:id_korisnika AND id_magacina=:id_magacina AND status='1'";
+		$query = "SELECT * FROM porudzbine WHERE id_korisnika=:id_korisnika AND id_magacina=:id_magacina";
 
 		$stmt = $this->db->prepare($query);
 		$stmtArray = array(
