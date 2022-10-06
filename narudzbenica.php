@@ -201,7 +201,7 @@ $saradnici = $getData->get_saradnici($id_korisnika);
 
 								<div class="porudzbenica-artikli" id="<?php echo $i; ?>">
 									<div class="redni-broj"><?php echo $i . ". "; ?></div>
-									<input type="text" class="awesomplete center-text input-small" name="proizvod<?php echo $i; ?>" id="proizvod<?php echo $i; ?>" list="proizvodi" size="34" placeholder="Izaberi Artikal" onChange="autofillProizvoda(this,'<?php echo $i; ?>','narudzbenica',<?php echo $id_magacina ?>)" required>
+									<input type="text" class="awesomplete center-text input-small" name="proizvod<?php echo $i; ?>" id="proizvod<?php echo $i; ?>" list="proizvodi" size="28" placeholder="Izaberi Artikal" onChange="autofillProizvoda(this,'<?php echo $i; ?>','narudzbenica',<?php echo $id_magacina ?>)" required>
 									<datalist id="proizvodi">
 										<?php
 

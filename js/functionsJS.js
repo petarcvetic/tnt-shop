@@ -15,7 +15,6 @@
 	}
 
 
-
  	function autofillNarudzbaMagacin(id){
  		var id_magacina = id.value;
 		var id_magacina = encodeURIComponent(id_magacina);

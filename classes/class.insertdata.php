@@ -26,8 +26,8 @@ class InsertData {
 		}
 	}
 
-	public function unos_proizvoda($id_korisnika, $naziv_proizvoda, $cena_proizvoda, $tezina_proizvoda, $cena_saradnika, $id_magacina, $kolicina_u_magacinu) {
-		$query = "INSERT INTO proizvodi (id_korisnika, naziv_proizvoda, cena_proizvoda, tezina_proizvoda, cena_saradnika, id_magacina, kolicina_u_magacinu) VALUES (:id_korisnika, :naziv_proizvoda, :cena_proizvoda, :tezina_proizvoda, :cena_saradnika, :id_magacina, :kolicina_u_magacinu)";
+	public function unos_proizvoda($id_korisnika, $naziv_proizvoda, $cena_proizvoda, $tezina_proizvoda, $cena_saradnika, $id_magacina, $kolicina_u_magacinu, $sifra_proizvoda,$broj_paketa) {
+		$query = "INSERT INTO proizvodi (id_korisnika, naziv_proizvoda, cena_proizvoda, tezina_proizvoda, cena_saradnika, id_magacina, kolicina_u_magacinu, sifra_proizvoda, broj_paketa) VALUES (:id_korisnika, :naziv_proizvoda, :cena_proizvoda, :tezina_proizvoda, :cena_saradnika, :id_magacina, :kolicina_u_magacinu, :sifra_proizvoda, :broj_paketa)";
 
 		$stmt = $this->db->prepare($query);
 		$stmtArray = array(
@@ -38,6 +38,8 @@ class InsertData {
 			"cena_saradnika" => $cena_saradnika,
 			"id_magacina" => $id_magacina,
 			"kolicina_u_magacinu" => $kolicina_u_magacinu,
+			"sifra_proizvoda" => $sifra_proizvoda,
+			"broj_paketa" => $broj_paketa,
 		);
 
 		return $this->insert_data($query, $stmtArray, "bindValue");
@@ -147,8 +149,8 @@ class InsertData {
 		return $this->insert_data($query, $stmtArray, "bindValue");
 	}
 
-	public function update_proizvoda($naziv_proizvoda, $cena_proizvoda, $tezina_proizvoda, $cena_saradnika, $id_magacina, $kolicina_u_magacinu, $sifra_proizvoda, $id_proizvoda, $id_korisnika) {
-		$query = "UPDATE proizvodi SET naziv_proizvoda=:naziv_proizvoda, cena_proizvoda=:cena_proizvoda, tezina_proizvoda=:tezina_proizvoda, cena_saradnika=:cena_saradnika, id_magacina=:id_magacina, kolicina_u_magacinu=:kolicina_u_magacinu, sifra_proizvoda=:sifra_proizvoda WHERE id_proizvoda=:id_proizvoda AND id_korisnika=:id_korisnika";
+	public function update_proizvoda($naziv_proizvoda, $cena_proizvoda, $tezina_proizvoda, $cena_saradnika, $id_magacina, $kolicina_u_magacinu, $sifra_proizvoda, $broj_paketa, $id_proizvoda, $id_korisnika) {
+		$query = "UPDATE proizvodi SET naziv_proizvoda=:naziv_proizvoda, cena_proizvoda=:cena_proizvoda, tezina_proizvoda=:tezina_proizvoda, cena_saradnika=:cena_saradnika, id_magacina=:id_magacina, kolicina_u_magacinu=:kolicina_u_magacinu, sifra_proizvoda=:sifra_proizvoda, broj_paketa=:broj_paketa WHERE id_proizvoda=:id_proizvoda AND id_korisnika=:id_korisnika";
 
 		$stmt = $this->db->prepare($query);
 		$stmtArray = array(
@@ -159,6 +161,7 @@ class InsertData {
 			"id_magacina" => $id_magacina,
 			"kolicina_u_magacinu" => $kolicina_u_magacinu,
 			"sifra_proizvoda" => $sifra_proizvoda,
+			"broj_paketa" => $broj_paketa,
 			"id_proizvoda" => $id_proizvoda,
 			"id_korisnika" => $id_korisnika,
 		);

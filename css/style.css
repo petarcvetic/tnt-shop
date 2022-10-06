@@ -83,6 +83,7 @@ body{
 
 .awesomplete{
 	float: none !important;
+	color: #111;
 }
 
 .input-select{
@@ -195,6 +196,18 @@ body{
 	margin:10px auto 20px !important;
 	display:block !important;
 	float:none !important;
+}
+
+.input-field-small{
+	padding: 10px 0; 
+	line-height: 30px; 
+	font-size: 1em;
+	border-radius: 25px;
+	border: 1px solid #80a16a;
+	width: 200px;
+	background-color: #f5fff7 !important;
+	margin:10px auto 20px !important;
+	display:block !important;
 }
 
 .input-small{
@@ -414,6 +427,13 @@ legend {
 	margin:25px auto;
 	background-color: #fff;
 	text-align: venter;
+	color: #111;
+}
+
+.scroll-overflow{
+  height: 600px;
+  overflow: auto;
+  margin: 20px 0px;
 }
 
 /*END Unosi*/
@@ -543,16 +563,38 @@ legend {
 
 /*EDIT PROIZVODA*/
 .row{
-	line-height: 2.5;
+	line-height: 2.8;
 	height: 60px;
-}
-
-.big-center-row{
-	width: 500px;
+	width: 400px;
 	margin: auto;
 }
 /*END Edit proizvoda*/
 
+/*PORUDzBINE*/
+.filter{
+	width: 300px;
+	height: 400px;
+	background-color: red;
+}
+
+.filter-field-small {
+  padding: 10px 0;
+  line-height: 30px;
+  font-size: 1em;
+  border-radius: 25px 0px 0px 25px;
+  border: 1px solid #80a16a;
+  width: 200px;
+  background-color: #f5fff7 !important;
+}
+
+.fa{
+	font-size: 27px;
+	margin: 8px 9px 10px 8px;
+}
+/*END Porudzbine*/
+
+
+/*STARO*/
 
 /*KARTICA DOBAVLJACA*/
 th, td{

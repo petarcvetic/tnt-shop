@@ -36,6 +36,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 	}
 
 	//Ako je kliknuto submit-proizvod
+	$naziv_proizvoda=$cena_proizvoda=$tezina_proizvoda=$cena_saradnika=$kolicina_u_magacinu=$sifra_proizvoda=$broj_pakete="";
 	if (isset($_POST['submit-proizvod'])) {
 		$naziv_proizvoda = strip_tags($_POST['naziv-proizvoda']);
 		$cena_proizvoda = strip_tags($_POST['cena-proizvoda']);
@@ -43,6 +44,8 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 		$cena_saradnika = strip_tags($_POST['cena-saradnika']);
 		$id_magacina = strip_tags($_POST['magacin']);
 		$kolicina_u_magacinu = strip_tags($_POST['kolicina-u-magacinu']);
+		$sifra_proizvoda = strip_tags($_POST['sifra-proizvoda']);
+		$broj_pakete = strip_tags($_POST['broj-pakete']);
 
 		$naziv_magacina = $getData->get_magacin_by_id($id_magacina)["naziv_magacina"];
 
@@ -54,7 +57,8 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 			}
 
 			if ($message == "") {
-				$insertData->unos_proizvoda($id_korisnika, $naziv_proizvoda, $cena_proizvoda, $tezina_proizvoda, $cena_saradnika, $id_magacina, $kolicina_u_magacinu);
+				$insertData->unos_proizvoda($id_korisnika, $naziv_proizvoda, $cena_proizvoda, $tezina_proizvoda, $cena_saradnika, $id_magacina, $kolicina_u_magacinu, $sifra_proizvoda, $broj_pakete);
+				$naziv_proizvoda=$cena_proizvoda=$tezina_proizvoda=$cena_saradnika=$kolicina_u_magacinu=$sifra_proizvoda=$broj_pakete="";
 			} else {
 				echo "<script> alert('" . $message . "'); </script>";
 			}
@@ -141,6 +145,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 		/*user koji ima status 0 je blokiran*/
 
 		if ($statusKorisnika == '1') {
+			$magacini = $getData->get_magacini_by_korisnik($id_korisnika);
 			?>
 
   	<div class="unos">
@@ -164,18 +169,27 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 						<div class="form-inputs">
 							<div class="left-row">
-								<input type="text" class="center-text input-field" name="naziv-proizvoda" placeholder="Naziv" required>
-								<input type="text" class="center-text input-field" name="cena-proizvoda" placeholder="Cena" required>
-								<input type="text" class="center-text input-field" name="tezina-proizvoda" placeholder="Težina" required>
-								<input type="text" class="center-text input-field" name="cena-saradnika" placeholder="Cena Saradnika" required>
+								<input type="text" class="center-text input-field" name="naziv-proizvoda" value="<?php echo $naziv_proizvoda; ?>" placeholder="Naziv" required>
+								<input type="text" class="center-text input-field" name="cena-proizvoda" value="<?php echo $cena_proizvoda; ?>" placeholder="Cena" required>
+								<input type="text" class="center-text input-field" name="tezina-proizvoda" value="<?php echo $tezina_proizvoda; ?>" placeholder="Težina" required>
+								<input type="text" class="center-text input-field" name="cena-saradnika" value="<?php echo $cena_saradnika; ?>" placeholder="Cena Saradnika" required>
 							</div>
 
 							<div class="right-row">
-								<select class="submit white-background unos-select" name="magacin">
-								<option value="1">Biznis soft</option>
-								<option value="2">Blagajna</option>
-							</select>
-								<input type="text" class="center-text input-field" name="kolicina-u-magacinu" placeholder="Količina u magacinu" required>
+								<select class="center-text input-field" name="magacin">
+									<option value="" disabled selected>Izaberi magacin</option>
+									<?php
+									foreach ($magacini as $magacin) {
+										echo "
+										<option value=" . $magacin['id_magacina'] . ">" . $magacin['naziv_magacina'] . "</option>
+										";
+									}
+									?>
+								</select>
+
+								<input type="text" class="center-text input-field" name="kolicina-u-magacinu" value="<?php echo $kolicina_u_magacinu; ?>" placeholder="Količina u magacinu" required>
+								<input type="text" class="center-text input-field" name="sifra-proizvoda" value="<?php echo $sifra_proizvoda; ?>" placeholder="Šifra proizvoda" required>
+								<input type="text" class="center-text input-field" name="broj-pakete" value="<?php echo $broj_pakete; ?>" placeholder="Broj paketa za slanje" required>
 							</div>
 						</div>
 
@@ -270,9 +284,6 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 
 				<!--Forma USERS-->
-				<?php
-$magacini = $getData->get_magacini_by_korisnik($id_korisnika);
-			?>
 				<div id="form5" class="hide">
 
 					<div class="flex">
@@ -285,22 +296,23 @@ $magacini = $getData->get_magacini_by_korisnik($id_korisnika);
 								<select class="submit white-background unos-select" onchange="autofillTabeleMagacin(this)">
 									<option value="" disabled selected>Izaberi magacin</option>
 									<?php
-foreach ($magacini as $magacin) {
-				echo "
+									foreach ($magacini as $magacin) {
+										echo "
 										<option value=" . $magacin['id_magacina'] . ">" . $magacin['naziv_magacina'] . "</option>
 										";
-			}
-			?>
+									}
+									?>
 								</select>
 
 						</div>
 					</div>
 
+					<div class="scroll-overflow">
+						<table class="unos-table" id="unos-tabela">
 
-					<table class="unos-table" id="unos-tabela">
-
-					</table>
-
+						</table>
+					</div>
+		
 				</div>
 
 			</div>

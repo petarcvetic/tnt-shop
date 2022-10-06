@@ -48,9 +48,10 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 			$id_magacina = strip_tags($_POST['id-magacina']);
 			$kolicina_u_magacinu = strip_tags($_POST['kolicina-u-magacinu']);
 			$sifra_proizvoda = strip_tags($_POST['sifre-proizvoda']);
+			$broj_paketa = strip_tags($_POST['broj-paketa']);
 
 			if ($naziv_proizvoda != "" && $cena_proizvoda != "" && $tezina_proizvoda != "" && $cena_saradnika != "" && $id_magacina != "" && $kolicina_u_magacinu != "") {
-				$insertData->update_proizvoda($naziv_proizvoda, $cena_proizvoda, $tezina_proizvoda, $cena_saradnika, $id_magacina, $kolicina_u_magacinu, $sifra_proizvoda, $id_proizvoda, $id_korisnika);
+				$insertData->update_proizvoda($naziv_proizvoda, $cena_proizvoda, $tezina_proizvoda, $cena_saradnika, $id_magacina, $kolicina_u_magacinu, $sifra_proizvoda, $broj_paketa, $id_proizvoda, $id_korisnika);
 				header('Location: edit-proizvoda.php');
 			}
 		}
@@ -85,46 +86,44 @@ foreach ($proizvodi as $proizvod) {
 						<!--Forma PROIZVODI-->
 						<div id="form1" class="show">
 
-							<h1 class="center-text white-text">PROIZVOD</h1>
+							<h1 class="center-text white-text">EDIT Proizvoda</h1>
 
 							<form action="" method="post" class="forme-unosa">
 
 								<div class="form-inputs">
-									<div class="big-center-row">
+									<div class="left-row">
 										<div class="row">
 											<input type="hidden" name="id-proizvoda" value="<?php echo $proizvod['id_proizvoda']; ?>">
-										Proizvod: <input type="text" class="center-text submit white-background float-right" name="naziv-proizvoda" value="<?php echo $proizvod['naziv_proizvoda']; ?>" required>
+										Proizvod: <input type="text" class="center-text input-field-small float-right" name="naziv-proizvoda" value="<?php echo $proizvod['naziv_proizvoda']; ?>" required>
 										</div>
 										<br>
 										<div class="row">
-											Cena: <input type="text" class="center-text submit white-background float-right" name="cena-proizvoda" value="<?php echo $proizvod['cena_proizvoda']; ?>" required>
+											Cena: <input type="text" class="center-text input-field-small float-right" name="cena-proizvoda" value="<?php echo $proizvod['cena_proizvoda']; ?>" required>
 										</div><br>
 										<div class="row">
-											Tezina: <input type="text" class="center-text submit white-background float-right" name="tezina-proizvoda" value="<?php echo $proizvod['tezina_proizvoda']; ?>" required>
+											Tezina: <input type="text" class="center-text input-field-small float-right" name="tezina-proizvoda" value="<?php echo $proizvod['tezina_proizvoda']; ?>" required>
 										</div><br>
 										<div class="row">
-											Cena saradnika:<input type="text" class="center-text submit white-background float-right" name="cena-saradnika" value="<?php echo $proizvod['cena_saradnika']; ?>" required>
+											Cena saradnika:<input type="text" class="center-text input-field-small float-right" name="cena-saradnika" value="<?php echo $proizvod['cena_saradnika']; ?>" required>
+										</div><br>
+									</div>
+
+									<div class="right-row">
+										<div class="row">
+											<?php
+												$naziv_magacina = $getData->get_magacin_by_id($proizvod['id_magacina'])['naziv_magacina'];
+											?>
+											<input type="hidden" name="id-magacina" value="<?php echo $proizvod['id_magacina']; ?>" required>
+											Magacin: <input type="text" class="center-text input-field-small float-right" value="<?php echo $naziv_magacina; ?>" disabled>
 										</div><br>
 										<div class="row">
-										Magacin: <select class="center-text submit white-background float-right" name="id-magacina" required>
-										<?php
-$magacini = $getData->get_magacini($id_korisnika);
-				foreach ($magacini as $magacin) {
-					if ($proizvod['id_magacina'] == $magacin['id_magacina']) {
-						$selected = "selected";
-					} else {
-						$selected = "";
-					}
-					echo "<option value='" . $magacin['id_magacina'] . "' " . $selected . ">" . $magacin['naziv_magacina'] . "</option>";
-				}
-				?>
-											</select>
+											Stanje: <input type="text" class="center-text input-field-small float-right" name="kolicina-u-magacinu" value="<?php echo $proizvod['kolicina_u_magacinu']; ?>" required>
 										</div><br>
 										<div class="row">
-											Stanje: <input type="text" class="center-text submit white-background float-right" name="kolicina-u-magacinu" value="<?php echo $proizvod['kolicina_u_magacinu']; ?>" required>
+											Šifra: <input type="text" class="center-text input-field-small float-right" name="sifre-proizvoda" value="<?php echo $proizvod['sifra_proizvoda']; ?>" required>
 										</div><br>
 										<div class="row">
-											Šifra: <input type="text" class="center-text submit white-background float-right" name="sifre-proizvoda" value="<?php echo $proizvod['sifra_proizvoda']; ?>" required>
+											Broj paketa: <input type="text" class="center-text input-field-small float-right" name="broj-paketa" value="<?php echo $proizvod['broj_paketa']; ?>" required>
 										</div><br>
 									</div>
 								</div>

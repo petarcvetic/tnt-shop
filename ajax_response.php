@@ -23,7 +23,7 @@ if (isset($_GET['id_magacina'])) {
 foreach ($proizvodi as $proizvod) {
 			echo "
 			<tr>
-				<td>" . $i . "</td>
+				<td><a href='edit-proizvoda.php?id-proizvoda=".$proizvod['id_proizvoda']."'><button class='broj center-text input-small plus'>" . $i . "</button></a></td>
 				<td>" . $proizvod['naziv_proizvoda'] . "</td>
 				<td>" . $proizvod['cena_proizvoda'] . "</td>
 				<td>" . $proizvod['cena_saradnika'] . "</td>
