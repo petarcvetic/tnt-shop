@@ -23,7 +23,7 @@ if (isset($_GET['id_magacina'])) {
 foreach ($proizvodi as $proizvod) {
 			echo "
 			<tr>
-				<td><a href='edit-proizvoda.php?id-proizvoda=".$proizvod['id_proizvoda']."'><button class='broj center-text input-small plus'>" . $i . "</button></a></td>
+				<td><a href='edit-proizvoda.php?id-proizvoda=" . $proizvod['id_proizvoda'] . "'><button class='broj center-text input-small plus'>" . $i . "</button></a></td>
 				<td>" . $proizvod['naziv_proizvoda'] . "</td>
 				<td>" . $proizvod['cena_proizvoda'] . "</td>
 				<td>" . $proizvod['cena_saradnika'] . "</td>
@@ -35,12 +35,19 @@ foreach ($proizvodi as $proizvod) {
 	}
 }
 
+/*OZNACAVANJE PORUDZBINE DA JE PLACENA*/
+if (isset($_GET['plati'])) {
+	$id_narudzbine = strip_tags($_GET['plati']);
+	$insertData->update_status_porudzbine($id_korisnika, $id_narudzbine, 2);
+	echo "<script>location.reload();</script>";
+}
+
 if (isset($_GET['proizvod'])) {
 	$naziv_proizvoda = strip_tags($_GET['proizvod']);
 	$i = strip_tags($_GET['i']);
 	$id_magacina = strip_tags($_GET['id_magacina']);
 
-	if($getData->if_proizvod_exists($id_korisnika, $naziv_proizvoda, $id_magacina) == 1){
+	if ($getData->if_proizvod_exists($id_korisnika, $naziv_proizvoda, $id_magacina) == 1) {
 		$proizvod = $getData->get_proizvod_by_name($id_korisnika, $naziv_proizvoda, $id_magacina);
 		$cena = $proizvod['cena_proizvoda'];
 		$stanje = $proizvod['kolicina_u_magacinu'];

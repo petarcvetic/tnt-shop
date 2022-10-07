@@ -117,6 +117,15 @@ class GetData {
 		return $count;
 	}
 
+	public function if_porudzbina_id_exists($id_korisnika, $id_narudzbine) {
+		$query = "SELECT COUNT(*) FROM porudzbine WHERE id_korisnika='$id_korisnika' AND id_narudzbine='$id_narudzbine'";
+
+		$stmt = $this->db->prepare($query);
+		$stmt->execute();
+		$count = $stmt->fetchColumn();
+		return $count;
+	}
+
 	public function get_magacini($id_korisnika) {
 		$query = "SELECT * FROM magacini WHERE id_korisnika=:id_korisnika ";
 
@@ -278,7 +287,7 @@ class GetData {
 		return $this->get_fetch_all($query, $stmtArray, "bindValue");
 	}
 
-	public function get_porudzbine_by_filter($id_korisnika, $id_magacina, $where){
+	public function get_porudzbine_by_filter($id_korisnika, $id_magacina, $where) {
 		$query = "SELECT * FROM porudzbine WHERE id_korisnika=:id_korisnika AND id_magacina=:id_magacina $where";
 
 		$stmt = $this->db->prepare($query);

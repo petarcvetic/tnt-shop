@@ -26,7 +26,7 @@ class InsertData {
 		}
 	}
 
-	public function unos_proizvoda($id_korisnika, $naziv_proizvoda, $cena_proizvoda, $tezina_proizvoda, $cena_saradnika, $id_magacina, $kolicina_u_magacinu, $sifra_proizvoda,$broj_paketa) {
+	public function unos_proizvoda($id_korisnika, $naziv_proizvoda, $cena_proizvoda, $tezina_proizvoda, $cena_saradnika, $id_magacina, $kolicina_u_magacinu, $sifra_proizvoda, $broj_paketa) {
 		$query = "INSERT INTO proizvodi (id_korisnika, naziv_proizvoda, cena_proizvoda, tezina_proizvoda, cena_saradnika, id_magacina, kolicina_u_magacinu, sifra_proizvoda, broj_paketa) VALUES (:id_korisnika, :naziv_proizvoda, :cena_proizvoda, :tezina_proizvoda, :cena_saradnika, :id_magacina, :kolicina_u_magacinu, :sifra_proizvoda, :broj_paketa)";
 
 		$stmt = $this->db->prepare($query);
@@ -144,6 +144,19 @@ class InsertData {
 			"kolicina_u_magacinu" => $kolicina_u_magacinu,
 			"id_proizvoda" => $id_proizvoda,
 			"id_korisnika" => $id_korisnika,
+		);
+
+		return $this->insert_data($query, $stmtArray, "bindValue");
+	}
+
+	public function update_status_porudzbine($id_korisnika, $id_narudzbine, $status) {
+		$query = "UPDATE porudzbine SET status=:status WHERE id_narudzbine=:id_narudzbine AND id_korisnika=:id_korisnika";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"status" => $status,
+			"id_korisnika" => $id_korisnika,
+			"id_narudzbine" => $id_narudzbine,
 		);
 
 		return $this->insert_data($query, $stmtArray, "bindValue");

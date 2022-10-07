@@ -49,7 +49,7 @@ body{
 }
 
 .container{
-	width: 60%;
+	width: 70%;
 	margin: auto;
 	min-height: 77.5vh;
 }
@@ -364,6 +364,15 @@ legend {
 	color:  white;
 }
 
+.unos-big{
+	padding-top: 30px;
+	min-width: 1300px;
+	max-width: 1800px;
+	display: flex;
+	margin: auto;
+	color:  white;
+}
+
 .unos-menu{
 	width: 270px;
 	-ms-flex: 1;  /* IE 10 */  
@@ -428,6 +437,7 @@ legend {
 	background-color: #fff;
 	text-align: venter;
 	color: #111;
+	font-size: 16px;
 }
 
 .scroll-overflow{
@@ -572,25 +582,40 @@ legend {
 
 /*PORUDzBINE*/
 .filter{
-	width: 300px;
-	height: 400px;
-	background-color: red;
+	height: 450px;
+	background-color: #6fb143;
+	flex: 2;
+  border: solid 5px #fff;
+  border-radius: 25px;
+  padding: 5px 30px;
+}
+
+.porudzbine-list{
+	min-height: 600px;
+	background-color: #6fb143;
+	flex: 5;
+  border: solid 5px #fff;
+  border-radius: 25px;
+  padding: 5px 30px;
+}
+
+.row-filter{
+	min-width: 300px;
+	line-height: 2.8;
+	height: 60px;
+	margin: auto;
 }
 
 .filter-field-small {
   padding: 10px 0;
   line-height: 30px;
   font-size: 1em;
-  border-radius: 25px 0px 0px 25px;
+  border-radius: 25px;
   border: 1px solid #80a16a;
   width: 200px;
   background-color: #f5fff7 !important;
 }
 
-.fa{
-	font-size: 27px;
-	margin: 8px 9px 10px 8px;
-}
 /*END Porudzbine*/
 
 

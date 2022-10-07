@@ -48,17 +48,18 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 			$porudzbine = $getData->get_porudzbine_by_magacin($id_korisnika, $id_magacina);
 
-			if (isset($_GET['filter']) && $_GET['filter']=1) {
-				if (isset($_GET['ime']) && $_GET['ime']!="") {
-					$where1 = " AND ime_i_prezime='".$_GET['ime']."'";
-				}else{$where1 = "";}
-				if (isset($_GET['datum']) && $_GET['datum']!="") {
-					$where2 = " AND datum='".$_GET['datum']."'";
-				}else{$where2 = "";}
-				if (isset($_GET['saradnik']) && $_GET['saradnik']!="") {
-					$where3 = " AND id_saradnika='".$_GET['saradnik']."'";
-				}else{$where3 = "";}
-				$where = $where1.$where2.$where3;
+			if (isset($_GET['filter']) && $_GET['filter'] = 1) {
+				if (isset($_GET['ime']) && $_GET['ime'] != "") {
+					$where1 = " AND ime_i_prezime='" . $_GET['ime'] . "'";
+				} else { $where1 = "";}
+				if (isset($_GET['datum']) && $_GET['datum'] != "") {
+					$datum_filter = date("d-m-Y", strtotime($_GET['datum']));
+					$where2 = " AND datum='" . $datum_filter . "'";
+				} else { $where2 = "";}
+				if (isset($_GET['saradnik']) && $_GET['saradnik'] != "") {
+					$where3 = " AND id_saradnika='" . $_GET['saradnik'] . "'";
+				} else { $where3 = "";}
+				$where = $where1 . $where2 . $where3;
 				$porudzbine = $getData->get_porudzbine_by_filter($id_korisnika, $id_magacina, $where);
 			}
 
@@ -67,25 +68,33 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 		<div><h1 class="center-text">Magacin <?php echo $naziv_magacina; ?></h1></div>
 
-		<div class="unos">
+		<div class="unos-big">
 
 			<div class="filter">
 				<h3 class="center-text">Filter</h3>
-				<div>
-					Ime i prezime: <input type="text" class="center-text filter-field-small" id="filter-ime" name="filter-ime">
-				</div>
-				<div>
-					Datum: <input type="date" class="center-text filter-field-small" id="filter-datum" name="filter-datum">
-				</div>
-				<div>
-					Saradnik: <input type="text" class="center-text filter-field-small" id="filter-saradnik" name="filter-saradnik">
-				</div>
-				<div>
-					<button type="submit" onclick="filter_porudzbina('<?php echo $id_magacina; ?>')"><i class="fa fa-search"></i></button>
+				<div class="row-filter">
+					Kupac: <input type="text" class="center-text filter-field-small float-right" id="filter-ime" name="filter-ime">
+				</div><br>
+				<div class="row-filter">
+					Datum: <input type="date" class="center-text filter-field-small float-right" id="filter-datum" name="filter-datum">
+				</div><br>
+				<div class="row-filter">
+					Saradnik: <select class="center-text filter-field-small float-right" name="saradnik" id="filter-saradnik" required>
+										<option value="" disabled selected>Saradnik</option>
+									<?php
+$saradnici = $getData->get_saradnici($id_korisnika);
+			foreach ($saradnici as $saradnik) {
+				echo "<option value='" . $saradnik['id_saradnika'] . "'>" . $saradnik['ime_saradnika'] . " " . $saradnik['prezime_saradnika'] . '</option>';
+			}
+			?>
+									</select>
+				</div><br>
+				<div class="center-row">
+					<button type="submit" style="margin: auto;" class="submit" onclick="filter_porudzbina('<?php echo $id_magacina; ?>')"><i class="fa fa-search"></i></button>
 				</div>
 			</div>
 
-			<div class="unos-form-container">
+			<div class="porudzbine-list">
 				<div class="scroll-overflow">
 					<table class="unos-table" id="magacin-tabela">
 						<tr>
@@ -96,13 +105,14 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 							<th>BROJ POSILJKE</th>
 							<th>IZNOS</th>
 							<th>Napomena</th>
+							<th></th>
 						</tr>
 				<?php
-	$i = 1;
-				foreach ($porudzbine as $porudzbina) {
-					$id_saradnika = $porudzbina["id_saradnika"];
-					$saradnik = $getData->get_saradnik_by_id($id_korisnika, $id_saradnika);
-					echo "
+$i = 1;
+			foreach ($porudzbine as $porudzbina) {
+				$id_saradnika = $porudzbina["id_saradnika"];
+				$saradnik = $getData->get_saradnik_by_id($id_korisnika, $id_saradnika);
+				echo "
 						<tr id='tr" . $i . "'>
 							<td><a href='edit-porudzbine.php?id_narudzbine=" . $porudzbina['id_narudzbine'] . "'><button class='broj center-text input-small plus'>" . $porudzbina['id_narudzbine'] . "</button></a></td>
 							<td>" . $porudzbina['datum'] . "</td>
@@ -111,24 +121,25 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 							<td>" . $porudzbina['broj_posiljke'] . "</td>
 							<td>" . $porudzbina['ukupno'] . "</td>
 							<td>" . $porudzbina['napomena'] . "</td>
+							<td><button class='broj center-text input-small plus' onclick='plati(" . '"' . $porudzbina['id_narudzbine'] . '"' . ")'><i class='fa fa-check'></i></button></td>
 						</tr>
 						";
-					if ($porudzbina['status'] == 2) {
-						$background_color = "green";
-						$text_color = "white";
-					} elseif ($porudzbina['status'] == 3) {
-						$background_color = "red";
-						$text_color = "white";
-					} elseif ($porudzbina['status'] == 4) {
-						$background_color = "yellow";
-						$text_color = "#333";
-					} else {
-						$background_color = "white";
-						$text_color = "#747673";}
-					echo "<script>$('#tr" . $i . "').css({'background-color':'" . $background_color . "', 'color':'" . $text_color . "'});</script>";
-					$i++;
-				}
-				?>
+				if ($porudzbina['status'] == 2) {
+					$background_color = "green";
+					$text_color = "white";
+				} elseif ($porudzbina['status'] == 3) {
+					$background_color = "red";
+					$text_color = "white";
+				} elseif ($porudzbina['status'] == 4) {
+					$background_color = "yellow";
+					$text_color = "#333";
+				} else {
+					$background_color = "white";
+					$text_color = "#747673";}
+				echo "<script>$('#tr" . $i . "').css({'background-color':'" . $background_color . "', 'color':'" . $text_color . "'});</script>";
+				$i++;
+			}
+			?>
 					</table>
 				</div>
 
@@ -174,9 +185,23 @@ include "assets/footer.php";
   function filter_porudzbina(id_magacina){
   	var ime_i_prezime = $("#filter-ime").val();
   	var datum = $("#filter-datum").val();
-  	var saradnik = $("#filter-saradnik").val();
-  	alert(ime_i_prezime+" / "+datum+" / "+saradnik);
+  	var saradnik = $("#filter-saradnik").find(":selected").val();
+
   	$(location).prop('href', 'porudzbine.php?id_magacina='+id_magacina+'&filter=1&ime='+ime_i_prezime+'&datum='+datum+'&saradnik='+saradnik);
+  }
+
+
+  function plati(id){
+  	var id_porudzbine = id.value;
+		var id_porudzbine = encodeURIComponent(id_porudzbine);
+
+  	var xhr = new XMLHttpRequest();
+		xhr.open("get", "ajax_response.php?plati="+id, false);
+		xhr.send();
+		var odgovor = xhr.responseText;
+		if(odgovor!==""){
+			$("#alert").html(odgovor);
+		}
   }
 
 </script>
