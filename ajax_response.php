@@ -51,10 +51,15 @@ if (isset($_GET['proizvod'])) {
 		$proizvod = $getData->get_proizvod_by_name($id_korisnika, $naziv_proizvoda, $id_magacina);
 		$cena = $proizvod['cena_proizvoda'];
 		$stanje = $proizvod['kolicina_u_magacinu'];
+		$tezina_proizvoda = $proizvod['tezina_proizvoda'];
+		$broj_paketa = $proizvod['broj_paketa'];
+
 		if ($proizvod !== false) {
 			echo '<script>
 						$("#cena-proizvoda' . $i . '").val("' . $cena . '");
 						$("#stanje' . $i . '").val("' . $stanje . '");
+						$("#tezina' . $i . '").val("' . $tezina_proizvoda . '");
+						$("#broj-paketa' . $i . '").val("' . $broj_paketa . '");
 					</script>';
 		}
 	}

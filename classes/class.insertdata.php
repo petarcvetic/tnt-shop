@@ -103,8 +103,8 @@ class InsertData {
 		return $this->insert_data($query, $stmtArray, "bindValue");
 	}
 
-	public function insert_new_porudzbina($id_korisnika, $datum, $id_magacina, $ime_i_prezime, $mesto, $adresa, $telefon, $id_saradnika, $prevoznik, $artikliKomadi, $ukupno, $user, $napomena) {
-		$query = "INSERT INTO porudzbine (id_korisnika, datum, id_magacina, ime_i_prezime, mesto, adresa, telefon, id_saradnika, prevoznik, artikliKomadi, ukupno, user, napomena, status) VALUES (:id_korisnika, :datum, :id_magacina, :ime_i_prezime, :mesto, :adresa, :telefon, :id_saradnika, :prevoznik, :artikliKomadi, :ukupno, :user, :napomena, :status)";
+	public function insert_new_porudzbina($id_korisnika, $datum, $id_magacina, $ime_i_prezime, $mesto, $adresa, $telefon, $id_saradnika, $prevoznik, $artikliKomadi, $ukupno, $ukupna_tezina, $ukupan_broj_paketa, $user, $napomena) {
+		$query = "INSERT INTO porudzbine (id_korisnika, datum, id_magacina, ime_i_prezime, mesto, adresa, telefon, id_saradnika, prevoznik, artikliKomadi, ukupno, ukupna_tezina, ukupan_broj_paketa, user, napomena, status) VALUES (:id_korisnika, :datum, :id_magacina, :ime_i_prezime, :mesto, :adresa, :telefon, :id_saradnika, :prevoznik, :artikliKomadi, :ukupno, :ukupna_tezina, :ukupan_broj_paketa, :user, :napomena, :status)";
 		$stmt = $this->db->prepare($query);
 		$stmtArray = array(
 			"id_korisnika" => $id_korisnika,
@@ -118,6 +118,8 @@ class InsertData {
 			"prevoznik" => $prevoznik,
 			"artikliKomadi" => $artikliKomadi,
 			"ukupno" => $ukupno,
+			"ukupna_tezina" => $ukupna_tezina,
+			"ukupan_broj_paketa" => $ukupan_broj_paketa,
 			"user" => $user,
 			"napomena" => $napomena,
 			"status" => $this->status,
@@ -126,8 +128,8 @@ class InsertData {
 		return $this->insert_data($query, $stmtArray, "bindValue");
 	}
 
-	public function update_porudzbina_by_id($datum, $id_magacina, $ime_i_prezime, $mesto, $adresa, $telefon, $id_saradnika, $prevoznik, $broj_posiljke, $artikliKomadi, $ukupno, $user, $napomena, $status, $id_korisnika, $id_narudzbine) {
-		$query = "UPDATE porudzbine SET datum=:datum, id_magacina=:id_magacina, ime_i_prezime=:ime_i_prezime, mesto=:mesto, adresa=:adresa, telefon=:telefon, id_saradnika=:id_saradnika, prevoznik=:prevoznik, broj_posiljke=:broj_posiljke, artikliKomadi=:artikliKomadi, ukupno=:ukupno, user=:user, napomena=:napomena, status=:status WHERE id_korisnika=:id_korisnika AND id_narudzbine=:id_narudzbine";
+	public function update_porudzbina_by_id($datum, $id_magacina, $ime_i_prezime, $mesto, $adresa, $telefon, $id_saradnika, $prevoznik, $broj_posiljke, $artikliKomadi, $ukupno, $ukupna_tezina, $ukupan_broj_paketa, $user, $napomena, $status, $id_korisnika, $id_narudzbine) {
+		$query = "UPDATE porudzbine SET datum=:datum, id_magacina=:id_magacina, ime_i_prezime=:ime_i_prezime, mesto=:mesto, adresa=:adresa, telefon=:telefon, id_saradnika=:id_saradnika, prevoznik=:prevoznik, broj_posiljke=:broj_posiljke, artikliKomadi=:artikliKomadi, ukupno=:ukupno, ukupna_tezina=:ukupna_tezina, ukupan_broj_paketa=:ukupan_broj_paketa, user=:user, napomena=:napomena, status=:status WHERE id_korisnika=:id_korisnika AND id_narudzbine=:id_narudzbine";
 
 		$stmt = $this->db->prepare($query);
 		$stmtArray = array(
@@ -142,6 +144,8 @@ class InsertData {
 			"broj_posiljke" => $broj_posiljke,
 			"artikliKomadi" => $artikliKomadi,
 			"ukupno" => $ukupno,
+			"ukupna_tezina" => $ukupna_tezina,
+			"ukupan_broj_paketa" => $ukupan_broj_paketa,
 			"user" => $user,
 			"napomena" => $napomena,
 			"status" => $status,

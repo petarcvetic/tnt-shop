@@ -1,5 +1,5 @@
 <?php
-$ukupno = 0;
+$ukupno = $ukupna_tezina = $ukupan_broj_paketa = 0;
 $artikliKomadi = $regular = "";
 $today = date("Y-m-d");
 
@@ -72,6 +72,8 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 						$naziv_proizvoda = strip_tags($_POST['proizvod' . $i]);
 						$kolicina = strip_tags($_POST["kolicina" . $i]);
 						$cena = strip_tags($_POST["cena_proizvoda" . $i]);
+						$tezina_proizvoda = strip_tags($_POST['tezina' . $i]);
+						$broj_paketa = strip_tags($_POST['broj-paketa' . $i]);
 						$trenutno_stanje = strip_tags($_POST['stanje' . $i]);
 
 						if ($getData->if_proizvod_exists($id_korisnika, $naziv_proizvoda, $id_magacina) != 0) {
@@ -79,11 +81,14 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 							$id_proizvoda = $proizvod["id_proizvoda"];
 
 							if ($id_proizvoda != "" && $kolicina != "") {
-								$artikalKomada = $id_proizvoda . "/" . $kolicina . "/" . $cena; //par "artikal"/"komada"/"cena"
+								$artikalKomada = $id_proizvoda . "/" . $kolicina . "/" . $cena . "/" . $tezina_proizvoda . "/" . $broj_paketa; //par "artikal"/"komada"/"cena"
 								$artikliKomadi .= $artikalKomada . ","; //------String koji sadrzi parove "artikal"/"komada"---------------//
 							} else {
 								$artikalKomada = "";
 							}
+
+							$ukupna_tezina = (float) $ukupna_tezina + (float) $kolicina * (float) $tezina_proizvoda;
+							$ukupan_broj_paketa = (float) $ukupan_broj_paketa + (float) $kolicina * (float) $broj_paketa;
 
 							$zbirno = (float) $kolicina * (float) $cena;
 							$ukupno = (float) $ukupno + (float) $zbirno; //------Ukupna cena------//
@@ -99,7 +104,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 				if ($artikliKomadi != "" && $ukupno != 0) {
 					$artikliKomadi = substr_replace($artikliKomadi, "", -1);
 
-					$query = $insertData->update_porudzbina_by_id($datum, $id_magacina, $ime_i_prezime, $mesto, $adresa, $telefon, $id_saradnika, $prevoznik, $broj_posiljke, $artikliKomadi, $ukupno, $username, $napomena, $status, $id_korisnika, $id_narudzbine);
+					$query = $insertData->update_porudzbina_by_id($datum, $id_magacina, $ime_i_prezime, $mesto, $adresa, $telefon, $id_saradnika, $prevoznik, $broj_posiljke, $artikliKomadi, $ukupno, $ukupna_tezina, $ukupan_broj_paketa, $username, $napomena, $status, $id_korisnika, $id_narudzbine);
 
 					if ($query == "") {
 /*Ako je upis u bazu uspeo skida se porucena kolicina sa stanja artikala*/
@@ -221,16 +226,28 @@ $prevoznici = $getData->get_prevoznici($id_korisnika);
 							<?php $i = 1;?>
 							<div id="proizvodi-za-porudzbinu">
 
+								<div class="porudzbenica-artikli">
+									<div class="big-zaglavlje">PROIZVOD</div>
+									<div class="small-zaglavlje">kom</div>
+									<div class="small-zaglavlje">Cena</div>
+									<div class="small-zaglavlje">Tezina</div>
+									<div class="small-zaglavlje">Paketi</div>
+									<div class="small-zaglavlje">Stanje</div>
+								</div>
+
 								<div class="porudzbenica-artikli" id="<?php echo $i; ?>">
 
 
 								<?php
 $artikliKomadi_e_array = explode(",", $artikliKomadi_e);
+				$count_artikli = count($artikliKomadi_e_array);
 				foreach ($artikliKomadi_e_array as $artikal_komad_e) {
 					$artikal_komad_e_array = explode("/", $artikal_komad_e);
 					$id_proizvoda_e = $artikal_komad_e_array[0];
 					$kolicina_e = $artikal_komad_e_array[1];
 					$cena_e = $artikal_komad_e_array[2];
+					$tezina_proizvoda_e = $artikal_komad_e_array[3];
+					$broj_paketa_e = $artikal_komad_e_array[4];
 
 					$proizvod_e = $getData->get_proizvod_by_id($id_korisnika, $id_proizvoda_e, $id_magacina_e);
 					$trenutno_stanje_e = $proizvod_e['kolicina_u_magacinu'] + $kolicina_e;
@@ -252,12 +269,19 @@ $artikliKomadi_e_array = explode(",", $artikliKomadi_e);
 
 									<input type="text" class="center-text input-small" name="kolicina<?php echo $i; ?>" size="5" placeholder="kolicina" value="<?php echo $kolicina_e; ?>" required>
 									<input type="text" class="center-text input-small" name="cena_proizvoda<?php echo $i; ?>" id="cena-proizvoda<?php echo $i; ?>" size="5" placeholder="cena" value="<?php echo $cena_e; ?>" required>
-									<input type="text" class="center-text input-small" name="stanje<?php echo $i; ?>" id="stanje<?php echo $i; ?>" size="5" value="<?php echo $trenutno_stanje_e; ?>" placeholder="stanje">
-									<div class="broj center-text input-small plus" id="plus<?php echo $i; ?>" onclick="createNewInput(<?php echo $i; ?>,<?php echo $id_magacina_e; ?>)">+</div><br>
 
+									<input type="text" class="center-text input-small" name="tezina<?php echo $i; ?>" id="tezina<?php echo $i; ?>" size="5" value="<?php echo $tezina_proizvoda_e; ?>" placeholder="tezina" required>
+									<input type="text" class="center-text input-small" name="broj-paketa<?php echo $i; ?>" id="broj-paketa<?php echo $i; ?>" size="3" value="<?php echo $broj_paketa_e; ?>" placeholder="paketi" required>
+
+									<input type="text" class="center-text input-small" name="stanje<?php echo $i; ?>" id="stanje<?php echo $i; ?>" size="5" value="<?php echo $trenutno_stanje_e; ?>" placeholder="stanje">
 
 								<?php
-$i++;
+if ($count_artikli == $i) {?>
+									<div class="broj center-text input-small plus" id="plus<?php echo $i; ?>" onclick="createNewInput(<?php echo $i; ?>,<?php echo $id_magacina_e; ?>)">+</div>
+								<?php
+}
+					echo "<br>";
+					$i++;
 				}
 				?>
 

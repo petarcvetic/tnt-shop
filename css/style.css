@@ -561,7 +561,7 @@ legend {
 }
 
 .porudzbenica-artikli input{
-	margin: 10px 20px !important;
+	margin: 10px 10px !important;
 }
 
 .plus{
@@ -645,6 +645,25 @@ legend {
 
 /*END Porudzbine*/
 
+/*EDIT PORUDzBINE*/
+.small-zaglavlje{
+
+	display: inline-block;
+	text-align: center;
+	width: 72px;
+	margin: 5px 20px;
+	color: #fff;
+}
+
+.big-zaglavlje{
+
+	display: inline-block;
+	text-align: center;
+	width: 370px;
+	margin: 5px 15px 5px 50px;
+	color: #fff;
+}
+/*END Edit porudzbine*/
 
 /*STARO*/
 
