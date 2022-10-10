@@ -48,7 +48,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 			$porudzbine = $getData->get_porudzbine_by_magacin($id_korisnika, $id_magacina);
 
-			if (isset($_GET['filter']) && $_GET['filter'] = 1) {
+			if (isset($_GET['filter']) && $_GET['filter'] == 1) {
 				if (isset($_GET['ime']) && $_GET['ime'] != "") {
 					$where1 = " AND ime_i_prezime='" . $_GET['ime'] . "'";
 				} else { $where1 = "";}
@@ -67,6 +67,18 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 		<div id="alert"></div>
 
 		<div><h1 class="center-text">Magacin <?php echo $naziv_magacina; ?></h1></div>
+
+		<?php
+$magacini = $getData->get_magacini($id_korisnika);
+			foreach ($magacini as $magacin) {
+				if ($magacin['id_magacina'] != $id_magacina) {
+					echo "<a href='porudzbine.php?id_magacina=" . $magacin['id_magacina'] . "'><button class='center-text submit'>" . $magacin['naziv_magacina'] . "</button></a>";
+				} elseif ($magacin['id_magacina'] == $id_magacina) {
+					$regular = true;
+				}
+			}
+
+			?>
 
 		<div class="unos-big">
 
@@ -125,17 +137,17 @@ $i = 1;
 						</tr>
 						";
 				if ($porudzbina['status'] == 2) {
-					$background_color = "green";
+					$background_color = "#49a549";
 					$text_color = "white";
 				} elseif ($porudzbina['status'] == 3) {
-					$background_color = "red";
+					$background_color = "#ff5858";
 					$text_color = "white";
 				} elseif ($porudzbina['status'] == 4) {
-					$background_color = "yellow";
-					$text_color = "#333";
+					$background_color = "#ffff5c";
+					$text_color = "#2b2b2b";
 				} else {
 					$background_color = "white";
-					$text_color = "#747673";}
+					$text_color = "#2b2b2b";}
 				echo "<script>$('#tr" . $i . "').css({'background-color':'" . $background_color . "', 'color':'" . $text_color . "'});</script>";
 				$i++;
 			}

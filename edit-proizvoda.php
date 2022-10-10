@@ -94,7 +94,7 @@ foreach ($proizvodi as $proizvod) {
 									<div class="left-row">
 										<div class="row">
 											<input type="hidden" name="id-proizvoda" value="<?php echo $proizvod['id_proizvoda']; ?>">
-										Proizvod: <input type="text" class="center-text input-field-small float-right" name="naziv-proizvoda" value="<?php echo $proizvod['naziv_proizvoda']; ?>" required>
+										Proizvod: <input type="text" class="center-text input-field-middle float-right" name="naziv-proizvoda" value="<?php echo $proizvod['naziv_proizvoda']; ?>" required>
 										</div>
 										<br>
 										<div class="row">
@@ -111,8 +111,8 @@ foreach ($proizvodi as $proizvod) {
 									<div class="right-row">
 										<div class="row">
 											<?php
-												$naziv_magacina = $getData->get_magacin_by_id($proizvod['id_magacina'])['naziv_magacina'];
-											?>
+$naziv_magacina = $getData->get_magacin_by_id($proizvod['id_magacina'])['naziv_magacina'];
+				?>
 											<input type="hidden" name="id-magacina" value="<?php echo $proizvod['id_magacina']; ?>" required>
 											Magacin: <input type="text" class="center-text input-field-small float-right" value="<?php echo $naziv_magacina; ?>" disabled>
 										</div><br>

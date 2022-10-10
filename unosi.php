@@ -1,5 +1,6 @@
 <?php
 $message = "";
+$today = date("Y-m-d");
 
 include "dbconfig.php";
 
@@ -36,7 +37,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 	}
 
 	//Ako je kliknuto submit-proizvod
-	$naziv_proizvoda=$cena_proizvoda=$tezina_proizvoda=$cena_saradnika=$kolicina_u_magacinu=$sifra_proizvoda=$broj_pakete="";
+	$naziv_proizvoda = $cena_proizvoda = $tezina_proizvoda = $cena_saradnika = $kolicina_u_magacinu = $sifra_proizvoda = $broj_pakete = "";
 	if (isset($_POST['submit-proizvod'])) {
 		$naziv_proizvoda = strip_tags($_POST['naziv-proizvoda']);
 		$cena_proizvoda = strip_tags($_POST['cena-proizvoda']);
@@ -58,7 +59,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 			if ($message == "") {
 				$insertData->unos_proizvoda($id_korisnika, $naziv_proizvoda, $cena_proizvoda, $tezina_proizvoda, $cena_saradnika, $id_magacina, $kolicina_u_magacinu, $sifra_proizvoda, $broj_pakete);
-				$naziv_proizvoda=$cena_proizvoda=$tezina_proizvoda=$cena_saradnika=$kolicina_u_magacinu=$sifra_proizvoda=$broj_pakete="";
+				$naziv_proizvoda = $cena_proizvoda = $tezina_proizvoda = $cena_saradnika = $kolicina_u_magacinu = $sifra_proizvoda = $broj_pakete = "";
 			} else {
 				echo "<script> alert('" . $message . "'); </script>";
 			}
@@ -116,13 +117,13 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 	if (isset($_POST['submit-user'])) {
 		$user_ime = strip_tags($_POST['user-ime']);
 		$user_prezime = strip_tags($_POST['user-prezime']);
-		$username = strip_tags($_POST['user-username']);
+		$user_username = strip_tags($_POST['user-username']);
 		$password = sha1(strip_tags($_POST['user-password']));
 		$email = strip_tags($_POST['user-email']);
 		$status = strip_tags($_POST['user-rola']);
 
-		if ($user_ime != "" && $user_prezime != "" && $username != "" && $password != "" && $email != "" && $status != "") {
-			$existingUsername = $getData->if_user_exists($username, $id_korisnika);
+		if ($user_ime != "" && $user_prezime != "" && $user_username != "" && $password != "" && $email != "" && $status != "") {
+			$existingUsername = $getData->if_user_exists($user_username, $id_korisnika);
 			$existingEmail = $getData->if_user_mail_exists($email);
 
 			if ($existingUsername > 0) {
@@ -133,10 +134,27 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 			}
 
 			if ($message == "") {
-				$insertData->unos_usera($user_ime, $user_prezime, $username, $password, $email, $id_korisnika, $status);
+				$insertData->unos_usera($user_ime, $user_prezime, $user_username, $password, $email, $id_korisnika, $status);
 			} else {
 				echo "<script> alert('" . $message . "'); </script>";
 			}
+		}
+	}
+
+	/*Ako je kliknuto submit-trosak*/
+	if (isset($_POST['submit-trosak'])) {
+		$datum_troska = strip_tags($_POST['datum-troska']);
+/*		$datum_troska = date("d-m-Y", strtotime($datum_troska));
+ */
+		$namena_troska = strip_tags($_POST['namena-troska']);
+		$iznos_troska = strip_tags($_POST['iznos-troska']);
+
+		if ($datum_troska != "" && $namena_troska != "" && $iznos_troska != "") {
+
+			$insertData->unos_troska($id_korisnika, $datum_troska, $namena_troska, $iznos_troska, $username);
+
+		} else {
+			echo "<script> alert('Sva polja moraju biti popunjena'); </script>";
 		}
 	}
 
@@ -156,6 +174,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
         <button id="3" class="submit">Gradovi</button>
         <button id="4" class="submit">Users</button>
         <button id="5" class="submit">Magacin</button>
+        <button id="6" class="submit">Trošak</button>
       </div>
 
 			<div class="unos-form-container">
@@ -179,12 +198,12 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 								<select class="center-text input-field" name="magacin">
 									<option value="" disabled selected>Izaberi magacin</option>
 									<?php
-									foreach ($magacini as $magacin) {
-										echo "
+foreach ($magacini as $magacin) {
+				echo "
 										<option value=" . $magacin['id_magacina'] . ">" . $magacin['naziv_magacina'] . "</option>
 										";
-									}
-									?>
+			}
+			?>
 								</select>
 
 								<input type="text" class="center-text input-field" name="kolicina-u-magacinu" value="<?php echo $kolicina_u_magacinu; ?>" placeholder="Količina u magacinu" required>
@@ -283,7 +302,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 				</div>
 
 
-				<!--Forma USERS-->
+				<!--Forma MAGACIN-->
 				<div id="form5" class="hide">
 
 					<div class="flex">
@@ -296,12 +315,12 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 								<select class="submit white-background unos-select" onchange="autofillTabeleMagacin(this)">
 									<option value="" disabled selected>Izaberi magacin</option>
 									<?php
-									foreach ($magacini as $magacin) {
-										echo "
+foreach ($magacini as $magacin) {
+				echo "
 										<option value=" . $magacin['id_magacina'] . ">" . $magacin['naziv_magacina'] . "</option>
 										";
-									}
-									?>
+			}
+			?>
 								</select>
 
 						</div>
@@ -312,7 +331,31 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 						</table>
 					</div>
-		
+
+				</div>
+
+
+				<!--Forma SARADNIK-->
+				<div id="form6" class="hide">
+
+					<h1 class="center-text white-text">SARADNIK</h1>
+
+					<form action="" method="post" class="forme-unosa">
+
+						<div class="form-inputs">
+							<div class="center-row">
+								<input type="date" class="center-text input-field" name="datum-troska" value="<?php echo $today; ?>" required>
+								<input type="text" class="center-text input-field" name="namena-troska" placeholder="Namena" required>
+								<input type="text" class="center-text input-field" name="iznos-troska" placeholder="Iznos" required>
+							</div>
+						</div>
+
+						<div class="unos-button">
+			        <input type="submit" class="submit button-full" name="submit-trosak" value="Submit"><br><br>
+			      </div>
+
+					</form>
+
 				</div>
 
 			</div>
@@ -362,53 +405,63 @@ include "assets/footer.php";
   $(document).ready(function(){
     $("#1").click(function(){
     	$("#1").addClass("active-button");
-    	$("#2, #3, #4, #5").removeClass("active-button");
+    	$("#2, #3, #4, #5, #6").removeClass("active-button");
 
       $("#form1").removeClass("hide");
       $("#form1").addClass("show");
 
-      $("#form2, #form3, #form4, #form5").removeClass("show");
-      $("#form2, #form3, #form4, #form5").addClass("hide");
+      $("#form2, #form3, #form4, #form5, #form6").removeClass("show");
+      $("#form2, #form3, #form4, #form5, #form6").addClass("hide");
     });
     $("#2").click(function(){
-    	$("#1, #3, #4, #5").removeClass("active-button");
+    	$("#1, #3, #4, #5, #6").removeClass("active-button");
     	$("#2").addClass("active-button");
 
 			$("#form2").removeClass("hide");
       $("#form2").addClass("show");
 
-      $("#form1, #form3, #form4, #form5").removeClass("show");
-      $("#form1, #form3, #form4, #form5").addClass("hide");
+      $("#form1, #form3, #form4, #form5, #form6").removeClass("show");
+      $("#form1, #form3, #form4, #form5, #form6").addClass("hide");
     });
     $("#3").click(function(){
-      $("#1, #2, #4, #5").removeClass("active-button");
+      $("#1, #2, #4, #5, #6").removeClass("active-button");
     	$("#3").addClass("active-button");
 
 			$("#form3").removeClass("hide");
       $("#form3").addClass("show");
 
-      $("#form1, #form2, #form4, #form5").removeClass("show");
-      $("#form1, #form2, #form4, #form5").addClass("hide");
+      $("#form1, #form2, #form4, #form5, #form6").removeClass("show");
+      $("#form1, #form2, #form4, #form5, #form6").addClass("hide");
     });
     $("#4").click(function(){
-      $("#1, #2, #3, #5").removeClass("active-button");
+      $("#1, #2, #3, #5, #6").removeClass("active-button");
     	$("#4").addClass("active-button");
 
 			$("#form4").removeClass("hide");
       $("#form4").addClass("show");
 
-      $("#form1, #form2, #form3, #form5").removeClass("show");
-      $("#form1, #form2, #form3, #form5").addClass("hide");
+      $("#form1, #form2, #form3, #form5, #form6").removeClass("show");
+      $("#form1, #form2, #form3, #form5, #form6").addClass("hide");
     });
     $("#5").click(function(){
-      $("#1, #2, #3, #4").removeClass("active-button");
+      $("#1, #2, #3, #4, #6").removeClass("active-button");
     	$("#5").addClass("active-button");
 
 			$("#form5").removeClass("hide");
       $("#form5").addClass("show");
 
-      $("#form1, #form2, #form3, #form4").removeClass("show");
-      $("#form1, #form2, #form3, #form4").addClass("hide");
+      $("#form1, #form2, #form3, #form4, #form6").removeClass("show");
+      $("#form1, #form2, #form3, #form4, #form6").addClass("hide");
+    });
+    $("#6").click(function(){
+      $("#1, #2, #3, #4, #5").removeClass("active-button");
+    	$("#6").addClass("active-button");
+
+			$("#form6").removeClass("hide");
+      $("#form6").addClass("show");
+
+      $("#form1, #form2, #form3, #form4, #form5").removeClass("show");
+      $("#form1, #form2, #form3, #form4, #form5").addClass("hide");
     });
   });
 

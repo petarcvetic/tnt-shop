@@ -299,6 +299,17 @@ class GetData {
 		return $this->get_fetch_all($query, $stmtArray, "bindValue");
 	}
 
+	public function get_troskovi_by_filter($id_korisnika, $where) {
+		$query = "SELECT * FROM troskovi WHERE id_korisnika=:id_korisnika $where";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"id_korisnika" => $id_korisnika,
+		);
+
+		return $this->get_fetch_all($query, $stmtArray, "bindValue");
+	}
+
 	public function get_porudzbina_by_id($id_korisnika, $id_narudzbine) {
 		$query = "SELECT * FROM porudzbine WHERE id_korisnika=:id_korisnika AND id_narudzbine=:id_narudzbine";
 

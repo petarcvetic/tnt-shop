@@ -87,6 +87,22 @@ class InsertData {
 		return $this->insert_data($query, $stmtArray, "bindValue");
 	}
 
+	public function unos_troska($id_korisnika, $datum_troska, $namena_troska, $iznos_troska, $user) {
+		$query = "INSERT INTO troskovi (id_korisnika, datum_troska, namena_troska, iznos_troska, user, status) VALUES (:id_korisnika, :datum_troska, :namena_troska, :iznos_troska, :user, :status)";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"id_korisnika" => $id_korisnika,
+			"datum_troska" => $datum_troska,
+			"namena_troska" => $namena_troska,
+			"iznos_troska" => $iznos_troska,
+			"user" => $user,
+			"status" => $this->status,
+		);
+
+		return $this->insert_data($query, $stmtArray, "bindValue");
+	}
+
 	public function insert_new_porudzbina($id_korisnika, $datum, $id_magacina, $ime_i_prezime, $mesto, $adresa, $telefon, $id_saradnika, $prevoznik, $artikliKomadi, $ukupno, $user, $napomena) {
 		$query = "INSERT INTO porudzbine (id_korisnika, datum, id_magacina, ime_i_prezime, mesto, adresa, telefon, id_saradnika, prevoznik, artikliKomadi, ukupno, user, napomena, status) VALUES (:id_korisnika, :datum, :id_magacina, :ime_i_prezime, :mesto, :adresa, :telefon, :id_saradnika, :prevoznik, :artikliKomadi, :ukupno, :user, :napomena, :status)";
 		$stmt = $this->db->prepare($query);

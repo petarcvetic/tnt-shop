@@ -74,10 +74,19 @@ $magacini = $getData->get_magacini_by_korisnik($id_korisnika);
 			}?>
         	</div>
         </div>
+
         <div class="wraped">
         	<div class="main-menu-block">
+        		<h3 class="center-text">UPISI</h3>
           	<a href="unosi.php"><button class="submit">Unosi</button></a>
           	<a href="narudzbenica.php"><button class="submit">Narudžbenica</button></a>
+        	</div>
+        </div>
+
+        <div class="wraped">
+        	<div class="main-menu-block">
+        		<h3 class="center-text">TROSKOVI</h3>
+          	<a href="troskovi.php"><button class="submit button-center">Troskovi</button></a>
         	</div>
         </div>
       </div>
