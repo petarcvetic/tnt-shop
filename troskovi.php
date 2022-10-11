@@ -40,7 +40,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 		if ($statusKorisnika == '1') {
 
-			/*KLIKNUTO JE search-trosak*/
+			/*KLIKNUTO JE search-trosak*/ 
 			if (isset($_POST['search-trosak'])) {
 				if (isset($_POST['namena-troska']) && $_POST['namena-troska'] != "") {
 					$where1 = " AND namena_troska='" . $_POST['namena-troska'] . "'";

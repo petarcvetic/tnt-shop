@@ -335,10 +335,10 @@ foreach ($magacini as $magacin) {
 				</div>
 
 
-				<!--Forma SARADNIK-->
+				<!--Forma TROSAK-->
 				<div id="form6" class="hide">
 
-					<h1 class="center-text white-text">SARADNIK</h1>
+					<h1 class="center-text white-text">TROŠAK</h1>
 
 					<form action="" method="post" class="forme-unosa">
 

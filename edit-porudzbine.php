@@ -128,6 +128,24 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 /* END "SUBMIT" */
 
+/*EXPORT CSV*/
+if(isset($_POST['export-narudzbenica'])){
+	include("SimpleXLSXGen.php");
+	$row = $getData->get_porudzbina_by_id($id_korisnika, $id_narudzbine);
+
+	$books = [
+    ["Ime i prezime","adresa","mesto","telefon","težina","broj paketa","vrednost","otkup","žiro račun","lično uručenje","otpremnica","povratnica","plaćen odgovor","poštarina","interna napomena","napomena za dostavu","pravno lice"],
+    [$row['ime_i_prezime'], $row['adresa'], $row['mesto'], $row['telefon'], $row['ukupna_tezina'], $row['ukupan_broj_paketa']," ", $row['ukupno'], "123-12345678-12", "0", "0", "0", "0", "1", " ", $row['napomena'], "0"]
+	];
+	$xlsx = Shuchkin\SimpleXLSXGen::fromArray( $books );
+	/*
+	$xlsx->saveAs('books.xlsx'); // or downloadAs('books.xlsx') or $xlsx_content = (string) $xlsx 
+	$xlsx_content = (string) $xlsx
+	*/
+	$xlsx->downloadAs('books.xlsx');
+}
+/*END Export to CSV*/
+
 /*Vadjenje podataka porudzbine iz baze*/
 			$narudzbina = $getData->get_porudzbina_by_id($id_korisnika, $id_narudzbine);
 
@@ -305,7 +323,8 @@ if ($count_artikli == $i) {?>
 							<input type="hidden" name="broj_artikala" id="broj_artikala" value="<?php echo $i; ?>">
 
 							<div class="unos-button">
-						        <input type="submit" class="submit button-full" name="submit-narudzbenica" value="Submit"><br><br>
+						        <input type="submit" class="submit button-full" name="submit-narudzbenica" value="EDIT">
+						        <input type="submit" class="submit button-full" name="export-narudzbenica" value="EXPORT CSV"><br><br>
 							</div>
 
 						</form>
