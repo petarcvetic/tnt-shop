@@ -40,7 +40,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 		if ($statusKorisnika == '1') {
 
-			/*KLIKNUTO JE search-trosak*/ 
+			/*KLIKNUTO JE search-trosak*/
 			if (isset($_POST['search-trosak'])) {
 				if (isset($_POST['namena-troska']) && $_POST['namena-troska'] != "") {
 					$where1 = " AND namena_troska='" . $_POST['namena-troska'] . "'";
@@ -126,7 +126,7 @@ $troskovi = $getData->get_troskovi_by_filter($id_korisnika, $where);
 			foreach ($troskovi as $trosak) {
 				echo "
 							<tr id='tr" . $i . "'>
-								<td><a href='edit-porudzbine.php?id_narudzbine=" . $trosak['id_troska'] . "'><button class='broj center-text input-small plus'>" . $i . "</button></a></td>
+								<td><a href='edit-troska.php?id_troska=" . $trosak['id_troska'] . "'><button class='broj center-text input-small plus'>" . $i . "</button></a></td>
 								<td>" . $trosak['namena_troska'] . "</td>
 								<td>" . $trosak['iznos_troska'] . "</td>
 								<td>" . $trosak['datum_troska'] . "</td>

@@ -51,7 +51,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 /* KLIKNUTO JE "SUBMIT" */
 			if (isset($_POST['submit-narudzbenica'])) {
 				$datum = strip_tags($_POST['datum']);
-				$datum = date("d-m-Y", strtotime($datum));
+//				$datum = date("d-m-Y", strtotime($datum));
 
 				$mesto = strip_tags($_POST['mesto']);
 
@@ -101,7 +101,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 					}
 				}
 
-				echo "Ukupna tezina = " . $ukupna_tezina . "<br>Broj paketa = " . $ukupan_broj_paketa . "<br>Ukupno = " . $ukupno;
+//				echo "Ukupna tezina = " . $ukupna_tezina . "<br>Broj paketa = " . $ukupan_broj_paketa . "<br>Ukupno = " . $ukupno;
 
 				if ($artikliKomadi != "" && $ukupno != 0) {
 					$artikliKomadi = substr_replace($artikliKomadi, "", -1);

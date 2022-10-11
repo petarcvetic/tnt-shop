@@ -48,8 +48,8 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 /* KLIKNUTO JE "SUBMIT" */
 			if (isset($_POST['submit-narudzbenica'])) {
 				$datum = strip_tags($_POST['datum']);
-				$datum = date("d-m-Y", strtotime($datum));
-				echo $datum;
+//				$datum = date("d-m-Y", strtotime($datum));
+				//				echo $datum;
 				$mesto = strip_tags($_POST['mesto']);
 
 				$id_saradnika = strip_tags($_POST['saradnik']);
@@ -64,6 +64,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 				$id_magacina = strip_tags($_POST['id_magacina']);
 				$telefon = strip_tags($_POST['telefon']);
 				$napomena = strip_tags($_POST['napomena']);
+				$postarina = strip_tags($_POST['postarina']);
 				$status = strip_tags($_POST['status']);
 				$broj_artikala = strip_tags($_POST['broj_artikala']);
 
@@ -104,7 +105,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 				if ($artikliKomadi != "" && $ukupno != 0) {
 					$artikliKomadi = substr_replace($artikliKomadi, "", -1);
 
-					$query = $insertData->update_porudzbina_by_id($datum, $id_magacina, $ime_i_prezime, $mesto, $adresa, $telefon, $id_saradnika, $prevoznik, $broj_posiljke, $artikliKomadi, $ukupno, $ukupna_tezina, $ukupan_broj_paketa, $username, $napomena, $status, $id_korisnika, $id_narudzbine);
+					$query = $insertData->update_porudzbina_by_id($datum, $id_magacina, $ime_i_prezime, $mesto, $adresa, $telefon, $id_saradnika, $prevoznik, $broj_posiljke, $artikliKomadi, $ukupno, $ukupna_tezina, $ukupan_broj_paketa, $username, $napomena, $postarina, $status, $id_korisnika, $id_narudzbine);
 
 					if ($query == "") {
 /*Ako je upis u bazu uspeo skida se porucena kolicina sa stanja artikala*/
@@ -129,21 +130,21 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 /* END "SUBMIT" */
 
 /*EXPORT CSV*/
-if(isset($_POST['export-narudzbenica'])){
-	include("SimpleXLSXGen.php");
-	$row = $getData->get_porudzbina_by_id($id_korisnika, $id_narudzbine);
+			if (isset($_POST['export-narudzbenica'])) {
+				include "SimpleXLSXGen.php";
+				$row = $getData->get_porudzbina_by_id($id_korisnika, $id_narudzbine);
 
-	$books = [
-    ["Ime i prezime","adresa","mesto","telefon","težina","broj paketa","vrednost","otkup","žiro račun","lično uručenje","otpremnica","povratnica","plaćen odgovor","poštarina","interna napomena","napomena za dostavu","pravno lice"],
-    [$row['ime_i_prezime'], $row['adresa'], $row['mesto'], $row['telefon'], $row['ukupna_tezina'], $row['ukupan_broj_paketa']," ", $row['ukupno'], "123-12345678-12", "0", "0", "0", "0", "1", " ", $row['napomena'], "0"]
-	];
-	$xlsx = Shuchkin\SimpleXLSXGen::fromArray( $books );
-	/*
-	$xlsx->saveAs('books.xlsx'); // or downloadAs('books.xlsx') or $xlsx_content = (string) $xlsx 
-	$xlsx_content = (string) $xlsx
-	*/
-	$xlsx->downloadAs('books.xlsx');
-}
+				$books = [
+					["Ime i prezime", "adresa", "mesto", "telefon", "težina", "broj paketa", "vrednost", "otkup", "žiro račun", "lično uručenje", "otpremnica", "povratnica", "plaćen odgovor", "poštarina", "interna napomena", "napomena za dostavu", "pravno lice"],
+					[$row['ime_i_prezime'], $row['adresa'], $row['mesto'], $row['telefon'], $row['ukupna_tezina'], $row['ukupan_broj_paketa'], " ", $row['ukupno'], "123-12345678-12", "0", "0", "0", "0", "1", " ", $row['napomena'], "0"],
+				];
+				$xlsx = Shuchkin\SimpleXLSXGen::fromArray($books);
+				/*
+					$xlsx->saveAs('books.xlsx'); // or downloadAs('books.xlsx') or $xlsx_content = (string) $xlsx
+					$xlsx_content = (string) $xlsx
+				*/
+				$xlsx->downloadAs('books.xlsx');
+			}
 /*END Export to CSV*/
 
 /*Vadjenje podataka porudzbine iz baze*/
@@ -172,6 +173,26 @@ if(isset($_POST['export-narudzbenica'])){
 				$selected3 = "checked";
 			} elseif ($status_e == 4) {
 				$selected4 = "checked";
+			}
+
+			$postarina_selected1 = $postarina_selected2 = $postarina_selected3 = $postarina_selected4 = $val1 = $val2 = "";
+			$postarina_e = $narudzbina['postarina'];
+			if ($postarina_e == 1) {
+				$postarina_selected1 = "checked";
+			} elseif ($postarina_e == 2) {
+				$postarina_selected2 = "checked";
+			} elseif ($postarina_e == 3) {
+				$postarina_selected3 = "checked";
+			} elseif ($postarina_e == 4) {
+				$postarina_selected4 = "checked";
+			} else {
+				$tip_magacina = $getData->get_magacin_by_id($id_magacina_e)['tip_magacina'];
+				if ($tip_magacina == 1) {
+					$postarina_selected3 = "checked";
+				}
+				if ($tip_magacina == 2) {
+					$postarina_selected1 = "checked";
+				}
 			}
 
 /*END vadjenje opdataka*/
@@ -264,8 +285,14 @@ $artikliKomadi_e_array = explode(",", $artikliKomadi_e);
 					$id_proizvoda_e = $artikal_komad_e_array[0];
 					$kolicina_e = $artikal_komad_e_array[1];
 					$cena_e = $artikal_komad_e_array[2];
-					$tezina_proizvoda_e = $artikal_komad_e_array[3];
-					$broj_paketa_e = $artikal_komad_e_array[4];
+
+					if (array_key_exists(3, $artikal_komad_e_array)) {
+						$tezina_proizvoda_e = $artikal_komad_e_array[3];
+					} else { $tezina_proizvoda_e = "";}
+
+					if (array_key_exists(4, $artikal_komad_e_array)) {
+						$broj_paketa_e = $artikal_komad_e_array[4];
+					} else { $broj_paketa_e = "";}
 
 					$proizvod_e = $getData->get_proizvod_by_id($id_korisnika, $id_proizvoda_e, $id_magacina_e);
 					$trenutno_stanje_e = $proizvod_e['kolicina_u_magacinu'] + $kolicina_e;
@@ -308,24 +335,55 @@ if ($count_artikli == $i) {?>
 
 							</div> <br><br>
 							<div>
-								<input type="radio" name="status" value="1" <?php echo $selected1; ?>>
-								<label>Ne naplaceno</label> &nbsp; &nbsp; &nbsp;
-								<input type="radio" name="status" value="2" <?php echo $selected2; ?>>
-								<label>Naplaceno</label> &nbsp; &nbsp; &nbsp;
-								<input type="radio" name="status" value="3" <?php echo $selected3; ?>>
-								<label>Lom</label> &nbsp; &nbsp; &nbsp;
-								<input type="radio" name="status" value="4" <?php echo $selected4; ?> >
-								<label>Povrat</label>
+								<div>
+									<input type="radio" name="status" value="1" <?php echo $selected1; ?>>
+									<label>Ne naplaceno</label> &nbsp; &nbsp; &nbsp;
+									<input type="radio" name="status" value="2" <?php echo $selected2; ?>>
+									<label>Naplaceno</label> &nbsp; &nbsp; &nbsp;
+									<input type="radio" name="status" value="3" <?php echo $selected3; ?>>
+									<label>Lom</label> &nbsp; &nbsp; &nbsp;
+									<input type="radio" name="status" value="4" <?php echo $selected4; ?> >
+									<label>Povrat</label>
+								</div><br>
 							</div>
-							<br>
+
+							<div>
+								Postarina
+								<?php
+$tip_magacina = $getData->get_magacin_by_id($id_magacina_e)['tip_magacina'];
+				if ($tip_magacina == 1) {
+					$val1 = "3";
+					$val2 = "4";
+					?>
+									<input type="radio" name="postarina" value="<?php echo $val1; ?>" <?php echo $postarina_selected3; ?>>
+									<label><?php echo $val1; ?></label> &nbsp; &nbsp; &nbsp;
+									<input type="radio" name="postarina" value="<?php echo $val2; ?>" <?php echo $postarina_selected4; ?>>
+									<label><?php echo $val2; ?></label> &nbsp; &nbsp; &nbsp;
+									<?php
+}
+				if ($tip_magacina == 2) {
+					$val1 = "1";
+					$val2 = "2";
+					?>
+									<input type="radio" name="postarina" value="<?php echo $val1; ?>" <?php echo $postarina_selected1; ?>>
+									<label><?php echo $val1; ?></label> &nbsp; &nbsp; &nbsp;
+									<input type="radio" name="postarina" value="<?php echo $val2; ?>" <?php echo $postarina_selected2; ?>>
+									<label><?php echo $val2; ?></label> &nbsp; &nbsp; &nbsp;
+									<?php
+}
+
+				?>
+
+							</div><br>
+
 							<input type="text" class="center-text input-field" name="napomena" value="<?php echo $narudzbina['napomena']; ?>" placeholder="napomena">
 
 							<input type="hidden" name="broj_artikala" id="broj_artikala" value="<?php echo $i; ?>">
 
 							<div class="unos-button">
 						        <input type="submit" class="submit button-full" name="submit-narudzbenica" value="EDIT">
-						        <input type="submit" class="submit button-full" name="export-narudzbenica" value="EXPORT CSV"><br><br>
-							</div>
+<!--						        <input type="submit" class="submit button-full" name="export-narudzbenica" value="EXPORT xlsx"><br><br>
+-->							</div>
 
 						</form>
 <?php } else {echo "<script>alert('Nepostojeci ID porudzbine');</script>";}?>

@@ -310,6 +310,18 @@ class GetData {
 		return $this->get_fetch_all($query, $stmtArray, "bindValue");
 	}
 
+	public function get_trosak_by_id($id_korisnika, $id_troska) {
+		$query = "SELECT * FROM troskovi WHERE id_korisnika=:id_korisnika AND id_troska=:id_troska";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"id_korisnika" => $id_korisnika,
+			"id_troska" => $id_troska,
+		);
+
+		return $this->get_fetch_data($query, $stmtArray, "bindValue");
+	}
+
 	public function get_porudzbina_by_id($id_korisnika, $id_narudzbine) {
 		$query = "SELECT * FROM porudzbine WHERE id_korisnika=:id_korisnika AND id_narudzbine=:id_narudzbine";
 

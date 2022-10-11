@@ -8,14 +8,14 @@ include "dbconfig.php";
 include "assets/header.php";
 
 /*Podaci USER-a*/
-	$useID = $_SESSION['sess_user_id'];
-	$username = $_SESSION['sess_user_name'];
-	$id_korisnika = $_SESSION['sess_id_korisnika'];
-	$statusUser = $_SESSION['sess_user_status'];
+$useID = $_SESSION['sess_user_id'];
+$username = $_SESSION['sess_user_name'];
+$id_korisnika = $_SESSION['sess_id_korisnika'];
+$statusUser = $_SESSION['sess_user_status'];
 
-/*KLIKNUTO JE Search na filteru*/
-if (isset($_POST['filter-search'])) {
-	
+/*KLIKNUTO JE Search ili Export na filteru*/
+if (isset($_POST['filter-search']) OR isset($_POST['export-narudzbenica'])) {
+
 	$id_magacina = strip_tags($_POST['id-magacina']);
 
 	if (isset($_POST['filter-ime']) && $_POST['filter-ime'] != "") {
@@ -24,21 +24,17 @@ if (isset($_POST['filter-search'])) {
 
 	if (isset($_POST['filter-od-datuma']) && $_POST['filter-od-datuma'] != "") {
 //		$od_datuma_filter = date("d-m-Y", strtotime($_POST['filter-od-datuma']));
-			$od_datuma_filter = $_POST['filter-od-datuma'];
+		$od_datuma_filter = $_POST['filter-od-datuma'];
 
 		if (isset($_POST['filter-do-datuma']) && $_POST['filter-do-datuma'] != "") {
-//			$do_datuma_filter = date("d-m-Y", strtotime($_POST['filter-do-datuma']));
 			$do_datuma_filter = $_POST['filter-do-datuma'];
-//			$where2 = " AND datum BETWEEN '" . $od_datuma_filter . "' AND '" . $do_datuma_filter . "'";
 			$where2 = " AND datum BETWEEN '" . $od_datuma_filter . "' AND '" . $do_datuma_filter . "'";
-		} 
-		else {
+		} else {
 			$where2 = " AND datum = '" . $od_datuma_filter . "'";
 		}
 
-	} 
-	else { $where2 = "";}
-	
+	} else { $where2 = "";}
+
 	if (isset($_POST['filter-saradnik']) && $_POST['filter-saradnik'] != "") {
 		$where3 = " AND id_saradnika='" . $_POST['filter-saradnik'] . "'";
 	} else { $where3 = "";}
@@ -46,24 +42,21 @@ if (isset($_POST['filter-search'])) {
 	$where = $where1 . $where2 . $where3;
 
 	$porudzbine = $getData->get_porudzbine_by_filter($id_korisnika, $id_magacina, $where);
-	
+
 }
 /*END Filter*/
-
 
 if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 	if (isset($_GET['id_magacina'])) {
 		$id_magacina = strip_tags($_GET['id_magacina']);
-	} 
-	if(isset($_POST['id-magacina'])){
+	}
+	if (isset($_POST['id-magacina'])) {
 		$id_magacina = strip_tags($_POST['id-magacina']);
 	}
 
-	if($id_korisnika == "") {
+	if ($id_korisnika == "") {
 		header("Location: index.php");
 	}
-
-
 
 /*Podaci KORISNIKA*/
 	$korisnik = $_SESSION['sess_korisnik_name'];
@@ -92,18 +85,18 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 		if ($statusKorisnika == '1') {
 			$naziv_magacina = $getData->get_magacin_by_id($id_magacina)["naziv_magacina"];
 
-			if(!isset($_POST['filter-search'])){
+			if (!isset($_POST['filter-search']) && !isset($_POST['export-narudzbenica'])) {
 				$porudzbine = $getData->get_porudzbine_by_magacin($id_korisnika, $id_magacina);
 			}
-			
-?>
+
+			?>
 
 		<div id="alert"></div>
 
 		<div><h1 class="center-text">Magacin <?php echo $naziv_magacina; ?></h1></div>
 
 		<?php
-			$magacini = $getData->get_magacini($id_korisnika);
+$magacini = $getData->get_magacini($id_korisnika);
 			foreach ($magacini as $magacin) {
 				if ($magacin['id_magacina'] != $id_magacina) {
 					echo "<a href='porudzbine.php?id_magacina=" . $magacin['id_magacina'] . "'><button class='center-text submit'>" . $magacin['naziv_magacina'] . "</button></a>";
@@ -112,17 +105,42 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 				}
 			}
 
+/*EXPORT CSV*/
+			if (isset($_POST['export-narudzbenica'])) {
+				include "SimpleXLSXGen.php";
+				$filename = "export" . date("d-m-Y-h-i-s") . ".xlsx";
+
+				$ziro_racun = "";
+				$tip_magacina = $getData->get_magacin_by_id($id_magacina)['tip_magacina'];
+				if ($tip_magacina == 1) {
+					$ziro_racun = $getData->get_korisnik($id_korisnika)['tekuci_racun'];
+				}
+
+				$narudzbine_xlsx = array();
+
+				array_push($narudzbine_xlsx, ["Ime i prezime", "adresa", "mesto", "telefon", "težina", "broj paketa", "vrednost", "otkup", "žiro račun", "lično uručenje", "otpremnica", "povratnica", "plaćen odgovor", "poštarina", "interna napomena", "napomena za dostavu", "pravno lice"]);
+
+				foreach ($porudzbine as $row) {
+
+					array_push($narudzbine_xlsx, [$row['ime_i_prezime'], $row['adresa'], $row['mesto'], $row['telefon'], $row['ukupna_tezina'], $row['ukupan_broj_paketa'], " ", $row['ukupno'], $ziro_racun, "0", "0", "0", "0", $row['postarina'], " ", $row['napomena'], "0"]);
+				}
+
+				$xlsx = Shuchkin\SimpleXLSXGen::fromArray($narudzbine_xlsx);
+				$xlsx->downloadAs($filename);
+			}
+/*END Export to CSV*/
+
 			?>
 
 		<div class="unos-big">
 
 			<div class="filter">
-				
+
 				<h3 class="center-text">Filter</h3>
-				
+
 				<form action="" method="post">
 					<input type="hidden" name="id-magacina" id="id-magacina" value="<?php echo $id_magacina; ?>">
-					
+
 					<div class="row-filter">
 						Kupac: <input type="text" class="center-text filter-field-small float-right" id="filter-ime" name="filter-ime">
 					</div><br>
@@ -139,18 +157,19 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 						Saradnik: <select class="center-text filter-field-small float-right" name="filter-saradnik" id="filter-saradnik">
 											<option value="" disabled selected>Saradnik</option>
 										<?php
-										$saradnici = $getData->get_saradnici($id_korisnika);
-										foreach ($saradnici as $saradnik) {
-											echo "<option value='" . $saradnik['id_saradnika'] . "'>" . $saradnik['ime_saradnika'] . " " . $saradnik['prezime_saradnika'] . '</option>';
-										}
-										?>
+$saradnici = $getData->get_saradnici($id_korisnika);
+			foreach ($saradnici as $saradnik) {
+				echo "<option value='" . $saradnik['id_saradnika'] . "'>" . $saradnik['ime_saradnika'] . " " . $saradnik['prezime_saradnika'] . '</option>';
+			}
+			?>
 										</select>
 					</div><br>
 
 					<div class="center-row">
-						<button type="submit" style="margin: auto;" class="submit" name="filter-search" id="filter-search"><i class="fa fa-search"></i></button>
+						<button type="submit" class="submit button-full" name="filter-search" id="filter-search"><i class="fa fa-search"></i></button>
+						<input type="submit" class="submit button-full" name="export-narudzbenica" id="export-narudzbenica" value="EXPORT xlsx"><br><br>
 					</div>
-				</form>	
+				</form>
 			</div>
 
 			<div class="porudzbine-list">
@@ -174,7 +193,7 @@ $i = 1;
 				echo "
 						<tr id='tr" . $i . "'>
 							<td><a href='edit-porudzbine.php?id_narudzbine=" . $porudzbina['id_narudzbine'] . "'><button class='broj center-text input-small plus'>" . $porudzbina['id_narudzbine'] . "</button></a></td>
-							<td>" . $porudzbina['datum'] . "</td>
+							<td>" . date("d-m-Y", strtotime($porudzbina['datum'])) . "</td>
 							<td>" . $porudzbina['ime_i_prezime'] . "</td>
 							<td>" . $saradnik['ime_saradnika'] . " " . $saradnik['prezime_saradnika'] . "</td>
 							<td>" . $porudzbina['broj_posiljke'] . "</td>
