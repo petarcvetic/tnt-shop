@@ -218,23 +218,20 @@ class InsertData {
 		return $this->insert_data($query, $stmtArray, "bindValue");
 	}
 
-	public function delete_row($tabela,$id,$id_korisnika){
+	public function delete_row($tabela, $id, $id_korisnika) {
 		if ($tabela == "troskovi") {
 			$id_tabele = "id_troska";
-		}
-		elseif ($tabela == "porudzbine") {
+		} elseif ($tabela == "porudzbine") {
 			$id_tabele = "id_narudzbine";
-		}
-		elseif($tabela == "proizvodi"){
+		} elseif ($tabela == "proizvodi") {
 			$id_tabele = "id_proizvoda";
-		}
-		elseif ($tabela == "admin") {
+		} elseif ($tabela == "admin") {
 			$id_tabele = "id_admin";
 		}
-		
+
 		$query = "DELETE FROM $tabela WHERE $id_tabele=$id AND id_korisnika=$id_korisnika";
 
-//		echo $tabela . "/" . $id . " / " . $id_korisnika . " / ". $query;
+		echo $tabela . "/" . $id . " / " . $id_korisnika . " / " . $query;
 
 		$stmt = $this->db->prepare($query);
 		$stmtArray = array();

@@ -67,12 +67,13 @@ if (isset($_GET['proizvod'])) {
 }
 
 /*DELETE input*/
-if(isset($_GET['delete']) && $_GET['delete']==1){
+if (isset($_GET['delete']) && $_GET['delete'] == 1) {
 	$tabela = strip_tags($_GET['tabela']);
 	$id = strip_tags($_GET['id']);
 
-	if($tabela!="" and $id!=""){
-		$insertData->delete_row($tabela,$id,$id_korisnika);
+	if ($tabela != "" and $id != "") {
+		$insertData->delete_row($tabela, $id, $id_korisnika);
+		echo "<script>location.reload();</script>";
 	}
 }
 

@@ -13,8 +13,8 @@ $username = $_SESSION['sess_user_name'];
 $id_korisnika = $_SESSION['sess_id_korisnika'];
 $statusUser = $_SESSION['sess_user_status'];
 
-/*KLIKNUTO JE Search ili Export na filteru*/
-if (isset($_POST['filter-search']) OR isset($_POST['export-narudzbenica'])) {
+/*KLIKNUTO JE Search ili EXPORT Bex ili EXPORT magacin na filteru*/
+if (isset($_POST['filter-search']) OR isset($_POST['export-narudzbenica']) OR isset($_POST['export-magacin'])) {
 
 	$id_magacina = strip_tags($_POST['id-magacina']);
 
@@ -85,7 +85,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 		if ($statusKorisnika == '1') {
 			$naziv_magacina = $getData->get_magacin_by_id($id_magacina)["naziv_magacina"];
 
-			if (!isset($_POST['filter-search']) && !isset($_POST['export-narudzbenica'])) {
+			if (!isset($_POST['filter-search']) && !isset($_POST['export-narudzbenica']) && !isset($_POST['export-magacin'])) {
 				$porudzbine = $getData->get_porudzbine_by_magacin($id_korisnika, $id_magacina);
 			}
 
@@ -105,10 +105,10 @@ $magacini = $getData->get_magacini($id_korisnika);
 				}
 			}
 
-/*EXPORT CSV*/
+/*EXPORT Bex*/
 			if (isset($_POST['export-narudzbenica'])) {
 				include "SimpleXLSXGen.php";
-				$filename = "export" . date("d-m-Y-h-i-s") . ".xlsx";
+				$filename = "export-bex" . date("d-m-Y-h-i-s") . ".xlsx";
 
 				$ziro_racun = "";
 				$tip_magacina = $getData->get_magacin_by_id($id_magacina)['tip_magacina'];
@@ -128,7 +128,38 @@ $magacini = $getData->get_magacini($id_korisnika);
 				$xlsx = Shuchkin\SimpleXLSXGen::fromArray($narudzbine_xlsx);
 				$xlsx->downloadAs($filename);
 			}
-/*END Export to CSV*/
+/*END Export Bex*/
+
+/*EXPORT Magacin*/
+			$proizvod_kolicina = "";
+			if (isset($_POST['export-magacin'])) {
+				include "SimpleXLSXGen.php";
+				$filename = "export-magacin" . date("d-m-Y-h-i-s") . ".xlsx";
+
+				$narudzbine_magacin = array();
+
+				array_push($narudzbine_magacin, ["Proizvod / Kolicina", "Ime i prezime", "Prevoznik", "napomena za dostavu"]);
+
+				foreach ($porudzbine as $row) {
+					$proizvod_kolicina = "";
+					$art_kom_array = explode(",", $row['artikliKomadi']);
+
+					foreach ($art_kom_array as $art_kom) {
+						$art_kom_row = explode("/", $art_kom);
+						$art_id = $art_kom_row[0];
+						$art_naziv = $getData->get_proizvod_by_id($id_korisnika, $art_id, $id_magacina)['naziv_proizvoda'];
+						$art_kolicina = $art_kom_row[1];
+
+						$proizvod_kolicina .= $art_naziv . ' * ' . $art_kolicina . 'kom, ' . utf8_encode(chr(10) . chr(13));
+					}
+
+					array_push($narudzbine_magacin, [$proizvod_kolicina, $row['ime_i_prezime'], $row['prevoznik'], $row['napomena']]);
+				}
+
+				$xlsx = Shuchkin\SimpleXLSXGen::fromArray($narudzbine_magacin);
+				$xlsx->downloadAs($filename);
+			}
+/*END Export Magacin*/
 
 			?>
 
@@ -167,7 +198,8 @@ $saradnici = $getData->get_saradnici($id_korisnika);
 
 					<div class="center-row">
 						<button type="submit" class="submit button-full" name="filter-search" id="filter-search"><i class="fa fa-search"></i></button>
-						<input type="submit" class="submit button-full" name="export-narudzbenica" id="export-narudzbenica" value="EXPORT xlsx"><br><br>
+						<input type="submit" class="submit button-full" name="export-narudzbenica" id="export-narudzbenica" value="EXPORT Bex">
+						<input type="submit" class="submit button-full" name="export-magacin" id="export-magacin" value="EXPORT magacin"><br><br>
 					</div>
 				</form>
 			</div>
