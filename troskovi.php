@@ -1,7 +1,8 @@
 <?php
 $ukupno = 0;
-$artikliKomadi = $where = "";
+$artikliKomadi = $where = $trosak_u_tekucem_mesecu = "";
 $today = date("Y-m-d");
+
 
 include "dbconfig.php";
 include "assets/header.php";
@@ -68,6 +69,21 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 				} else { $where3 = "";}
 				$where = $where1 . $where2 . $where3;
 			}
+			else{
+				$current_month = $getData->get_trosakovi_current_month($id_korisnika);
+				$month_sum = 0;
+				foreach ($current_month as $row) {
+					$month_sum += $row["iznos_troska"];
+				}
+				$trosak_u_tekucem_mesecu = "ZA TEKUCI MESEC: ".$month_sum;
+
+				$current_year = $getData->get_trosakovi_current_year($id_korisnika);
+				$year_sum = 0;
+				foreach ($current_year as $row) {
+					$year_sum += $row["iznos_troska"];
+				}
+				$trosak_u_tekucoj_godini = "ZA TEKUCU GODINU: ".$year_sum;
+			}
 
 			?>
 
@@ -117,6 +133,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 								<th>NAMENA</th>
 								<th>IZNOS</th>
 								<th>UNEO</th>
+								<th></th>
 							</tr>
 
 						<?php
@@ -131,12 +148,13 @@ $troskovi = $getData->get_troskovi_by_filter($id_korisnika, $where);
 								<td>" . $trosak['iznos_troska'] . "</td>
 								<td>" . $trosak['datum_troska'] . "</td>
 								<td>" . $trosak['user'] . "</td>
+								<td><button class='broj center-text input-small plus' onclick='delete_row(" . '"troskovi","' . $trosak['id_troska'] . '"' . ")'><i class='fa fa-trash' aria-hidden='true'></i></button></td>
 							</tr>
 							";
 				$ukupan_trosak += $trosak['iznos_troska'];
 				$i++;
 			}
-			echo "UKUPAN TROSAK: " . $ukupan_trosak;
+			echo $trosak_u_tekucoj_godini . "&nbsp &nbsp &nbsp " . $trosak_u_tekucem_mesecu;
 			?>
 						</table>
 					</div>

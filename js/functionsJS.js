@@ -50,7 +50,6 @@
 
 	function createNewInput(i,id_magacina){
 
-
 		i=Number(i);  // broj trenutnog inputa
 		var s = Number(i)+1;
 		var narudzbenica = "narudzbenica";
@@ -61,7 +60,7 @@
 			i = s;
 			
 			var div_start = '<div class="porudzbenica-artikli" id="'+i+'">';
-			var cell1 = '<div class="redni-broj">'+i+'</div>';
+			var cell1 = '<div class="redni-broj">'+i+'. </div>';
 			var cell2 = '<input type="text" class="awesomplete center-text input-small" name="proizvod'+i+'" id="proizvod'+i+'" list="proizvodi" size="34" placeholder="Izaberi Artikal" required onChange="autofillProizvoda(this,'+"'"+i+"','narudzbenica','"+id_magacina+"')"+'">';
 			var cell3 = '<input type="text" class="center-text input-small" name="kolicina'+i+'" size="5" placeholder="kolicina" required>';			
 			var cell4 = '<input type="text" class="center-text input-small" name="cena_proizvoda'+i+'" id="cena-proizvoda'+i+'" size="5" placeholder="cena" required>';
@@ -69,7 +68,7 @@
 			var cell5 = '<input type="text" class="center-text input-small" name="tezina'+i+'" id="tezina'+i+'" size="5" placeholder="tezina" required>';
 			var cell6 = '<input type="text" class="center-text input-small" name="broj-paketa'+i+'" id="broj-paketa'+i+'" size="3" placeholder="paketi" required>';
 
-			var cell7 = '<input type="text" class="center-text input-small" name="stanje'+i+'" id="stanje'+i+'" size="5" placeholder="stanje" disabled>';
+			var cell7 = '<input type="text" class="center-text input-small" name="stanje'+i+'" id="stanje'+i+'" size="5" placeholder="stanje" >';
 			var cell8 = '<div class="broj center-text input-small plus" id="plus'+i+'" onclick="createNewInput('+"'"+i+"','"+id_magacina+"')"+'">+</div>';
 			var div_end = '</div>';		
 
@@ -79,7 +78,15 @@
 				var ii = i-1;
 				$("#plus"+ii).css("display","none");
 			}
-		}	
+		}
+
+		function load_js(){
+			var head= document.getElementsByTagName('head')[0];
+			var script= document.createElement('script');
+			script.src= 'js/awesomplete.js';
+			head.appendChild(script);
+		}
+		load_js();	
 
 	}
 
@@ -88,6 +95,16 @@
 		var selected = object.value;
 		var id_proizvoda = $('#datalist_edit').find('option[value="'+ selected +'"]').attr('id');
 		location.href = "edit-proizvoda.php?id-proizvoda="+id_proizvoda;
+	}
+
+	function delete_row(tabela,id){
+		var xhr = new XMLHttpRequest();
+		xhr.open("get", "ajax_response.php?delete=1&tabela="+tabela+"&id="+id, false);
+		xhr.send();
+		var odgovor = xhr.responseText;
+		if(odgovor!==""){
+			$("#alert").html(odgovor);
+		}
 	}
 
 //STARO

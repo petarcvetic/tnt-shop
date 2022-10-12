@@ -65,6 +65,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 			?>
 		<div id="alert"></div>
+		<a href="troskovi.php"><button class="center-text input-small plus back-button"><i class="fa fa-arrow-left" aria-hidden="true"></i>Back</button></a>
 		<div class="unos">
 
 			<div class="unos-form-container">

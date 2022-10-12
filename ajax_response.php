@@ -42,6 +42,7 @@ if (isset($_GET['plati'])) {
 	echo "<script>location.reload();</script>";
 }
 
+/*autofillProizvoda*/
 if (isset($_GET['proizvod'])) {
 	$naziv_proizvoda = strip_tags($_GET['proizvod']);
 	$i = strip_tags($_GET['i']);
@@ -62,6 +63,16 @@ if (isset($_GET['proizvod'])) {
 						$("#broj-paketa' . $i . '").val("' . $broj_paketa . '");
 					</script>';
 		}
+	}
+}
+
+/*DELETE input*/
+if(isset($_GET['delete']) && $_GET['delete']==1){
+	$tabela = strip_tags($_GET['tabela']);
+	$id = strip_tags($_GET['id']);
+
+	if($tabela!="" and $id!=""){
+		$insertData->delete_row($tabela,$id,$id_korisnika);
 	}
 }
 

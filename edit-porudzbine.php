@@ -1,6 +1,6 @@
 <?php
 $ukupno = $ukupna_tezina = $ukupan_broj_paketa = 0;
-$artikliKomadi = $regular = "";
+$artikliKomadi = $regular = $artikliStanja = "";
 $today = date("Y-m-d");
 
 include "dbconfig.php";
@@ -82,8 +82,10 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 							$id_proizvoda = $proizvod["id_proizvoda"];
 
 							if ($id_proizvoda != "" && $kolicina != "") {
+								$artikalStanje = $id_proizvoda . "/" . $trenutno_stanje. "/" . $kolicina;
 								$artikalKomada = $id_proizvoda . "/" . $kolicina . "/" . $cena . "/" . $tezina_proizvoda . "/" . $broj_paketa; //par "artikal"/"komada"/"cena"
-								$artikliKomadi .= $artikalKomada . ","; //------String koji sadrzi parove "artikal"/"komada"---------------//
+								$artikliKomadi .= $artikalKomada . ","; //------String koji sadrzi parove "artikal"/"komada"-------//
+								$artikliStanja .= $artikalStanje . ",";
 							} else {
 								$artikalKomada = "";
 							}
@@ -103,24 +105,26 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 				}
 
 				if ($artikliKomadi != "" && $ukupno != 0) {
-					$artikliKomadi = substr_replace($artikliKomadi, "", -1);
+					$artikliKomadi = substr_replace($artikliKomadi, "", -1); /*uklanjanje poslednjeg zareza*/
+					$artikliStanja = substr_replace($artikliStanja, "", -1);
+
 
 					$query = $insertData->update_porudzbina_by_id($datum, $id_magacina, $ime_i_prezime, $mesto, $adresa, $telefon, $id_saradnika, $prevoznik, $broj_posiljke, $artikliKomadi, $ukupno, $ukupna_tezina, $ukupan_broj_paketa, $username, $napomena, $postarina, $status, $id_korisnika, $id_narudzbine);
 
 					if ($query == "") {
 /*Ako je upis u bazu uspeo skida se porucena kolicina sa stanja artikala*/
-						$artikliKomadi_array = explode(",", $artikliKomadi);
-						foreach ($artikliKomadi_array as $artikal_komad) {
+						$artikliStanja_array = explode(",", $artikliStanja);
+						foreach ($artikliStanja_array as $artikal_komad) {
 							$artikal_komad_array = explode("/", $artikal_komad);
 							$id_proizvoda_i = $artikal_komad_array[0];
-							$poruceno_i = $artikal_komad_array[1];
+							$proslo_stanje = $artikal_komad_array[1];
+							$poruceno_i = $artikal_komad_array[2];
 
 //							$trenutno_stanje = $getData->get_proizvod_by_id($id_korisnika, $id_proizvoda_i, $id_magacina)['kolicina_u_magacinu'];
-							$novo_stanje = $trenutno_stanje - $poruceno_i;
-
+							$novo_stanje = $proslo_stanje - $poruceno_i;
 							$insertData->update_stanje_proizvoda($novo_stanje, $id_proizvoda_i, $id_korisnika);
 						}
-						header("Location:porudzbine.php?id_magacina=" . $id_magacina);
+//						header("Location:porudzbine.php?id_magacina=" . $id_magacina);
 					} else {
 						echo "<script>alert('Doslo je do greske pri upisu u bazu'" . $query . ");</script>";
 					}
@@ -198,8 +202,8 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 /*END vadjenje opdataka*/
 			?>
 			<div id="alert"></div>
-
-    	<div class="unos">
+			<a href="porudzbine.php?id_magacina=<?php echo $id_magacina_e; ?>"><button class="center-text input-small plus back-button"><i class="fa fa-arrow-left" aria-hidden="true"></i>Back</button></a>
+    		<div class="unos">
 
 				<div class="unos-form-container">
 
@@ -264,6 +268,16 @@ $prevoznici = $getData->get_prevoznici($id_korisnika);
 							</div><br><br>
 							<?php $i = 1;?>
 							<div id="proizvodi-za-porudzbinu">
+								<datalist id="proizvodi">
+									<?php
+
+									$proizvodi = $getData->get_proizvodi_from_magacin($id_korisnika, $id_magacina_e);
+									foreach ($proizvodi as $proizvod) {
+										echo "<option value=" . $proizvod['id_proizvoda'] . ">" . $proizvod['naziv_proizvoda'] . "</option>";
+									}
+
+									?>
+								</datalist>
 
 								<div class="porudzbenica-artikli">
 									<div class="big-zaglavlje">PROIZVOD</div>
@@ -275,7 +289,7 @@ $prevoznici = $getData->get_prevoznici($id_korisnika);
 								</div>
 
 								<div class="porudzbenica-artikli" id="<?php echo $i; ?>">
-
+									
 
 								<?php
 $artikliKomadi_e_array = explode(",", $artikliKomadi_e);
@@ -300,17 +314,8 @@ $artikliKomadi_e_array = explode(",", $artikliKomadi_e);
 
 
 									<div class="redni-broj"><?php echo $i . ". "; ?></div>
-									<input type="text" class="awesomplete center-text input-small" name="proizvod<?php echo $i; ?>" id="proizvod<?php echo $i; ?>" list="proizvodi<?php echo $i; ?>" size="34" value="<?php echo $proizvod_e['naziv_proizvoda']; ?>" onChange="autofillProizvoda(this,'<?php echo $i; ?>','narudzbenica',<?php echo $id_magacina_e ?>)" required>
-									<datalist id="proizvodi<?php echo $i; ?>">
-										<?php
-
-					$proizvodi = $getData->get_proizvodi_from_magacin($id_korisnika, $id_magacina_e);
-					foreach ($proizvodi as $proizvod) {
-						echo "<option value=" . $proizvod['id_proizvoda'] . ">" . $proizvod['naziv_proizvoda'] . "</option>";
-					}
-
-					?>
-									</datalist>
+									<input type="text" class="awesomplete center-text input-small" name="proizvod<?php echo $i; ?>" id="proizvod<?php echo $i; ?>" list="proizvodi" size="32" value="<?php echo $proizvod_e['naziv_proizvoda']; ?>" onChange="autofillProizvoda(this,'<?php echo $i; ?>','narudzbenica',<?php echo $id_magacina_e ?>)" required>
+									
 
 									<input type="text" class="center-text input-small" name="kolicina<?php echo $i; ?>" size="5" placeholder="kolicina" value="<?php echo $kolicina_e; ?>" required>
 									<input type="text" class="center-text input-small" name="cena_proizvoda<?php echo $i; ?>" id="cena-proizvoda<?php echo $i; ?>" size="5" placeholder="cena" value="<?php echo $cena_e; ?>" required>

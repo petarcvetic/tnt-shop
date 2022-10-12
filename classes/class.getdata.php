@@ -322,6 +322,33 @@ class GetData {
 		return $this->get_fetch_data($query, $stmtArray, "bindValue");
 	}
 
+	public function get_trosakovi_current_month($id_korisnika) {
+		$query = "SELECT * FROM troskovi WHERE MONTH(datum_troska) = MONTH(CURRENT_DATE()) AND YEAR(datum_troska) = YEAR(CURRENT_DATE()) AND id_korisnika=:id_korisnika";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"id_korisnika" => $id_korisnika,
+		);
+		return $this->get_fetch_all($query, $stmtArray, "bindValue");
+	}
+
+	public function get_trosakovi_current_year($id_korisnika) {
+		$query = "SELECT * FROM troskovi WHERE YEAR(datum_troska) = YEAR(CURRENT_DATE()) AND id_korisnika=:id_korisnika";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"id_korisnika" => $id_korisnika,
+		);
+		return $this->get_fetch_all($query, $stmtArray, "bindValue");
+	}
+
+
+
+
+
+
+
+
 	public function get_porudzbina_by_id($id_korisnika, $id_narudzbine) {
 		$query = "SELECT * FROM porudzbine WHERE id_korisnika=:id_korisnika AND id_narudzbine=:id_narudzbine";
 
