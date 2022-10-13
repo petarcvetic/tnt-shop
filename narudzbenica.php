@@ -1,7 +1,7 @@
 <?php
 $ukupno = $ukupna_tezina = $ukupan_broj_paketa = 0;
 
-$artikliKomadi = $regular = "";
+$artikliKomadi = $regular = $postarina ="";
 $today = date("Y-m-d");
 
 include "dbconfig.php";
@@ -67,6 +67,15 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 				$telefon = strip_tags($_POST['telefon']);
 				$napomena = strip_tags($_POST['napomena']);
 				$broj_artikala = strip_tags($_POST['broj_artikala']);
+				
+				$magacin = $getData->get_magacin_by_id($id_magacina);
+				$tip_magacina = $magacin['tip_magacina'];
+				if($tip_magacina == 1){
+					$postarina = "3";
+				}
+				elseif($tip_magacina == 2){
+					$postarina = "1";
+				}
 
 				for ($i = 1; $i <= $broj_artikala; $i++) {
 					if (isset($_POST["proizvod" . $i]) && $_POST["proizvod" . $i] != "") {
@@ -106,7 +115,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 				if ($artikliKomadi != "" && $ukupno != 0) {
 					$artikliKomadi = substr_replace($artikliKomadi, "", -1);
 
-					$query = $insertData->insert_new_porudzbina($id_korisnika, $datum, $id_magacina, $ime_i_prezime, $mesto, $adresa, $telefon, $id_saradnika, $prevoznik, $artikliKomadi, $ukupno, $ukupna_tezina, $ukupan_broj_paketa, $username, $napomena);
+					$query = $insertData->insert_new_porudzbina($id_korisnika, $datum, $id_magacina, $ime_i_prezime, $mesto, $adresa, $telefon, $id_saradnika, $prevoznik, $artikliKomadi, $ukupno, $ukupna_tezina, $ukupan_broj_paketa, $username, $napomena, $postarina);
 
 					if ($query == "") {
 /*Ako je upis u bazu uspeo skida se porucena kolicina sa stanja artikala*/

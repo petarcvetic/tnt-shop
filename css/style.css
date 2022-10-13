@@ -860,42 +860,24 @@ table{
 }
 
 
+@media only screen and (max-device-width: 1440px){
+	.container{
+		width: 90%;
+	}
 
-
+	.unnos{
+		min-width: 90%;
+    max-width: 100%;
+	}
+}
 
 /*LAPTOP-TABLET*/
 
 @media only screen and (max-device-width: 1160px){
 
-	/*KARTICA DOBAVLJACA*/
-
-	.fix-position-left{
-
-		display: block;
-
-		position: relative;
-
-		left: 0px;
-
-		right: 0px;
-
-		top: 0px;
-
-		margin: 25px auto;
-
+	.unos-form-container {
+		padding: 5px 5px;
 	}
-
-
-
-	.kartica-klijenta{
-
-		width: 80%;
-
-		margin: auto;
-
-	}
-
-
 
 }
 

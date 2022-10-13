@@ -118,8 +118,8 @@ class InsertData {
 		return $this->insert_data($query, $stmtArray, "bindValue");
 	}
 
-	public function insert_new_porudzbina($id_korisnika, $datum, $id_magacina, $ime_i_prezime, $mesto, $adresa, $telefon, $id_saradnika, $prevoznik, $artikliKomadi, $ukupno, $ukupna_tezina, $ukupan_broj_paketa, $user, $napomena) {
-		$query = "INSERT INTO porudzbine (id_korisnika, datum, id_magacina, ime_i_prezime, mesto, adresa, telefon, id_saradnika, prevoznik, artikliKomadi, ukupno, ukupna_tezina, ukupan_broj_paketa, user, napomena, status) VALUES (:id_korisnika, :datum, :id_magacina, :ime_i_prezime, :mesto, :adresa, :telefon, :id_saradnika, :prevoznik, :artikliKomadi, :ukupno, :ukupna_tezina, :ukupan_broj_paketa, :user, :napomena, :status)";
+	public function insert_new_porudzbina($id_korisnika, $datum, $id_magacina, $ime_i_prezime, $mesto, $adresa, $telefon, $id_saradnika, $prevoznik, $artikliKomadi, $ukupno, $ukupna_tezina, $ukupan_broj_paketa, $user, $napomena, $postarina) {
+		$query = "INSERT INTO porudzbine (id_korisnika, datum, id_magacina, ime_i_prezime, mesto, adresa, telefon, id_saradnika, prevoznik, artikliKomadi, ukupno, ukupna_tezina, ukupan_broj_paketa, user, napomena, postarina, status) VALUES (:id_korisnika, :datum, :id_magacina, :ime_i_prezime, :mesto, :adresa, :telefon, :id_saradnika, :prevoznik, :artikliKomadi, :ukupno, :ukupna_tezina, :ukupan_broj_paketa, :user, :napomena, :postarina, :status)";
 		$stmt = $this->db->prepare($query);
 		$stmtArray = array(
 			"id_korisnika" => $id_korisnika,
@@ -137,6 +137,7 @@ class InsertData {
 			"ukupan_broj_paketa" => $ukupan_broj_paketa,
 			"user" => $user,
 			"napomena" => $napomena,
+			"postarina" => $postarina,
 			"status" => $this->status,
 		);
 
@@ -181,7 +182,7 @@ class InsertData {
 			"id_proizvoda" => $id_proizvoda,
 			"id_korisnika" => $id_korisnika,
 		);
-
+//		return $this->insert_data($query, $stmtArray, "bindParam");
 		return $this->insert_data($query, $stmtArray, "bindValue");
 	}
 

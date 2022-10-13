@@ -117,14 +117,14 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 						foreach ($artikliStanja_array as $artikal_komad) {
 							$artikal_komad_array = explode("/", $artikal_komad);
 							$id_proizvoda_i = $artikal_komad_array[0];
-							$proslo_stanje = $artikal_komad_array[1];
-							$poruceno_i = $artikal_komad_array[2];
+							$proslo_stanje = (int)$artikal_komad_array[1];
+							$poruceno_i = (int)$artikal_komad_array[2];
 
 //							$trenutno_stanje = $getData->get_proizvod_by_id($id_korisnika, $id_proizvoda_i, $id_magacina)['kolicina_u_magacinu'];
-							$novo_stanje = $proslo_stanje - $poruceno_i;
+							$novo_stanje = (int)($proslo_stanje - $poruceno_i);
 							$insertData->update_stanje_proizvoda($novo_stanje, $id_proizvoda_i, $id_korisnika);
 						}
-//						header("Location:porudzbine.php?id_magacina=" . $id_magacina);
+						header("Location:porudzbine.php?id_magacina=" . $id_magacina);
 					} else {
 						echo "<script>alert('Doslo je do greske pri upisu u bazu'" . $query . ");</script>";
 					}

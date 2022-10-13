@@ -127,6 +127,7 @@ $magacini = $getData->get_magacini($id_korisnika);
 
 				$xlsx = Shuchkin\SimpleXLSXGen::fromArray($narudzbine_xlsx);
 				$xlsx->downloadAs($filename);
+				exit();
 			}
 /*END Export Bex*/
 
@@ -150,7 +151,8 @@ $magacini = $getData->get_magacini($id_korisnika);
 						$art_naziv = $getData->get_proizvod_by_id($id_korisnika, $art_id, $id_magacina)['naziv_proizvoda'];
 						$art_kolicina = $art_kom_row[1];
 
-						$proizvod_kolicina .= $art_naziv . ' * ' . $art_kolicina . 'kom, ' . utf8_encode(chr(10) . chr(13));
+//						$proizvod_kolicina .= $art_naziv . ' * ' . $art_kolicina . 'kom, ' . utf8_encode(chr(10) . chr(13));
+						$proizvod_kolicina .= $art_naziv . ' * ' . $art_kolicina . 'kom, ' . "\n";
 					}
 
 					array_push($narudzbine_magacin, [$proizvod_kolicina, $row['ime_i_prezime'], $row['prevoznik'], $row['napomena']]);
@@ -158,6 +160,7 @@ $magacini = $getData->get_magacini($id_korisnika);
 
 				$xlsx = Shuchkin\SimpleXLSXGen::fromArray($narudzbine_magacin);
 				$xlsx->downloadAs($filename);
+				exit();
 			}
 /*END Export Magacin*/
 
