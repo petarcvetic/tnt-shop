@@ -112,7 +112,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 //				echo "Ukupna tezina = " . $ukupna_tezina . "<br>Broj paketa = " . $ukupan_broj_paketa . "<br>Ukupno = " . $ukupno;
 
-				if ($artikliKomadi != "" && $ukupno != 0) {
+				if ($artikliKomadi != "") {
 					$artikliKomadi = substr_replace($artikliKomadi, "", -1);
 
 					$query = $insertData->insert_new_porudzbina($id_korisnika, $datum, $id_magacina, $ime_i_prezime, $mesto, $adresa, $telefon, $id_saradnika, $prevoznik, $artikliKomadi, $ukupno, $ukupna_tezina, $ukupan_broj_paketa, $username, $napomena, $postarina);
@@ -200,16 +200,24 @@ $saradnici = $getData->get_saradnici($id_korisnika);
 									<input type="text" class="center-text input-field" name="ime_i_prezime" placeholder="Ime i Prezime" required>
 									<input type="text" class="center-text input-field" name="adresa" placeholder="Adresa" required>
 									<select class="center-text input-field" name="prevoznik" placeholder="Prevoznik" required>
-										<option>Bex</option>
-										<option>Aks</option>
+										<option disabled selected>Prevoznik</option>
+										<?php
+										$prevoznici = $getData->get_prevoznici($id_korisnika);
+										foreach ($prevoznici as $prevoznik) {
+											echo "<option>" . $prevoznik['naziv_prevoznika'] . "</option>";
+										}
+										?>
 									</select>
 								</div>
+
+
+
 
 								<div class="right-3row">
 									<input type="text" class="center-text input-field" name="magacin" value="<?php echo $naziv_magacina ?>" disabled>
 									<input type="hidden" name="id_magacina" value="<?php echo $id_magacina ?>">
 									<input type="text" class="center-text input-field" name="telefon" placeholder="Telefon" required>
-									<input type="text" class="center-text input-field" name="napomena" placeholder="Napomena" required>
+									<input type="text" class="center-text input-field" name="napomena" placeholder="Napomena">
 								</div>
 
 							</div>
@@ -230,11 +238,11 @@ $saradnici = $getData->get_saradnici($id_korisnika);
 				?>
 									</datalist>
 
-									<input type="text" class="center-text input-small" name="kolicina<?php echo $i; ?>" size="5" placeholder="kolicina" required>
-									<input type="text" class="center-text input-small" name="cena_proizvoda<?php echo $i; ?>" id="cena-proizvoda<?php echo $i; ?>" size="5" placeholder="cena" required>
+									<input type="text" class="center-text input-small" onblur="calculateSum()" name="kolicina<?php echo $i; ?>" id="kolicina<?php echo $i; ?>" size="5" placeholder="kolicina" required>
+									<input type="text" class="center-text input-small" onblur="calculateSum()" name="cena_proizvoda<?php echo $i; ?>" id="cena-proizvoda<?php echo $i; ?>" size="5" placeholder="cena" required>
 
-									<input type="text" class="center-text input-small" name="tezina<?php echo $i; ?>" id="tezina<?php echo $i; ?>" size="5" placeholder="tezina" required>
-									<input type="text" class="center-text input-small" name="broj-paketa<?php echo $i; ?>" id="broj-paketa<?php echo $i; ?>" size="3" placeholder="paketi" required>
+									<input type="text" class="center-text input-small" onblur="calculateSum()" name="tezina<?php echo $i; ?>" id="tezina<?php echo $i; ?>" size="5" placeholder="tezina" required>
+									<input type="text" class="center-text input-small" onblur="calculateSum()" name="broj-paketa<?php echo $i; ?>" id="broj-paketa<?php echo $i; ?>" size="3" placeholder="paketi" required>
 									<input type="text" class="center-text input-small" name="stanje<?php echo $i; ?>" id="stanje<?php echo $i; ?>" size="5" placeholder="stanje" disabled>
 									<div class="broj center-text input-small plus" id="plus<?php echo $i; ?>" onclick="createNewInput('<?php echo $i; ?>','<?php echo $id_magacina; ?>')">+</div>
 								</div>
@@ -248,11 +256,26 @@ $saradnici = $getData->get_saradnici($id_korisnika);
 							</div>
 
 						</form>
+
+						<div class="flex">
+							<div class="flex1">
+								Vrednost porudzbine: <input type="text" class="center-text input-small" id="suma_porudzbine" size="5" disabled>
+							</div>
+
+							<div class="flex1">
+								Ukupna tezina: <input type="text" class="center-text input-small" id="suma_tezina" size="5" disabled>
+							</div>
+
+							<div class="flex1">
+								Broj paketa: <input type="text" class="center-text input-small" id="suma_paketi" size="5" disabled>
+							</div>
+						</div>
 					<?php }?>
 					</div>
 
+					
 				</div> <!--END unos-form-container-->
-
+				
 			</div> <!--END unos-->
 
 		<?php
@@ -278,6 +301,41 @@ include "assets/footer.php";
 ?>
 
 <script type="text/javascript">
+	function calculateSum(){
+		var broj_artikala = $("#broj_artikala").val();
+		var i = 1;
+		var suma_artikal = 0;
+		var suma = 0;
+		var paketi = 0;
+		var sum_paketa = 0;
+		var tezina = 0;
+		var sum_tezina = 0;
+
+
+		while(i <= broj_artikala){
+			var kolicina = $("#kolicina"+i).val();
+			var cena = $("#cena-proizvoda"+i).val();
+			var tezina_artikla = $("#tezina"+i).val();
+			var paketi_artikla = $("#broj-paketa"+i).val();
+
+			suma_artikal = Number(kolicina) * Number(cena);
+			suma += Number(suma_artikal); 
+
+			tezina = Number(kolicina) * Number(tezina_artikla);
+			sum_tezina += Number(tezina);
+
+			paketi = Number(kolicina) * Number(paketi_artikla);
+			sum_paketa += Number(paketi);
+
+			i++
+		}
+		
+//		alert(suma);
+		$("#suma_porudzbine").val(suma);
+		$("#suma_tezina").val(sum_tezina);
+		$("#suma_paketi").val(sum_paketa);
+	}
+
  function mediaSize(){
     if (window.matchMedia('(max-device-width: 768px)').matches){
       $("body").css("background-image", "url('images/background_mobile.webp')");

@@ -287,6 +287,19 @@ class GetData {
 		return $this->get_fetch_all($query, $stmtArray, "bindValue");
 	}
 
+	public function get_porudzbine_by_magacin_DESC($id_korisnika, $id_magacina) {
+		$query = "SELECT * FROM porudzbine WHERE id_korisnika=:id_korisnika AND id_magacina=:id_magacina ORDER BY datum  DESC, id_narudzbine DESC";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"id_korisnika" => $id_korisnika,
+			"id_magacina" => $id_magacina,
+		);
+
+		return $this->get_fetch_all($query, $stmtArray, "bindValue");
+	}
+
+
 	public function get_porudzbine_by_filter($id_korisnika, $id_magacina, $where) {
 		$query = "SELECT * FROM porudzbine WHERE id_korisnika=:id_korisnika AND id_magacina=:id_magacina $where";
 

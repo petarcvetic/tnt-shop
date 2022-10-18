@@ -19,7 +19,7 @@ if (isset($_POST['filter-search']) OR isset($_POST['export-narudzbenica']) OR is
 	$id_magacina = strip_tags($_POST['id-magacina']);
 
 	if (isset($_POST['filter-ime']) && $_POST['filter-ime'] != "") {
-		$where1 = " AND ime_i_prezime='" . $_POST['filter-ime'] . "'";
+		$where1 = " AND ime_i_prezime LIKE '%" . $_POST['filter-ime'] . "%'";
 	} else { $where1 = "";}
 
 	if (isset($_POST['filter-od-datuma']) && $_POST['filter-od-datuma'] != "") {
@@ -86,7 +86,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 			$naziv_magacina = $getData->get_magacin_by_id($id_magacina)["naziv_magacina"];
 
 			if (!isset($_POST['filter-search']) && !isset($_POST['export-narudzbenica']) && !isset($_POST['export-magacin'])) {
-				$porudzbine = $getData->get_porudzbine_by_magacin($id_korisnika, $id_magacina);
+				$porudzbine = $getData->get_porudzbine_by_magacin_DESC($id_korisnika, $id_magacina);
 			}
 
 			?>
@@ -152,7 +152,7 @@ $magacini = $getData->get_magacini($id_korisnika);
 						$art_kolicina = $art_kom_row[1];
 
 //						$proizvod_kolicina .= $art_naziv . ' * ' . $art_kolicina . 'kom, ' . utf8_encode(chr(10) . chr(13));
-						$proizvod_kolicina .= $art_naziv . ' * ' . $art_kolicina . 'kom, ' . "\n";
+						$proizvod_kolicina .= $art_naziv . ' * ' . $art_kolicina . ' kom, ' . "\x0D";
 					}
 
 					array_push($narudzbine_magacin, [$proizvod_kolicina, $row['ime_i_prezime'], $row['prevoznik'], $row['napomena']]);
