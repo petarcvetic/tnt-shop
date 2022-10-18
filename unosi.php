@@ -279,7 +279,7 @@ foreach ($magacini as $magacin) {
 								<input type="text" class="center-text input-field" name="user-prezime" placeholder="Prezime" required>
 								<input type="text" class="center-text input-field" name="user-username" placeholder="Username" required>
 								<input type="password" class="center-text input-field" name="user-password" id="user-password" placeholder="Password" required>
-								<input type="checkbox" onclick="showPassword()">Show Password
+								<label><input type="checkbox" onclick="showPassword()">Show Password</label>
 							</div>
 
 							<div class="right-row">
@@ -465,13 +465,6 @@ include "assets/footer.php";
     });
   });
 
-  function showPassword() {
-	  var x = document.getElementById("user-password");
-	  if (x.type === "password") {
-	    x.type = "text";
-	  } else {
-	    x.type = "password";
-	  }
-	}
+
 
 </script>

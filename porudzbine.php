@@ -93,13 +93,13 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 
 		<div id="alert"></div>
 
-		<div><h1 class="center-text">Magacin <?php echo $naziv_magacina; ?></h1></div>
+
 
 		<?php
 $magacini = $getData->get_magacini($id_korisnika);
 			foreach ($magacini as $magacin) {
 				if ($magacin['id_magacina'] != $id_magacina) {
-					echo "<a href='porudzbine.php?id_magacina=" . $magacin['id_magacina'] . "'><button class='center-text submit'>" . $magacin['naziv_magacina'] . "</button></a>";
+					echo "<a href='porudzbine.php?id_magacina=" . $magacin['id_magacina'] . "'><button class='center-text submit' style='margin-left:50px'>" . $magacin['naziv_magacina'] . "</button></a>";
 				} elseif ($magacin['id_magacina'] == $id_magacina) {
 					$regular = true;
 				}
@@ -208,6 +208,7 @@ $saradnici = $getData->get_saradnici($id_korisnika);
 			</div>
 
 			<div class="porudzbine-list">
+				<div><h3 class="center-text">Magacin <?php echo $naziv_magacina; ?></h3></div>
 				<div class="scroll-overflow">
 					<table class="unos-table" id="magacin-tabela">
 						<tr>

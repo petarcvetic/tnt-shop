@@ -1,3 +1,13 @@
+	function showPassword() {
+	  var x = document.getElementById("user-password");
+	  if (x.type === "password") {
+	    x.type = "text";
+	  } else {
+	    x.type = "password";
+	  }
+	}
+
+
 	function autofillTabeleMagacin(id){
 		
 		var id_magacina = id.value;
@@ -61,7 +71,7 @@
 			
 			var div_start = '<div class="porudzbenica-artikli" id="'+i+'">';
 			var cell1 = '<div class="redni-broj">'+i+'. </div>';
-			var cell2 = '<input type="text" class="awesomplete center-text input-small" name="proizvod'+i+'" id="proizvod'+i+'" list="proizvodi" size="28" placeholder="Izaberi Artikal" required onChange="autofillProizvoda(this,'+"'"+i+"','narudzbenica','"+id_magacina+"')"+'">';
+			var cell2 = '<input type="text" class="awesomplete center-text proizvod-input" name="proizvod'+i+'" id="proizvod'+i+'" list="proizvodi" size="28" placeholder="Izaberi Artikal" required onChange="autofillProizvoda(this,'+"'"+i+"','narudzbenica','"+id_magacina+"')"+'">';
 			var cell3 = '<input type="text" class="center-text input-small" onblur="calculateSum()" name="kolicina'+i+'" id="kolicina'+i+'" size="5" placeholder="kolicina" required>';			
 			var cell4 = '<input type="text" class="center-text input-small" onblur="calculateSum()" name="cena_proizvoda'+i+'" id="cena-proizvoda'+i+'" size="5" placeholder="cena" required>';
 

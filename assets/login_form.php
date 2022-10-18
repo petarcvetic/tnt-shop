@@ -8,7 +8,7 @@ if (isset($_SESSION['error_msg'])) {
 
 <div class="login-box move-left-50">
   <div class="login-logo">
-    <img src="images/logo-big.webp" height="222" width="400" alt="Logo">
+    <img src="images/logo-big.webp" height="171" width="300" alt="Logo">
   </div>
   <br>
 
@@ -16,13 +16,17 @@ if (isset($_SESSION['error_msg'])) {
 
     <div class="center-text"> Login: </div>
 
-      <br>
+
       <div class="login-div">
-        <input type="text" name="username" id="username" class="center-text login-fields" placeholder="Username" autofocus><br>
+        <input type="text" name="username" id="username" class="center-text input-field" placeholder="Username" autofocus>
       </div>
 
       <div class="login-div">
-        <input type="password" name="password" id="password" class="center-text login-fields" placeholder="Password"><br><br>
+        <input type="password" name="password" id="user-password" class="center-text input-field" placeholder="Password">
+        <div class="label-center">
+          <label><input type="checkbox" onclick="showPassword()">Show Password</label>
+        </div>
+        <br><br>
       </div>
 
       <div class="login-div">
