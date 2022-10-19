@@ -337,54 +337,69 @@ if ($count_artikli == $i) {?>
 
 								</div>
 
-							</div> <br><br>
+							</div> <br>
 							<div>
 								<div class="flex">
 									<div class="flex1">
-										<input type="radio" name="status" value="1" <?php echo $selected1; ?>>
-										<label>Ne naplaceno</label> &nbsp; &nbsp; &nbsp;
-										<input type="radio" name="status" value="2" <?php echo $selected2; ?>>
-										<label>Naplaceno</label> &nbsp; &nbsp; &nbsp;
+										<div class="radio-label">
+											<input type="radio" name="status" value="1" <?php echo $selected1; ?>>
+											<label>Ne naplaceno</label>
+										</div>
+										<div class="radio-label">
+											<input type="radio" name="status" value="2" <?php echo $selected2; ?>>
+											<label>Naplaceno</label>
+										</div>
+
 									</div>
 
 									<div class="flex1">
-										<input type="radio" name="status" value="3" <?php echo $selected3; ?>>
-										<label>Lom</label> &nbsp; &nbsp; &nbsp;
-										<input type="radio" name="status" value="4" <?php echo $selected4; ?> >
-										<label>Povrat</label>
+										<div class="radio-label">
+											<input type="radio" name="status" value="3" <?php echo $selected3; ?>>
+											<label>Lom</label>
+										</div>
+										<div class="radio-label">
+											<input type="radio" name="status" value="4" <?php echo $selected4; ?> >
+											<label>Povrat</label>
+										</div>
 									</div>
 
-								</div><br>
-							</div>
-
-							<div>
-								Postarina
-								<?php
+									<div class="flex1">
+										<div class="radio-label-postarina">
+											Postarina
+											<?php
 $tip_magacina = $getData->get_magacin_by_id($id_magacina_e)['tip_magacina'];
 				if ($tip_magacina == 1) {
 					$val1 = "3";
 					$val2 = "4";
 					?>
-									<input type="radio" name="postarina" value="<?php echo $val1; ?>" <?php echo $postarina_selected3; ?>>
-									<label><?php echo $val1; ?></label> &nbsp; &nbsp; &nbsp;
-									<input type="radio" name="postarina" value="<?php echo $val2; ?>" <?php echo $postarina_selected4; ?>>
-									<label><?php echo $val2; ?></label> &nbsp; &nbsp; &nbsp;
-									<?php
+											<input type="radio" name="postarina" value="<?php echo $val1; ?>" <?php echo $postarina_selected3; ?>>
+											<label><?php echo $val1; ?></label> &nbsp; &nbsp;
+											<input type="radio" name="postarina" value="<?php echo $val2; ?>" <?php echo $postarina_selected4; ?>>
+											<label><?php echo $val2; ?></label>
+											<?php
 }
 				if ($tip_magacina == 2) {
 					$val1 = "1";
 					$val2 = "2";
 					?>
-									<input type="radio" name="postarina" value="<?php echo $val1; ?>" <?php echo $postarina_selected1; ?>>
-									<label><?php echo $val1; ?></label> &nbsp; &nbsp; &nbsp;
-									<input type="radio" name="postarina" value="<?php echo $val2; ?>" <?php echo $postarina_selected2; ?>>
-									<label><?php echo $val2; ?></label> &nbsp; &nbsp; &nbsp;
-									<?php
+											<input type="radio" name="postarina" value="<?php echo $val1; ?>" <?php echo $postarina_selected1; ?>>
+											<label><?php echo $val1; ?></label> &nbsp; &nbsp; &nbsp;
+											<input type="radio" name="postarina" value="<?php echo $val2; ?>" <?php echo $postarina_selected2; ?>>
+											<label><?php echo $val2; ?></label> &nbsp; &nbsp; &nbsp;
+											<?php
 }
 
 				?>
+										</div>
+									</div>
 
+								</div>
 							</div><br>
+
+							<div>
+
+
+							</div>
 
 							<input type="text" class="center-text input-field" name="napomena" value="<?php echo $narudzbina['napomena']; ?>" placeholder="napomena">
 
@@ -432,7 +447,7 @@ include "assets/footer.php";
       $(".header").css("border-bottom", "none");
     }
     else{
-      $("body").css("background-image", "url('images/background.webp')");
+      $("body").css("background-image", "url('images/background-big1.webp')");
     }
   }
 

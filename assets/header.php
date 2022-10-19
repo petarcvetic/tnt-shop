@@ -47,7 +47,7 @@ if (isset($_SESSION['sess_user_id']) && $_SESSION['sess_user_id'] != "") {
 		<?php
 if ($_SESSION['sess_korisnik_status'] > 0) {?>
 			<div class="logo">
-				<a href="index.php"><img src="images/logo-medium.webp" height="150" alt="pc-code_logo"></a>
+				<a href="index.php"><img src="images/logo-medium-transparent.webp" height="150" alt="pc-code_logo"></a>
 			</div>
 		<?php }?>
 

@@ -290,7 +290,7 @@ include "assets/footer.php";
       $(".header").css("border-bottom", "none");
     }
     else{
-      $("body").css("background-image", "url('images/background.webp')");
+      $("body").css("background-image", "url('images/background-big.webp')");
     }
   }
 

@@ -12,14 +12,23 @@ body{
 	font-family: 'Roboto', sans-serif;
 	font-size: 22px;
   height: 100%; 
-	background-position: center;
+/*	background-position: center;
 	background-repeat: no-repeat;
-	background-size: cover;
+	background-size: 100%;
 	color: #3c3c3c;
+*/
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: left top;
 }
 
 a{
 		text-decoration: none;
+}
+
+h1{
+	margin: 10px 0 0 0;
+	padding: 0;
 }
 
 h3{
@@ -767,13 +776,16 @@ table{
 
 
 @media only screen and (max-device-width: 1680px){
+	.container{
+		width: 90%;
+	}
 	.input-small{
 		width: 6vw;
 		margin: 10px 6px !important;
 	}
 
 	.proizvod-input{
-		width: 15vw;
+		width: 22vw;
 	}
 
 	.plus{
@@ -790,52 +802,50 @@ table{
 
 	.small-zaglavlje{
 		width: 6vw;
-		margin: 5px 19px 5px 19px;
+		margin: 5px 19px 5px 12px;
 	}
 
 	.big-zaglavlje{
-		width: 14vw;
+		width: 21vw;
 	}
 
 
 	/*LOGIN*/
-	.login-box{
-		padding: 3% 0 0 0;
+	.login-box {
+    padding: 0;
 	}
+
+	.login-form {
+    margin: 0px auto;
+	}
+
 
 	.footer{
 		background-color: #ffffff;
 	}
 	/*END LOGIN*/
 
-
-	/*UNOS*/
-	.fakture-izvodi{
-		width:100%;
+	.unos {
+	  min-width: 900px;
+	  max-width: 90%;
+		width: 80vw;
 	}
+	.unos-big {
+    padding-top: 0px;
+  }
 
-	.dobavljac-box{
-		margin: 20px auto;
-	}
+  .row-filter {
+  	height: 40px;
+  }
 
-	.fakture-box, .izvodi-box{
-		width: 360px;
-		margin: 30px 20px 50px 20px;
-	}
-	/*END UNOS*/
+  .unos-form-container {
+    min-height: 500px;
+  }
 
-	/*KARTICA DOBAVLJACA*/
-	.kartica-klijenta{
-		width: calc(100% - 430px);
-		margin: 10px 0px 10px 400px;
-	}
+  .form-inputs {
+    min-height: 283px;
+  }
 
-	.fix-position-left{
-		position: fixed;
-		top: 140px;
-		left: 80px;
-	}
-	/*END KARTICA DOBAVLJACA*/
 }
 
 
@@ -845,7 +855,20 @@ table{
 	}	
 
 	.porudzbine-list{
-		height: 550px;
+		min-height: 550px;
+	}
+
+	.proizvod-input{
+		width: 24vw;
+	}
+
+	.big-zaglavlje{
+		width: 24vw;
+	}
+
+	.small-zaglavlje{
+		width: 6.5vw;
+		margin: 5px 5px 5px 8px;
 	}
 
 	.scroll-overflow {
@@ -867,18 +890,25 @@ table{
 }
 
 
-@media only screen and (max-device-width: 1330px){
+@media only screen and (max-device-width: 1366px){
+	.container{
+		width: 95vw;
+	}
+	
 	.input-small{
-		width: 7vw;
-		margin: 10px 10px !important;
+		font-size: 1.2vw !important;
+		width: 6.3vw;
+		margin: 10px 5px !important;
 	}
 
 	.proizvod-input{
-		width: 15vw;
+		font-size: 1.2vw !important;
+		width: 23vw;
 	}
 
 	.plus{
 		width: 3vw;
+		margin: 0px !important;
 	}
 
 	.broj{
@@ -890,15 +920,52 @@ table{
 	}
 
 	.big-zaglavlje{
-		width: 14vw;
+		width: 22vw;
 	}
 
 	.small-zaglavlje{
 		width: 6.5vw;
-		margin: 5px 21px 5px 20px;
+		margin: 5px 10px 5px 12px;
+	}
+
+	.unos {
+    padding-top: 5px;
+  }
+
+  .narudzbenica-general {
+  	height: 245px;
+  }
+
+	.scroll-overflow {
+    height: 470px;
+  }
+
+  .filter {
+    height: 530px;
+	}
+
+	.porudzbine-list {
+    min-height: 530px;
+	}
+
+	.input-field {
+		margin: 0 auto 15px;
+	}
+
+	.radio-label{
+		font-size: 1.25vw;
+		display: inline-block;
+		border: solid 1px white;
+		width: 45%;
+	}
+
+	.radio-label-postarina{
+		font-size: 1.25vw;
+		display: inline-block;
+		border: solid 1px white;
+		width: 92%;
 	}
 }
-
 
 /*LAPTOP-TABLET*/
 @media only screen and (max-device-width: 1160px){
@@ -1049,6 +1116,16 @@ table{
 		height: 38px;
 	  min-width: 240px;
 	}
+
+	.radio-label{
+		font-size: 2.5vw;
+		width: 45%;
+	}
+
+	.radio-label-postarina{
+		font-size: 2.5vw;
+		width: 92%;
+	}
 }
 
 @media only screen and (max-device-width: 425px) {
@@ -1157,4 +1234,14 @@ table{
   .row .input-field-small{
   	width: 320px;
   }
+
+  .radio-label{
+		font-size: 4.5vw;
+		width: 45%;
+	}
+
+	.radio-label-postarina{
+		font-size: 4.5vw;
+		width: 92%;
+	}
 }

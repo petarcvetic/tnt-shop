@@ -1,7 +1,7 @@
 <?php
 $ukupno = $ukupna_tezina = $ukupan_broj_paketa = 0;
 
-$artikliKomadi = $regular = $postarina ="";
+$artikliKomadi = $regular = $postarina = "";
 $today = date("Y-m-d");
 
 include "dbconfig.php";
@@ -67,13 +67,12 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 				$telefon = strip_tags($_POST['telefon']);
 				$napomena = strip_tags($_POST['napomena']);
 				$broj_artikala = strip_tags($_POST['broj_artikala']);
-				
+
 				$magacin = $getData->get_magacin_by_id($id_magacina);
 				$tip_magacina = $magacin['tip_magacina'];
-				if($tip_magacina == 1){
+				if ($tip_magacina == 1) {
 					$postarina = "3";
-				}
-				elseif($tip_magacina == 2){
+				} elseif ($tip_magacina == 2) {
 					$postarina = "1";
 				}
 
@@ -202,11 +201,11 @@ $saradnici = $getData->get_saradnici($id_korisnika);
 									<select class="center-text input-field" name="prevoznik" placeholder="Prevoznik" required>
 										<option disabled selected>Prevoznik</option>
 										<?php
-										$prevoznici = $getData->get_prevoznici($id_korisnika);
-										foreach ($prevoznici as $prevoznik) {
-											echo "<option>" . $prevoznik['naziv_prevoznika'] . "</option>";
-										}
-										?>
+$prevoznici = $getData->get_prevoznici($id_korisnika);
+				foreach ($prevoznici as $prevoznik) {
+					echo "<option>" . $prevoznik['naziv_prevoznika'] . "</option>";
+				}
+				?>
 									</select>
 								</div>
 
@@ -226,7 +225,7 @@ $saradnici = $getData->get_saradnici($id_korisnika);
 
 								<div class="porudzbenica-artikli" id="<?php echo $i; ?>">
 									<div class="redni-broj"><?php echo $i . ". "; ?></div>
-									<input type="text" class="awesomplete center-text input-small" name="proizvod<?php echo $i; ?>" id="proizvod<?php echo $i; ?>" list="proizvodi" size="28" placeholder="Izaberi Artikal" onChange="autofillProizvoda(this,'<?php echo $i; ?>','narudzbenica',<?php echo $id_magacina ?>)" required>
+									<input type="text" class="awesomplete center-text proizvod-input" name="proizvod<?php echo $i; ?>" id="proizvod<?php echo $i; ?>" list="proizvodi" size="28" placeholder="Izaberi Artikal" onChange="autofillProizvoda(this,'<?php echo $i; ?>','narudzbenica',<?php echo $id_magacina ?>)" required>
 									<datalist id="proizvodi">
 										<?php
 
@@ -273,9 +272,9 @@ $saradnici = $getData->get_saradnici($id_korisnika);
 					<?php }?>
 					</div>
 
-					
+
 				</div> <!--END unos-form-container-->
-				
+
 			</div> <!--END unos-->
 
 		<?php
@@ -319,7 +318,7 @@ include "assets/footer.php";
 			var paketi_artikla = $("#broj-paketa"+i).val();
 
 			suma_artikal = Number(kolicina) * Number(cena);
-			suma += Number(suma_artikal); 
+			suma += Number(suma_artikal);
 
 			tezina = Number(kolicina) * Number(tezina_artikla);
 			sum_tezina += Number(tezina);
@@ -329,7 +328,7 @@ include "assets/footer.php";
 
 			i++
 		}
-		
+
 //		alert(suma);
 		$("#suma_porudzbine").val(suma);
 		$("#suma_tezina").val(sum_tezina);
@@ -342,7 +341,7 @@ include "assets/footer.php";
       $(".header").css("border-bottom", "none");
     }
     else{
-      $("body").css("background-image", "url('images/background.webp')");
+      $("body").css("background-image", "url('images/background-big.webp')");
     }
   }
 
