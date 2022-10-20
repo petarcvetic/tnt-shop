@@ -104,7 +104,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 					}
 				}
 
-				if ($artikliKomadi != "" && $ukupno != 0) {
+				if ($artikliKomadi != "") {
 					$artikliKomadi = substr_replace($artikliKomadi, "", -1); /*uklanjanje poslednjeg zareza*/
 					$artikliStanja = substr_replace($artikliStanja, "", -1);
 

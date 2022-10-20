@@ -34,6 +34,7 @@ foreach ($proizvodi as $proizvod) {
 		}
 	}
 }
+/*END popunjavanje tabele magacin na unosi.php*/
 
 /*OZNACAVANJE PORUDZBINE DA JE PLACENA*/
 if (isset($_GET['plati'])) {
@@ -41,6 +42,21 @@ if (isset($_GET['plati'])) {
 	$insertData->update_status_porudzbine($id_korisnika, $id_narudzbine, 2);
 	echo "<script>location.reload();</script>";
 }
+
+/*UPIS BROJA PORUDZBINE*/
+if(isset($_GET['edit-broja-porudzbine']) && $_GET['edit-broja-porudzbine']==1){
+	$broj_posiljke = strip_tags($_GET['broj-posiljke']);
+	$id_narudzbine = strip_tags($_GET['id-narudzbine']);
+
+	if($broj_posiljke != "" && $id_narudzbine != ""){
+		$insertData->update_broja_posiljke($broj_posiljke,$id_narudzbine,$id_korisnika);
+		echo 1;
+	}
+	else{
+		echo 2;
+	}
+}
+/*END upis broja porudzbine*/
 
 /*autofillProizvoda*/
 if (isset($_GET['proizvod'])) {

@@ -199,6 +199,19 @@ class InsertData {
 		return $this->insert_data($query, $stmtArray, "bindValue");
 	}
 
+	public function update_broja_posiljke($broj_posiljke,$id_narudzbine,$id_korisnika) {
+		$query = "UPDATE porudzbine SET broj_posiljke=:broj_posiljke WHERE id_narudzbine=:id_narudzbine AND id_korisnika=:id_korisnika";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"broj_posiljke" => $broj_posiljke,
+			"id_korisnika" => $id_korisnika,
+			"id_narudzbine" => $id_narudzbine,
+		);
+
+		return $this->insert_data($query, $stmtArray, "bindValue");
+	}
+
 	public function update_proizvoda($naziv_proizvoda, $cena_proizvoda, $tezina_proizvoda, $cena_saradnika, $id_magacina, $kolicina_u_magacinu, $sifra_proizvoda, $broj_paketa, $id_proizvoda, $id_korisnika) {
 		$query = "UPDATE proizvodi SET naziv_proizvoda=:naziv_proizvoda, cena_proizvoda=:cena_proizvoda, tezina_proizvoda=:tezina_proizvoda, cena_saradnika=:cena_saradnika, id_magacina=:id_magacina, kolicina_u_magacinu=:kolicina_u_magacinu, sifra_proizvoda=:sifra_proizvoda, broj_paketa=:broj_paketa WHERE id_proizvoda=:id_proizvoda AND id_korisnika=:id_korisnika";
 

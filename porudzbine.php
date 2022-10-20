@@ -108,7 +108,7 @@ $magacini = $getData->get_magacini($id_korisnika);
 /*EXPORT Bex*/
 			if (isset($_POST['export-narudzbenica'])) {
 				include "SimpleXLSXGen.php";
-				$filename = "export-bex" . date("d-m-Y-h-i-s") . ".xlsx";
+				$filename = "export-".$naziv_magacina."-BEX-" . date("d-m-Y-h-i-s") . ".xlsx";
 
 				$ziro_racun = "";
 				$tip_magacina = $getData->get_magacin_by_id($id_magacina)['tip_magacina'];
@@ -135,7 +135,7 @@ $magacini = $getData->get_magacini($id_korisnika);
 			$proizvod_kolicina = "";
 			if (isset($_POST['export-magacin'])) {
 				include "SimpleXLSXGen.php";
-				$filename = "export-magacin" . date("d-m-Y-h-i-s") . ".xlsx";
+				$filename = "export-magacin-".$naziv_magacina."-". date("d-m-Y-h-i-s") . ".xlsx";
 
 				$narudzbine_magacin = array();
 
@@ -232,7 +232,7 @@ $i = 1;
 							<td>" . date("d-m-Y", strtotime($porudzbina['datum'])) . "</td>
 							<td>" . $porudzbina['ime_i_prezime'] . "</td>
 							<td>" . $saradnik['ime_saradnika'] . " " . $saradnik['prezime_saradnika'] . "</td>
-							<td>" . $porudzbina['broj_posiljke'] . "</td>
+							<td><input type='text' class='center-text input-small' id='broj_posiljke".$porudzbina['id_narudzbine']."' value='".$porudzbina['broj_posiljke']."' onblur='upis_broja_porudzbine(this.value,".$porudzbina['id_narudzbine'].")' onkeypress='ifEnter(event,".$porudzbina['id_narudzbine'].",this.value)' size='3'></td>
 							<td>" . $porudzbina['ukupno'] . "</td>
 							<td>" . $porudzbina['napomena'] . "</td>
 							<td><button class='broj center-text input-small plus' onclick='plati(" . '"' . $porudzbina['id_narudzbine'] . '"' . ")'><i class='fa fa-check'></i></button></td>
@@ -318,5 +318,30 @@ include "assets/footer.php";
 			$("#alert").html(odgovor);
 		}
   }
+
+  /*ako je kliknut Enter*/
+	function ifEnter(e,id,value){
+		if(e.keyCode === 13){
+      e.preventDefault(); // Ensure it is only this code that runs
+      	$( "#broj_posiljke"+id ).blur(); //na blur se trigeruje funkcija upis_broja_porudzbine
+    }
+	}
+
+  
+
+
+	function upis_broja_porudzbine(broj_posiljke,id_narudzbine){
+		var xhr = new XMLHttpRequest();
+		xhr.open("get", "ajax_response.php?edit-broja-porudzbine=1&broj-posiljke="+broj_posiljke+"&id-narudzbine="+id_narudzbine, false);
+		xhr.send();
+		var odgovor = xhr.responseText;
+		if(odgovor!=="" && odgovor==1){
+			location.reload();
+		}
+		else{
+			alert("Doslo je do greske pri upisu u bazu");
+			location.reload();
+		}
+	}
 
 </script>
