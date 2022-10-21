@@ -143,12 +143,12 @@ $troskovi = $getData->get_troskovi_by_filter($id_korisnika, $where);
 			foreach ($troskovi as $trosak) {
 				echo "
 							<tr id='tr" . $i . "'>
-								<td><a href='edit-troska.php?id_troska=" . $trosak['id_troska'] . "'><button class='broj center-text input-small plus'>" . $i . "</button></a></td>
+								<td><a href='edit-troska.php?id_troska=" . $trosak['id_troska'] . "'><button class='broj center-text input-small plus'>" . $trosak['id_troska'] . "</button></a></td>
 								<td>" . $trosak['namena_troska'] . "</td>
 								<td>" . $trosak['iznos_troska'] . "</td>
 								<td>" . $trosak['datum_troska'] . "</td>
 								<td>" . $trosak['user'] . "</td>
-								<td><button class='broj center-text input-small plus' onclick='delete_row(" . '"troskovi","' . $trosak['id_troska'] . '"' . ")'><i class='fa fa-trash' aria-hidden='true'></i></button></td>
+								<td><button class='broj center-text delete' onclick='delete_row(" . '"troskovi","' . $trosak['id_troska'] . '"' . ")'><i class='fa fa-trash' aria-hidden='true'></i></button></td>
 							</tr>
 							";
 				$ukupan_trosak += $trosak['iznos_troska'];
@@ -186,6 +186,7 @@ include "assets/footer.php";
 ?>
 
 <script type="text/javascript">
+	
  function mediaSize(){
     if (window.matchMedia('(max-device-width: 768px)').matches){
       $("body").css("background-image", "url('images/background_mobile.webp')");

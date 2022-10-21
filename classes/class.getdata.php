@@ -301,7 +301,7 @@ class GetData {
 
 
 	public function get_porudzbine_by_filter($id_korisnika, $id_magacina, $where) {
-		$query = "SELECT * FROM porudzbine WHERE id_korisnika=:id_korisnika AND id_magacina=:id_magacina $where";
+		$query = "SELECT * FROM porudzbine WHERE id_korisnika=:id_korisnika AND id_magacina=:id_magacina $where ORDER BY datum  DESC, id_narudzbine DESC";
 
 		$stmt = $this->db->prepare($query);
 		$stmtArray = array(

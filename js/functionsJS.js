@@ -7,7 +7,6 @@
 	  }
 	}
 
-
 	function autofillTabeleMagacin(id){
 		
 		var id_magacina = id.value;
@@ -108,12 +107,18 @@
 	}
 
 	function delete_row(tabela,id){
-		var xhr = new XMLHttpRequest();
-		xhr.open("get", "ajax_response.php?delete=1&tabela="+tabela+"&id="+id, false);
-		xhr.send();
-		var odgovor = xhr.responseText;
-		if(odgovor!==""){
-			$("#alert").html(odgovor);
+		var brisanje = "";
+		if (tabela == "porudzbine") { brisanje = "porudzbinu";}
+		if (tabela == "troskovi") { brisanje = "trosak";}
+
+		if (confirm("Da li si siguran da zelis da obrises "+brisanje+" "+id)) {
+			var xhr = new XMLHttpRequest();
+			xhr.open("get", "ajax_response.php?delete=1&tabela="+tabela+"&id="+id, false);
+			xhr.send();
+			var odgovor = xhr.responseText;
+			if(odgovor!==""){
+				$("#alert").html(odgovor);
+			}
 		}
 	}
 

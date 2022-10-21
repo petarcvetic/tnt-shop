@@ -35,11 +35,16 @@ if (isset($_POST['filter-search']) OR isset($_POST['export-narudzbenica']) OR is
 
 	} else { $where2 = "";}
 
-	if (isset($_POST['filter-saradnik']) && $_POST['filter-saradnik'] != "") {
-		$where3 = " AND id_saradnika='" . $_POST['filter-saradnik'] . "'";
+	if(isset($_POST['filter-broj-posiljke']) && $_POST['filter-broj-posiljke']!="") {
+		$where3 = " AND broj_posiljke='" . $_POST['filter-broj-posiljke'] . "'";
 	} else { $where3 = "";}
 
-	$where = $where1 . $where2 . $where3;
+
+	if (isset($_POST['filter-saradnik']) && $_POST['filter-saradnik'] != "") {
+		$where4 = " AND id_saradnika='" . $_POST['filter-saradnik'] . "'";
+	} else { $where4 = "";}
+
+	$where = $where1 . $where2 . $where3 . $where4;
 
 	$porudzbine = $getData->get_porudzbine_by_filter($id_korisnika, $id_magacina, $where);
 
@@ -188,6 +193,10 @@ $magacini = $getData->get_magacini($id_korisnika);
 					</div><br>
 
 					<div class="row-filter">
+						Broj pošiljke: <input type="text" class="center-text filter-field-small float-right" id="filter-broj-posiljke" name="filter-broj-posiljke">
+					</div><br>
+
+					<div class="row-filter">
 						Saradnik: <select class="center-text filter-field-small float-right" name="filter-saradnik" id="filter-saradnik">
 											<option value="" disabled selected>Saradnik</option>
 										<?php
@@ -232,10 +241,13 @@ $i = 1;
 							<td>" . date("d-m-Y", strtotime($porudzbina['datum'])) . "</td>
 							<td>" . $porudzbina['ime_i_prezime'] . "</td>
 							<td>" . $saradnik['ime_saradnika'] . " " . $saradnik['prezime_saradnika'] . "</td>
-							<td><input type='text' class='center-text input-small' id='broj_posiljke".$porudzbina['id_narudzbine']."' value='".$porudzbina['broj_posiljke']."' onblur='upis_broja_porudzbine(this.value,".$porudzbina['id_narudzbine'].")' onkeypress='ifEnter(event,".$porudzbina['id_narudzbine'].",this.value)' size='3'></td>
+							<td><input type='text' class='center-text input-small' id='broj_posiljke".$porudzbina['id_narudzbine']."' value='".$porudzbina['broj_posiljke']."' onblur='upis_broja_porudzbine(this.value,".$porudzbina['id_narudzbine'].")' onkeypress='ifEnter(event,".$porudzbina['id_narudzbine'].",this.value)' size='7'></td>
 							<td>" . $porudzbina['ukupno'] . "</td>
 							<td>" . $porudzbina['napomena'] . "</td>
-							<td><button class='broj center-text input-small plus' onclick='plati(" . '"' . $porudzbina['id_narudzbine'] . '"' . ")'><i class='fa fa-check'></i></button></td>
+							<td>
+								<button class='broj center-text plati' onclick='plati(" . '"' . $porudzbina['id_narudzbine'] . '"' . ")'><i class='fa fa-check'></i></button><br>
+								<button class='broj center-text delete' onclick='delete_row(&quot;porudzbine&quot;,".$porudzbina['id_narudzbine'].")'><i class='fa fa-trash' aria-hidden='true'></i></button>
+							</td>
 						</tr>
 						";
 				if ($porudzbina['status'] == 2) {
