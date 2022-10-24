@@ -99,7 +99,6 @@
 
 	}
 
-
 	function redirect_to(object){
 		var selected = object.value;
 		var id_proizvoda = $('#datalist_edit').find('option[value="'+ selected +'"]').attr('id');

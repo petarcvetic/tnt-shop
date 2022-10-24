@@ -3,7 +3,7 @@ include "dbconfig.php";
 
 $id_korisnika = $_SESSION['sess_id_korisnika'];
 
-//POPUNJAVANJE TABELE MAGACIN NA STRANI unosi.php
+//POPUNJAVANJE TABELE MAGACIN NA STRANI unosi.php 
 if (isset($_GET['id_magacina'])) {
 	$id_magacina = strip_tags($_GET['id_magacina']);
 	$proizvodi = $getData->get_proizvodi_from_magacin($id_korisnika, $id_magacina);
@@ -86,6 +86,25 @@ if (isset($_GET['proizvod'])) {
 if (isset($_GET['delete']) && $_GET['delete'] == 1) {
 	$tabela = strip_tags($_GET['tabela']);
 	$id = strip_tags($_GET['id']);
+
+	if($tabela == "porudzbine"){
+		$porudzbina = $getData->get_porudzbina_by_id($id_korisnika, $id);
+		$artikli_komadi = $porudzbina['artikliKomadi'];
+		
+		$artikli_komadi_array = explode(",", $artikli_komadi);
+
+		foreach ($artikli_komadi_array as $artikal_komad) {
+			$artikal_komad_array = explode("/", $artikal_komad);
+			$id_proizvoda = $artikal_komad_array[0];
+			$komada = $artikal_komad_array[1];
+
+			$proizvod = $getData->get_proizvod_by_id_and_korisnik($id_korisnika, $id_proizvoda);
+			$staro_stanje = $proizvod['kolicina_u_magacinu'];
+			$novo_stanje = $staro_stanje + $komada;
+
+			$insertData->update_stanje_proizvoda($novo_stanje, $id_proizvoda, $id_korisnika);
+		}
+	}
 
 	if ($tabela != "" and $id != "") {
 		$insertData->delete_row($tabela, $id, $id_korisnika);
