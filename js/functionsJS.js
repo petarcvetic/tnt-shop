@@ -105,7 +105,7 @@
 		alert(selected+" / "+page);
 		var id = $('#datalist_edit').find('option[value="'+ selected +'"]').attr('id');
 		var get_parametar = "";
-/*
+
 		if(page == "edit-proizvoda"){
 			get_parametar = "id-proizvoda";
 		}
@@ -114,7 +114,7 @@
 		}
 		
 		location.href = page+".php?"+get_parametar+"="+id;
-*/	}
+	}
 
 	function delete_row(tabela,id){
 		var brisanje = "";
