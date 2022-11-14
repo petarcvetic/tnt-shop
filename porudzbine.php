@@ -3,6 +3,7 @@ $ukupno = 0;
 $artikliKomadi = "";
 $today = date("Y-m-d");
 $id_magacina = "";
+$zbirna_suma_show = "display:none;";
 
 include "dbconfig.php";
 include "assets/header.php";
@@ -42,6 +43,7 @@ if (isset($_POST['filter-search']) OR isset($_POST['export-narudzbenica']) OR is
 
 	if (isset($_POST['filter-saradnik']) && $_POST['filter-saradnik'] != "") {
 		$where4 = " AND id_saradnika='" . $_POST['filter-saradnik'] . "'";
+		$zbirna_suma_show = "display: block;";
 	} else { $where4 = "";}
 
 	$where = $where1 . $where2 . $where3 . $where4;
@@ -231,10 +233,14 @@ $saradnici = $getData->get_saradnici($id_korisnika);
 							<th></th>
 						</tr>
 				<?php
-$i = 1;
+
+				$i = 1;
+				$ukupna_suma = 0;
+
 			foreach ($porudzbine as $porudzbina) {
 				$id_saradnika = $porudzbina["id_saradnika"];
 				$saradnik = $getData->get_saradnik_by_id($id_korisnika, $id_saradnika);
+				$ukupna_suma += $porudzbina['ukupno']; 
 				echo "
 						<tr id='tr" . $i . "'>
 							<td><a href='edit-porudzbine.php?id_narudzbine=" . $porudzbina['id_narudzbine'] . "'><button class='broj center-text input-small plus'>" . $porudzbina['id_narudzbine'] . "</button></a></td>
@@ -267,6 +273,11 @@ $i = 1;
 			}
 			?>
 					</table>
+					
+				</div>
+
+				<div style='background_color: red; <?php echo $zbirna_suma_show; ?>'>
+					Ukupni iznos = <span id="ukupni_iznos"><?php echo $ukupna_suma; ?></span>
 				</div>
 
 			</div><!--END unos-form-container-->

@@ -121,6 +121,23 @@
 		}
 	}
 
+	function change_status(tabela, id, status, id_korisnika){
+		var brisanje = "";
+		if (tabela == "porudzbine") { brisanje = "porudzbinu";}
+		if (tabela == "troskovi") { brisanje = "trosak";}
+		if (tabela == "proizvodi") { brisanje = "proizvod";}
+
+		if (confirm("Da li si siguran da zelis da uklonite "+brisanje+" "+id)) {
+			var xhr = new XMLHttpRequest();
+			xhr.open("get", "ajax_response.php?change-status=1&tabela="+tabela+"&id="+id+"&status="+status, false);
+			xhr.send();
+			var odgovor = xhr.responseText;
+			if(odgovor!==""){
+				$("#alert").html(odgovor);
+			}
+		}
+	}
+
 //STARO
 	function autofillArtikal(art,i,doc){
 		var artikal = art.value;

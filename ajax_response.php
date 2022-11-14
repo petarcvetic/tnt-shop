@@ -3,7 +3,7 @@ include "dbconfig.php";
 
 $id_korisnika = $_SESSION['sess_id_korisnika'];
 
-//POPUNJAVANJE TABELE MAGACIN NA STRANI unosi.php 
+//POPUNJAVANJE TABELE MAGACIN NA STRANI unosi.php
 if (isset($_GET['id_magacina'])) {
 	$id_magacina = strip_tags($_GET['id_magacina']);
 	$proizvodi = $getData->get_proizvodi_from_magacin($id_korisnika, $id_magacina);
@@ -44,15 +44,14 @@ if (isset($_GET['plati'])) {
 }
 
 /*UPIS BROJA PORUDZBINE*/
-if(isset($_GET['edit-broja-porudzbine']) && $_GET['edit-broja-porudzbine']==1){
+if (isset($_GET['edit-broja-porudzbine']) && $_GET['edit-broja-porudzbine'] == 1) {
 	$broj_posiljke = strip_tags($_GET['broj-posiljke']);
 	$id_narudzbine = strip_tags($_GET['id-narudzbine']);
 
-	if($broj_posiljke != "" && $id_narudzbine != ""){
-		$insertData->update_broja_posiljke($broj_posiljke,$id_narudzbine,$id_korisnika);
+	if ($broj_posiljke != "" && $id_narudzbine != "") {
+		$insertData->update_broja_posiljke($broj_posiljke, $id_narudzbine, $id_korisnika);
 		echo 1;
-	}
-	else{
+	} else {
 		echo 2;
 	}
 }
@@ -87,10 +86,10 @@ if (isset($_GET['delete']) && $_GET['delete'] == 1) {
 	$tabela = strip_tags($_GET['tabela']);
 	$id = strip_tags($_GET['id']);
 
-	if($tabela == "porudzbine"){
+	if ($tabela == "porudzbine") {
 		$porudzbina = $getData->get_porudzbina_by_id($id_korisnika, $id);
 		$artikli_komadi = $porudzbina['artikliKomadi'];
-		
+
 		$artikli_komadi_array = explode(",", $artikli_komadi);
 
 		foreach ($artikli_komadi_array as $artikal_komad) {
@@ -108,6 +107,36 @@ if (isset($_GET['delete']) && $_GET['delete'] == 1) {
 
 	if ($tabela != "" and $id != "") {
 		$insertData->delete_row($tabela, $id, $id_korisnika);
+		echo "<script>location.reload();</script>";
+	}
+}
+
+if (isset($_GET['change-status']) && $_GET['change-status'] == 1) {
+	$tabela = strip_tags($_GET['tabela']);
+	$id = strip_tags($_GET['id']);
+	$status = strip_tags($_GET['status']);
+
+	if ($tabela == "porudzbine") {
+		$porudzbina = $getData->get_porudzbina_by_id($id_korisnika, $id);
+		$artikli_komadi = $porudzbina['artikliKomadi'];
+
+		$artikli_komadi_array = explode(",", $artikli_komadi);
+
+		foreach ($artikli_komadi_array as $artikal_komad) {
+			$artikal_komad_array = explode("/", $artikal_komad);
+			$id_proizvoda = $artikal_komad_array[0];
+			$komada = $artikal_komad_array[1];
+
+			$proizvod = $getData->get_proizvod_by_id_and_korisnik($id_korisnika, $id_proizvoda);
+			$staro_stanje = $proizvod['kolicina_u_magacinu'];
+			$novo_stanje = $staro_stanje + $komada;
+
+			$insertData->update_stanje_proizvoda($novo_stanje, $id_proizvoda, $id_korisnika);
+		}
+	}
+
+	if ($tabela != "" and $id != "") {
+		$insertData->change_status($tabela, $id, $status, $id_korisnika);
 		echo "<script>location.reload();</script>";
 	}
 }

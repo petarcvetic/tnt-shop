@@ -87,6 +87,11 @@ foreach ($proizvodi as $proizvod) {
 						<div id="form1" class="show">
 
 							<h1 class="center-text white-text">EDIT Proizvoda</h1>
+							<?php
+if ($proizvod['status'] == 0) {
+					echo "Proizvod " . $proizvod['naziv_proizvoda'] . " je blokiran. Odblokiraj proizvod <button class='broj center-text plati' onclick='change_status(" . '"proizvodi","' . $proizvod['id_proizvoda'] . '","1","' . $id_korisnika . '"' . ")'><i class='fa fa-check'></i></button>";
+				} else {
+					?>
 
 							<form action="" method="post" class="forme-unosa">
 
@@ -112,7 +117,7 @@ foreach ($proizvodi as $proizvod) {
 										<div class="row">
 											<?php
 $naziv_magacina = $getData->get_magacin_by_id($proizvod['id_magacina'])['naziv_magacina'];
-				?>
+					?>
 											<input type="hidden" name="id-magacina" value="<?php echo $proizvod['id_magacina']; ?>" required>
 											Magacin: <input type="text" class="center-text input-field-small float-right" value="<?php echo $naziv_magacina; ?>" disabled>
 										</div><br>
@@ -130,17 +135,19 @@ $naziv_magacina = $getData->get_magacin_by_id($proizvod['id_magacina'])['naziv_m
 
 								<div class="unos-button">
 					        <input type="submit" class="submit button-full" name="submit-proizvod" value="Submit"><br><br>
+					      	<button class='broj center-text delete' onclick='change_status("proizvodi","<?php echo $proizvod['id_proizvoda']; ?>","0", "<?php echo $id_korisnika; ?>")'>
+						      	<i class='fa fa-trash' aria-hidden='true'></i>
+						      </button>
 					      </div>
 
 							</form>
-
+						<?php }?>
 						</div>
 					<?php } else {
 				echo "<script>alert('Proizvod sa zadatim ID-jem ne postoji u bazi')</script>";
 			}?>
 					</div><!--END unos-form-container-->
 				</div><!--END unos -->
-
 
 
 	<?php	} elseif ($statusKorisnika == '0') {

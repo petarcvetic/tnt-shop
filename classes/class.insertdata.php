@@ -199,7 +199,7 @@ class InsertData {
 		return $this->insert_data($query, $stmtArray, "bindValue");
 	}
 
-	public function update_broja_posiljke($broj_posiljke,$id_narudzbine,$id_korisnika) {
+	public function update_broja_posiljke($broj_posiljke, $id_narudzbine, $id_korisnika) {
 		$query = "UPDATE porudzbine SET broj_posiljke=:broj_posiljke WHERE id_narudzbine=:id_narudzbine AND id_korisnika=:id_korisnika";
 
 		$stmt = $this->db->prepare($query);
@@ -249,6 +249,28 @@ class InsertData {
 
 		$stmt = $this->db->prepare($query);
 		$stmtArray = array();
+		return $this->insert_data($query, $stmtArray, "bindParam");
+	}
+
+	public function change_status($tabela, $id, $status, $id_korisnika) {
+		if ($tabela == "troskovi") {
+			$id_tabele = "id_troska";
+		} elseif ($tabela == "porudzbine") {
+			$id_tabele = "id_narudzbine";
+		} elseif ($tabela == "proizvodi") {
+			$id_tabele = "id_proizvoda";
+		} elseif ($tabela == "admin") {
+			$id_tabele = "id_admin";
+		}
+
+		$query = "UPDATE $tabela SET status=:status WHERE $id_tabele=$id AND id_korisnika=$id_korisnika";
+
+		echo $tabela . "/" . $id . " / " . $id_korisnika . " / " . $query;
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"status" => $status,
+		);
 		return $this->insert_data($query, $stmtArray, "bindParam");
 	}
 
