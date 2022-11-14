@@ -196,7 +196,7 @@ class GetData {
 	}
 
 	public function get_proizvod_by_id($id_korisnika, $id_proizvoda, $id_magacina) {
-		$query = "SELECT * FROM proizvodi WHERE id_korisnika=:id_korisnika AND id_proizvoda=:id_proizvoda AND id_magacina=:id_magacina AND status='1'";
+		$query = "SELECT * FROM proizvodi WHERE id_korisnika=:id_korisnika AND id_proizvoda=:id_proizvoda AND id_magacina=:id_magacina";
 
 		$stmt = $this->db->prepare($query);
 		$stmtArray = array(
@@ -299,7 +299,6 @@ class GetData {
 		return $this->get_fetch_all($query, $stmtArray, "bindValue");
 	}
 
-
 	public function get_porudzbine_by_filter($id_korisnika, $id_magacina, $where) {
 		$query = "SELECT * FROM porudzbine WHERE id_korisnika=:id_korisnika AND id_magacina=:id_magacina $where ORDER BY datum  DESC, id_narudzbine DESC";
 
@@ -355,13 +354,6 @@ class GetData {
 		return $this->get_fetch_all($query, $stmtArray, "bindValue");
 	}
 
-
-
-
-
-
-
-
 	public function get_porudzbina_by_id($id_korisnika, $id_narudzbine) {
 		$query = "SELECT * FROM porudzbine WHERE id_korisnika=:id_korisnika AND id_narudzbine=:id_narudzbine";
 
@@ -382,6 +374,38 @@ class GetData {
 			"id_korisnika" => $id_korisnika,
 		);
 		return $this->get_fetch_all($query, $stmtArray, "bindParam");
+	}
+
+	public function get_all_users($id_korisnika) {
+		$query = "SELECT * FROM admin WHERE id_korisnika=:id_korisnika";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"id_korisnika" => $id_korisnika,
+		);
+
+		return $this->get_fetch_all($query, $stmtArray, "bindValue");
+	}
+
+	public function if_user_id_exists_for_korisnik($id_korisnika, $id_admin) {
+		$query = "SELECT COUNT(*) FROM admin WHERE id_korisnika='$id_korisnika' AND id_admin='$id_admin'";
+
+		$stmt = $this->db->prepare($query);
+		$stmt->execute();
+		$count = $stmt->fetchColumn();
+		return $count;
+	}
+
+	public function get_user_by_id_and_korisnik($id_korisnika, $id_proizvoda) {
+		$query = "SELECT * FROM admin WHERE id_korisnika=:id_korisnika AND id_admin=:id_admin";
+
+		$stmt = $this->db->prepare($query);
+		$stmtArray = array(
+			"id_korisnika" => $id_korisnika,
+			"id_admin" => $id_admin,
+		);
+
+		return $this->get_fetch_data($query, $stmtArray, "bindValue");
 	}
 
 /* STARO */

@@ -99,11 +99,22 @@
 
 	}
 
-	function redirect_to(object){
+	function redirect_to(object,page){
 		var selected = object.value;
-		var id_proizvoda = $('#datalist_edit').find('option[value="'+ selected +'"]').attr('id');
-		location.href = "edit-proizvoda.php?id-proizvoda="+id_proizvoda;
-	}
+		var page = page;
+		alert(selected+" / "+page);
+		var id = $('#datalist_edit').find('option[value="'+ selected +'"]').attr('id');
+		var get_parametar = "";
+/*
+		if(page == "edit-proizvoda"){
+			get_parametar = "id-proizvoda";
+		}
+		else if(page == "edit-usera"){
+			get_parametar = "id-usera";
+		}
+		
+		location.href = page+".php?"+get_parametar+"="+id;
+*/	}
 
 	function delete_row(tabela,id){
 		var brisanje = "";

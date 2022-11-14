@@ -71,7 +71,7 @@ if ($user->is_loggedin() != "" && $_SESSION['sess_korisnik_status'] != "0") {
 if ($id_proizvoda <= 0) {
 				$proizvodi = $getData->get_all_proizvodi($id_korisnika);
 				?>
-						<input type="text" class="center-text input-small proizvod-input" list="datalist_edit" size="34" onChange="redirect_to(this)" placeholder="Odaberi proizvod">
+						<input type="text" class="center-text input-small proizvod-input" list="datalist_edit" size="34" onChange="redirect_to(this,'edit-proizvoda')" placeholder="Odaberi proizvod">
 
 						<datalist id="datalist_edit">
 

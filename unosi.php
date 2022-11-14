@@ -268,7 +268,10 @@ foreach ($magacini as $magacin) {
 
 				<!--Forma USERS-->
 				<div id="form4" class="hide">
-
+					<?php
+if ($_SESSION['sess_user_status'] > 2) {?>
+					<a href='edit-usera.php'><button class='center-text submit'>Edit user-a</button></a>
+					<?php }?>
 					<h1 class="center-text white-text">USER</h1>
 
 					<form action="" method="post" class="forme-unosa">
