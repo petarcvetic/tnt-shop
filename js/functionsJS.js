@@ -102,7 +102,7 @@
 	function redirect_to(object,page){
 		var selected = object.value;
 		var page = page;
-		alert(selected+" / "+page);
+//		alert(selected+" / "+page);
 		var id = $('#datalist_edit').find('option[value="'+ selected +'"]').attr('id');
 		var get_parametar = "";
 
